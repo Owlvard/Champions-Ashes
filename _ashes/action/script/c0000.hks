@@ -553,6 +553,13 @@ function GetAttackRequest(is_guard)
         if is_both == TRUE then
             local sp = env(345 , HAND_RIGHT) 
             local is_gh = GetEquipType(HAND_RIGHT, 35) 
+            local spo = env(345 , HAND_LEFT) 
+            local is_gho = GetEquipType(HAND_LEFT, 35) 
+            local is_rightHandCA = FALSE
+            local is_leftHandCA = FALSE
+
+            if (is_gh == TRUE and sp == 655 and is_both_right == TRUE) then is_rightHandCA = TRUE else is_rightHandCA = FALSE end
+            if (is_gho == TRUE and spo == 655 and is_both_right == FALSE) then is_leftHandCA = TRUE else is_leftHandCA = FALSE end
             
             if is_arrow == TRUE then
                 act("弓矢スロット選択", 0)
@@ -568,7 +575,7 @@ function GetAttackRequest(is_guard)
                 return ATTACK_REQUEST_INVALID
             elseif env(1106, ACTION_ARM_LIGHT_KICK) == TRUE then
                 return ATTACK_REQUEST_LIGHT_KICK
-            elseif is_guard == TRUE and is_gh == TRUE and sp == 655 then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt
+            elseif (is_guard == TRUE and is_rightHandCA == TRUE) or (is_guard == TRUE and is_leftHandCA == TRUE)   then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt
             else
                 return ATTACK_REQUEST_BOTH_LIGHT
             end
@@ -7733,7 +7740,9 @@ function AttackRightLightDashSpecial_onUpdate()
 end
 
 function AttackRightWhileGuard_onUpdate()
-    if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", TO_GUARDON, TRUE) == TRUE then
+    local b2 = "W_AttackBothHeavy1Start" 
+    if env(345 , HAND_RIGHT) == 624 then b2 = "W_AttackRightHeavy1SubStart" end
+    if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, TO_GUARDON, TRUE) == TRUE then
         return 
     else
         return 
