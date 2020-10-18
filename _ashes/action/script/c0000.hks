@@ -708,7 +708,7 @@ function GetAttackRequest(is_guard)
             local is_gm = FALSE
             local is_go = FALSE
             if (   (sp ~= 50 and sp ~= 179 and sp ~= 232 and sp ~= 264 and sp ~= 164 and sp ~= 107)         and GetEquipType(HAND_LEFT, 38) == TRUE)   then is_go = TRUE    else is_go = FALSE end
-            if (   (spm ~= 50 and spm ~= 179 and spm ~= 232 and spm ~= 264 and spm ~= 164 and spm ~= 107)   and GetEquipType(HAND_RIGHT, 38)  == TRUE)   then is_gm = TRUE    else is_gm = FALSE end
+            if (   (spm ~= 50 and spm ~= 179 and spm ~= 232 and spm ~= 264 and spm ~= 164 and spm ~= 107 and spm ~= 621 )   and GetEquipType(HAND_RIGHT, 38)  == TRUE)   then is_gm = TRUE    else is_gm = FALSE end
             
             -- powerstance
             if      (   (is_am == TRUE and spm ~= 102)                          and    (is_a == TRUE and sp ~= 102)             and     (is_both == FALSE and spm ~= 138)   )   then return ATTACK_REQUEST_BOTH_LEFT
@@ -1494,7 +1494,9 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     -- ******************************************************
 
     -- initialize local variables
-    local ca_feintLimitOneActive = env(1116, 100801) == TRUE
+
+
+    local ca_feintLimitOneActive = env(1116, 100801) == TRUE 
     local ca_feintLimitTwoActive = env(1116, 100802) == TRUE
     local ca_feintLimitThreeActive = env(1116, 100803) == TRUE
     local ca_feintWindowActive = ca_feintLimitOneActive or ca_feintLimitTwoActive or ca_feintLimitThreeActive
@@ -1503,10 +1505,16 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     local ca_neverFeintToForwardR1 = env(1116, 100821) == TRUE
     local ca_neverFeintToR2 = env(1116, 100822) == TRUE
     local ca_neverFeintToForwardR2 = env(1116, 100823) == TRUE
-    local ca_neverFeintToNonSpells = env(1116, 100824) == TRUE
-    local ca_isWaRequest = (request >= 100 and request <= 136) or (request >= 200 and request <= 236)
+    local ca_neverFeintToNonSpells = env(1116, 100824) == TRUE 
+    --local ca_isWaRequest = (request >= 100 and request <= 136) or (request >= 200 and request <= 236) 
+    --local ca_isWaRequest = (request > 99 and request < 137) or (request > 199 and request < 237) 
+    --local ca_isWaRequest = ((request >= 100) and (request <= 136)) or ((request >= 200) and (request <= 236)) 
+    --local ca_isWaRequest = ((request >= 100 and request <= 136) or (request >= 200 and request <= 236)) 
+    --local ca_isWaRequest = (((request >= 100) and (request <= 136)) or ((request >= 200) and (request <= 236))) == true
+    --local ca_isWaRequest = request >= 100 and request <= 136 or request >= 200 and request <= 236
+    local ca_isWaRequest = request == 100 or request == 101 or request == 102 or request == 103 or request == 104 or request == 105 or request == 106 or request == 107 or request == 108 or request == 109 or request == 100 or request == 111 or request == 112 or request == 113 or request == 114 or request == 115 or request == 116 or request == 117 or request == 118 or request == 119 or request == 120 or request == 121 or request == 122 or request == 123 or request == 124 or request == 125 or request == 126 or request == 127 or request == 128 or request == 129 or request == 130 or request == 131 or request == 132 or request == 133 or request == 134 or request == 135 or request == 136 or request == 200 or request == 201 or request == 202 or request == 203 or request == 204 or request == 205 or request == 206 or request == 207 or request == 208 or request == 209 or request == 200 or request == 211 or request == 212 or request == 213 or request == 214 or request == 215 or request == 216 or request == 217 or request == 218 or request == 219 or request == 220 or request == 221 or request == 222 or request == 223 or request == 224 or request == 225 or request == 226 or request == 227 or request == 228 or request == 229 or request == 230 or request == 231 or request == 232 or request == 233 or request == 234 or request == 235 or request == 236
     local ca_isR1Request = request == ATTACK_REQUEST_RIGHT_LIGHT or request == ATTACK_REQUEST_BOTH_LIGHT
-    local ca_isForwardR1Request = request == ATTACK_REQUEST_LIGHT_KICK
+    local ca_isForwardR1Request = request == ATTACK_REQUEST_LIGHT_KICK 
     local ca_isR2Request = request == ATTACK_REQUEST_RIGHT_HEAVY or request == ATTACK_REQUEST_BOTH_HEAVY
     local ca_isForwardR2Request = request == ATTACK_REQUEST_HEAVY_KICK
     
@@ -1534,7 +1542,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     else 
         ca_feintCounter = ca_feintCounter + 1
     end
-
+    
     -- *************************
     -- * End of the feint code *
     -- *************************
@@ -1690,7 +1698,12 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         if IsArtsSpAtk() == TRUE and b1 == "W_AttackBothLightStep" then
             b1 = "W_AttackBothLightStepSpecial"
         end
+
+        local sp_m = env(345 , HAND_RIGHT)
+        if (   GetEquipType(HAND_RIGHT, 36) == TRUE and sp_m == 176 and env(1116, 100282) == TRUE)    then 
+        else
         ExecEventAllBody(b1)
+        end
     elseif request == ATTACK_REQUEST_BOTH_LEFT then
         if r1 == "W_AttackRightLightDash" then
             if  (GetEquipType(HAND_RIGHT, 30) == TRUE and GetEquipType(HAND_LEFT, 30) == TRUE)  or  (GetEquipType(HAND_RIGHT, 27) == TRUE and GetEquipType(HAND_LEFT, 27) == TRUE) then l1 = "W_AttackBothLeft3" -- powerstance
@@ -2076,7 +2089,13 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     elseif request == SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS or request == SWORDARTS_REQUEST_LEFT_ONESHOT_NOGENTRANS then
         SetSwordArtsPointInfo(ACTION_ARM_L2, TRUE)     
         if (faultyWA ~= TRUE) then
-        ExecEventAllBody("W_OneShotNoGenTransStart")
+                    
+            local sp_m = env(345 , c_SwordArtsHand)
+                if (env(345 , c_SwordArtsHand) == 624) then
+                    if iT ~= TRUE then ExecEventAllBody("W_Warcry")
+                    else ExecEventAllBody("W_OneShotNoGenTransStart") end
+                elseif (sp_m == 654 and (style == HAND_RIGHT and style ~= HAND_RIGHT_BOTH  )) then ExecEventAllBody("W_Warcry")
+                else ExecEventAllBody("W_OneShotNoGenTransStart") end
     else ExecEventHalfBlend(Event_MagicInvalidRight, blend_type) end
     elseif request == SWORDARTS_REQUEST_RIGHT_STORMSTANCE or request == SWORDARTS_REQUEST_LEFT_STORMSTANCE then
         return FALSE
@@ -6692,7 +6711,7 @@ function Rolling_onUpdate()
     local endratio = 1
     act(2001, math.abs(1 + addratio * math.abs(math.sin(math.rad(2 * rolling_angle)))))
     local b2 = "W_AttackBothHeavy2Start"
-    if (env(345 , HAND_RIGHT) == 654) then b2 = "W_AttackBothHeavyKick" end
+    if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b2 = "W_AttackBothHeavyKick" end
     if EvasionCommonFunction(FALL_TYPE_DEFAULT, "W_AttackRightLightStep", "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLightStep", b2) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -6769,7 +6788,21 @@ function BackStep_onUpdate()
         br2 = "W_AttackBothHeavy2Start"
     end
 
-    if (sp == 67 or sp == 177) then 
+    local is_both = FALSE
+    local is_both_right = FALSE
+    if HAND_LEFT_BOTH <= c_Style then
+        is_both = TRUE
+    end
+    if c_Style == HAND_RIGHT_BOTH then
+        is_both_right = TRUE
+    end
+
+    if (sp == 67 or sp == 177) and (c_Style == HAND_RIGHT or is_both_right == TRUE  ) then -- backstep attack
+        rr1 = "W_AttackRightBackstep"
+        br1 = "W_AttackBothBackstep"
+    end
+
+    if (osp == 67 or osp == 177) and (is_both == TRUE and is_both_right == FALSE )  then -- backstep attack
         rr1 = "W_AttackRightBackstep"
         br1 = "W_AttackBothBackstep"
     end
@@ -8268,7 +8301,8 @@ function AttackBothLight2_onUpdate()  -- r12
 
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     local b1 = "W_AttackBothLight3"
-    if (sp_m == 654) then b1 = "W_AttackBothLight1" end
+
+    if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b1 = "W_AttackBothLight1" end
 
     if env(1116, 100283) == FALSE and AttackCommonFunction("W_AttackRightLight3", "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -8613,7 +8647,7 @@ function AttackBothHeavy1Start_onUpdate()  -- r21 charge
     end
 
     local b2 = "W_AttackBothHeavy2Start"
-    if (env(345 , HAND_RIGHT) == 654) then b2 = "W_AttackBothHeavyKick" end
+    if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b2 = "W_AttackBothHeavyKick" end
 
     if AttackCommonFunction("W_AttackRightLight1", r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -8652,7 +8686,7 @@ function AttackBothHeavy1End_onUpdate()  -- r21 release end
     end
         
     local b2 = "W_AttackBothHeavy2Start"
-    if (env(345 , HAND_RIGHT) == 654) then b2 = "W_AttackBothHeavyKick" end
+    if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b2 = "W_AttackBothHeavyKick" end
 
     if AttackCommonFunction("W_AttackRightLight1", r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -8949,6 +8983,8 @@ function AttackBothLightStep_onUpdate() -- roll r1
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
 
     local sp_m = env(345 , HAND_RIGHT)
+
+    if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b1 = "W_AttackBothLight2" end
     if sp_m == 643 then b1 = "W_AttackBothLight2" end
     if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackBothLeft1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -11079,6 +11115,11 @@ function Charge_Upper_onUpdate()
     if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", l2, b1, b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
         return 
         
+    elseif sp_m == 656 and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE) then -- new
+        act("特殊補間設定", 0, TRUE)
+        ExecEventAllBody("W_ChargeContinue")
+        return -- new
+
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
         ExecEventAllBody("W_Idle")
@@ -11129,6 +11170,10 @@ function ChargeContinue_onUpdate()
 
     if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", l2, "W_AttackBothLight1", b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
         return 
+    elseif sp_kind == 656 and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE) then -- new
+        act("特殊補間設定", 0, TRUE)
+        ExecEventAllBody("W_ChargeContinue2")
+        return -- new
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
         ExecEventAllBody("W_Idle")
@@ -11161,6 +11206,9 @@ function Warcry_onUpdate()
     if env(345 , hand) == 242 then
         r2 = "W_AttackRightHeavy1Start"
         b2 = "W_AttackBothHeavy1Start"
+    end
+    if env(345 , hand) == 624 then
+        r2 = "W_AttackRightLightStepSpecial"
     end
     if SwordArtsCommonFunction(g_r1, r2, g_l1, g_l2, g_b1, b2, FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
         return 
@@ -11236,16 +11284,23 @@ function OneShotNoGenTransStart_onUpdate()
         r2 = "W_OneShotNoGenTransContinue"
         b2 = "W_OneShotNoGenTransContinue"
     end
+
+    if i1BB == TRUE then 
+        r2 = "W_AttackRightHeavy1SubStart" 
+        b2 = "W_AttackBothHeavy1SubStart"
+    end
+
     if sp_kind == 247 then
         r1 = "W_AttackRightLight2"
         b1 = "W_AttackBothLight2"
     end
     if sp_kind == 624 then
-        r2 = "W_AttackRightLight3"
+        r1 = "W_AttackRightLight3"
         r2 = "W_AttackRightLightStepSpecial"
         b1 = "W_AttackBothDashSpecial"
         b2 = "W_AttackBothHeavy2Start"
     end
+
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     else
