@@ -3,14 +3,7 @@
 ******************
 
 Installing, updating, enabling, and disabling is all handled by the launcher now.
-Place tha launcher in your root game directory and launche it.
 
-TIP:
-\AshesLauncher\Disabled
-Any files in this folder will be copied to your game directory when you disable the mod.
-For example if you put WexDust's dinput8.dll there it will enable it when you disale the mod.
-
-Files starting with _ will be ignored and won't be copied over to the main game directory.
 
 LEGACY_INSTALLATION
 ------------
