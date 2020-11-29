@@ -8087,7 +8087,7 @@ function AttackRightHeavySpecial1Start_onUpdate() -- r14
     local r1 = "W_AttackRightLight1"
     local r2 = "W_AttackRightHeavy2Start"
     --if (i1BB == TRUE and (sp_m ~= 264 or sp_m ~= 612) ) then r1 = "W_AttackRightLight2" end
-    if (sp_m == 195 or sp_m == 613 or sp_m == 643 or sp_m == 612 or sp_m == 621 or sp_m == 624 or sp_m == 643 or sp_m == 101 ) then r1 = "W_AttackRightLight3" end
+    if (sp_m == 195 or sp_m == 613 or sp_m == 643 or sp_m == 612 or sp_m == 621 or sp_m == 624 or sp_m == 643 or sp_m == 101 or sp_m == 605  or sp_m == 620 ) then r1 = "W_AttackRightLight3" end
     if (sp_m == 641) then r1 = "W_AttackRightLight1" end
     if (sp_m == 264 or sp_m == 164 or sp_m == 614) then r1 = "W_AttackRightLight3" end
     if (sp_m == 643) then r2 = "W_AttackRightHeavy1SubStart" end
@@ -8519,7 +8519,7 @@ function AttackBothLight3_onUpdate()  -- r13
         --l1 = "W_AttackBothHeavySpecial1Start"
         l1 = "W_AttackBothLeft3"
     end
-    if sp_m == 232  then b1 = "W_AttackBothLight1" end
+    if sp_m == 232 or sp_m == 242  then b1 = "W_AttackBothLight1" end
     if env(1116, 100440) == TRUE then
         act(2001, 0.699999988079071)
     end
