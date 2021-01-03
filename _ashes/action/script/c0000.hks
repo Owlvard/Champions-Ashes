@@ -481,7 +481,7 @@ function GetSwordArtsInfo()
         arts_id = env(326, arts_hand)
     else
         local sp_o = env(326, HAND_LEFT)
-        if (    (sp == 137 or sp == 237 or (is_r == TRUE) or sp == 186 or sp == 187 or sp == 20 or is_m == TRUE or sp_o == SWORDARTS_RIGHTARTS or sp_o == 1701 ) and not (sp == 115 or sp == 178 or  sp == 207 or sp == 217 or sp == 220 or sp == 234 or sp == 257 or sp == 99 or sp == 101 or sp == 151  or sp == 218 or sp == 71 or (is_sh == TRUE and sp_o == 3202   )     )   ) then         
+        if (    (sp == 137 or sp == 237 or (is_r == TRUE) or sp == 186 or sp == 187 or sp == 20 or is_m == TRUE or sp_o == SWORDARTS_RIGHTARTS or sp_o == 1701 ) and not (sp == 115 or sp == 178 or  sp == 207 or sp == 217 or sp == 218 or sp == 220 or sp == 234 or sp == 257 or sp == 99 or sp == 101 or sp == 151 or sp == 71 or (is_sh == TRUE and sp_o == 3202   )     )   ) then         
             arts_hand = HAND_RIGHT
             arts_id = env(326, HAND_RIGHT) 
         else
@@ -501,7 +501,8 @@ function GetSwordArtsInfo()
                 arts_hand = HAND_LEFT
             end
         end
-        if ((env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and (sp == 218 and c_SwordArtsID == SWORDARTS_DRAWSTANCE) or (sp == 115)) ) then
+        --if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and ((sp == 218 and c_SwordArtsID == SWORDARTS_DRAWSTANCE) or (sp == 115)) ) then
+        if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and (sp == 218 or sp == 115) ) then
             if arts_hand == HAND_LEFT then
                 if arts_id ~= SWORDARTS_ONESHOTFULL then
                     arts_id = SWORDARTS_PARRY
