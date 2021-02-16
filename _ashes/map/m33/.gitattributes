@@ -1,3 +1,0 @@
-m33_0000.tpfbdt filter=lfs diff=lfs merge=lfs -text
-m33_0001.tpfbdt filter=lfs diff=lfs merge=lfs -text
-m33_0003.tpfbdt filter=lfs diff=lfs merge=lfs -text
