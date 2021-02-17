@@ -762,7 +762,7 @@ function GetAttackRequest(is_guard)
             if (   (spm ~= 50 and spm ~= 179 and spm ~= 232 and spm ~= 264 and spm ~= 164 and spm ~= 107 and spm ~= 621 )   and GetEquipType(HAND_RIGHT, 38)  == TRUE)   then is_gm = TRUE    else is_gm = FALSE end
             
             -- powerstance
-            if      (   (is_am == TRUE and spm ~= 102)                          and    (is_a == TRUE and sp ~= 102)             and     (is_both == FALSE and spm ~= 138)   )   then return ATTACK_REQUEST_BOTH_LEFT
+            if      (   (is_am == TRUE and spm ~= 102)                          and    (is_a == TRUE and (sp ~= 102 and sp ~= 602 and sp ~= 620 and sp ~= 653))             and     (is_both == FALSE and spm ~= 138)   )   then return ATTACK_REQUEST_BOTH_LEFT
             elseif  (   (is_rm == TRUE and spm ~= 624)                          and    (is_r == TRUE)                           and     (is_both == FALSE and spm ~= 237)   )   then return ATTACK_REQUEST_BOTH_LEFT
             elseif  (   (is_gm == TRUE)                                         and    (is_go == TRUE)                          and     (is_both == FALSE)                  )   then return ATTACK_REQUEST_BOTH_LEFT
             elseif ((is_m == TRUE) and (sp ~= 99 and sp ~= 101 and sp ~= 137 and sp ~= 151)) then
@@ -4534,7 +4534,7 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         end
     elseif damage_level == DAMAGE_LEVEL_EXLARGE then
         -- Insert start: poise resisted throws by halvard
-        if (env(334, 2) == TRUE and env(329) == FALSE) then
+        if (env(334, 2) == TRUE and env(329) == FALSE and HalComesBack == TRUE) then
             damage_level = DAMAGE_LEVEL_NONE
             ExecAddDamage(damage_angle, attack_dir, damage_level, FALSE, is_damaged)
             return FALSE
@@ -4548,7 +4548,7 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         return TRUE
     elseif damage_level == DAMAGE_LEVEL_EX_BLAST then
         -- Insert start: poise resisted throws by halvard
-        if (env(334, 2) == TRUE and env(329) == FALSE) then
+        if (env(334, 2) == TRUE and env(329) == FALSE and HalComesBack == TRUE) then
             damage_level = DAMAGE_LEVEL_NONE
             ExecAddDamage(damage_angle, attack_dir, damage_level, FALSE, is_damaged)
             return FALSE
@@ -4568,7 +4568,7 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         return TRUE
     elseif damage_level == DAMAGE_LEVEL_SMALL_BLOW then
         -- Insert start: poise resisted throws by halvard
-        if (env(334, 2) == TRUE and env(329) == FALSE) then
+        if (env(334, 2) == TRUE and env(329) == FALSE and HalComesBack == TRUE) then
             damage_level = DAMAGE_LEVEL_NONE
             ExecAddDamage(damage_angle, attack_dir, damage_level, FALSE, is_damaged)
             return FALSE
@@ -4582,7 +4582,7 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         return TRUE
     elseif damage_level == DAMAGE_LEVEL_UPPER then
         -- Insert start: poise resisted throws by halvard
-        if (env(334, 2) == TRUE and env(329) == FALSE) then
+        if (env(334, 2) == TRUE and env(329) == FALSE and HalComesBack == TRUE) then
             damage_level = DAMAGE_LEVEL_NONE
             ExecAddDamage(damage_angle, attack_dir, damage_level, FALSE, is_damaged)
             return FALSE
@@ -4599,7 +4599,7 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         return FALSE
     elseif damage_level == DAMAGE_LEVEL_FLING then
         -- Insert start: poise resisted throws by halvard
-        if (env(334, 2) == TRUE and env(329) == FALSE) then
+        if (env(334, 2) == TRUE and env(329) == FALSE and HalComesBack == TRUE) then
             damage_level = DAMAGE_LEVEL_NONE
             ExecAddDamage(damage_angle, attack_dir, damage_level, FALSE, is_damaged)
             return FALSE
@@ -6038,7 +6038,8 @@ function MoveCommonFunction(blend_type)
             if (env(345 , HAND_RIGHT) == 609) then r2 = "W_AttackRightHeavyKickSpecial" end
             if (env(345 , HAND_RIGHT) == 609 and c_Style == HAND_RIGHT_BOTH) then  b2 = "W_AttackBothHeavyKickSpecial" end -- left hand both 2h offhand combat art tonitrus
 
-            if (env(345 , HAND_RIGHT) == 656) then b2 = "W_AttackBothHeavyKickSpecial" end
+            if (env(345 , HAND_RIGHT) == 656 and c_Style == HAND_RIGHT_BOTH) then b2 = "W_AttackBothHeavyKickSpecial" end -- right hand both 2h mainhand !!!!!!!!!!!! c_style style
+            if (env(345 , HAND_LEFT) == 656 and c_Style == HAND_LEFT_BOTH) then b2 = "W_AttackBothHeavyKickSpecial" end -- left hand both 2h offhand !!!!!!!!!!!!!!!!!
             if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackBothHeavy2Start" end
         end
     end
@@ -7005,23 +7006,36 @@ function BackStep_onUpdate()
 
     local hand = HAND_RIGHT
     local is_both_left = FALSE
+    local is_both_right = FALSE
 
-    if c_style == HAND_LEFT_BOTH then 
+    local style = c_Style
+
+    if style == HAND_LEFT_BOTH then 
         hand = HAND_LEFT 
+        is_both_right = FALSE
         is_both_left = TRUE
+    end
+
+    if style == HAND_RIGHT_BOTH then 
+        is_both_right = TRUE 
+        is_both_left = FALSE
     end
 
     local is_so = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_SHIELD, WEAPON_CATEGORY_LARGE_SHIELD, WEAPON_CATEGORY_TORCH) 
     local is_mm = GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42) 
     local is_mo = GetEquipType(HAND_LEFT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42) 
-    if is_mm == TRUE then rr2 = "W_CrossbowStepInFire" br2 = "W_CrossbowStepInReload" end
-    if is_mo == TRUE and is_both_left == TRUE then br2 = "W_CrossbowStepInReload" end
+    
+    if is_mm == TRUE then rr2 = "W_CrossbowStepInFire" end
+    if is_mm == TRUE and is_both_right == TRUE then br2 = "W_CrossbowStepInReload" end
     if is_so == TRUE and is_both_left == TRUE then br2 = "W_AttackBothHeavy1Start" end
+    if is_mo == TRUE and is_both_left == TRUE then br2 = "W_CrossbowStepInReload" end
 
     if IsDualBlade() == TRUE then br2 = "W_CrossbowStepInFire" end
+    if osp == 250 and is_both_left == TRUE then br2 = "W_AttackBothHeavy1Start" end
+    if sp == 250 and is_both_right == TRUE then br2 = "W_AttackBothHeavy1Start" end
+    
     if (env(345 , hand) == 43) then rr2 = "W_AttackRightHeavy1Start" br2 = "W_AttackBothHeavy1Start" end
 
-    local is_both_right = FALSE
     if c_Style == HAND_RIGHT_BOTH then is_both_right = TRUE end
 
     local catalysto = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_STAFF)
@@ -9358,7 +9372,7 @@ function AttackBothHeavySpecial2Start_onUpdate() -- T TA Transform Attack
     if sp_m == 614 then r1 = "W_AttackRightLight3" end
     if  sp_m == 609 or sp_m == 612 then r1 = "W_AttackRightHeavySpecial1Start" end
 
-    if AttackCommonFunction(r1, r2, "W_AttackBothLeft1", "W_AttackLeftHeavy1", r1, "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
+    if AttackCommonFunction(r1, r2, "W_AttackBothLeft1", "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
         return 
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
         ExecEventAllBody("W_AttackBothHeavySpecial2End")
@@ -10582,6 +10596,10 @@ function DrawStanceRightAttackLight_onUpdate()
         b2 = "W_DrawStanceRightAttackHeavy"
         is_artsr2 = TRUE
     end
+    if (sp_kind == 164) then
+        r2 = "W_AttackRightHeavy1SubStart"
+        b2 = "W_AttackBothHeavy1SubStart"
+    end
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, is_artsr1, is_artsr2, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -10864,6 +10882,11 @@ function DrawStanceRightAttackHeavy_onUpdate()
             is_artsr1 = TRUE
         end
     end
+    if (sp_kind == 164) then
+        r2 = "W_AttackRightHeavy1SubStart"
+        b2 = "W_AttackBothHeavy1SubStart"
+    end
+
     if env(1116, 100700) == TRUE then
         r1 = "W_DrawStanceRightAttackLight"
         b1 = "W_DrawStanceRightAttackLight"
