@@ -308,7 +308,7 @@ function GetWeightIndex(is_move)
     elseif move_id == WEIGHT_HEAVY or move_id == WEIGHT_HEAVY + 20 or move_id == WEIGHT_HEAVY + 40 or move_id == WEIGHT_HEAVY + 60 then
         move_weight = MOVE_WEIGHT_HEAVY
         evasion_weight = EVASION_WEIGHT_INDEX_HEAVY
-        act(2002, 660)
+        act(2002, 660) -- fatroll stamina regen buff
     elseif move_id == WEIGHT_OVERWEIGHT or move_id == WEIGHT_OVERWEIGHT + 20 or move_id == WEIGHT_OVERWEIGHT + 40 or move_id == WEIGHT_OVERWEIGHT + 60 then
         move_weight = MOVE_WEIGHT_HEAVY
         evasion_weight = EVASION_WEIGHT_INDEX_OVERWEIGHT
@@ -598,8 +598,8 @@ function GetAttackRequest(is_guard)
             local is_rightHandCA = FALSE
             local is_leftHandCA = FALSE
 
-            if (    ((is_gh == TRUE and sp == 655) or sp == 167 or sp == 231) and is_both_right == TRUE) then is_rightHandCA = TRUE else is_rightHandCA = FALSE end
-            if (    ((is_gho == TRUE and spo == 655) or spo == 167 or spo == 231) and is_both_right == FALSE) then is_leftHandCA = TRUE else is_leftHandCA = FALSE end
+            if (    ((is_gh == TRUE and sp == 655) or sp == 72 or sp == 167 or sp == 231) and is_both_right == TRUE) then is_rightHandCA = TRUE else is_rightHandCA = FALSE end
+            if (    ((is_gho == TRUE and spo == 655) or spo == 72 or spo == 167 or spo == 231) and is_both_right == FALSE) then is_leftHandCA = TRUE else is_leftHandCA = FALSE end
             
             if is_arrow == TRUE then
                 act("弓矢スロット選択", 0)
@@ -617,9 +617,8 @@ function GetAttackRequest(is_guard)
                 return ATTACK_REQUEST_LIGHT_KICK
             elseif (is_guard == TRUE and is_rightHandCA == TRUE) or (is_guard == TRUE and is_leftHandCA == TRUE) then
                 if (sp == 655 or spo == 655) then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt combat art
-                elseif (sp == 231 or spo == 231) then 
-                    SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE)
-                    return ExecEventAllBody("W_DrawStanceRightAttackHeavy")   -- astora combat art
+                elseif (sp == 231 or spo == 231) then SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE) return ExecEventAllBody("W_DrawStanceRightAttackHeavy")   -- astora combat art
+                elseif (sp == 72 or spo == 72) then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky combat art
                 else return SWORDARTS_REQUEST_RIGHT_ONESHOT -- eleonora combat art
                 end
             else
@@ -650,6 +649,7 @@ function GetAttackRequest(is_guard)
                 act(2002, 626)
                 --SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE) -- doesn't work w parry shields
                 return ExecEventAllBody("W_DrawStanceRightAttackHeavy") -- astora
+            elseif sp == 72 then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky
             elseif sp == 167 then 
                 return SWORDARTS_REQUEST_RIGHT_ONESHOT -- eleonora
             end
@@ -898,6 +898,7 @@ function SetEvasionStaminaCost()
         c_StaminaCostRolling = -20
         c_StaminaCostBackStep = -14
         c_StaminaCostJump = -16
+        act(2002, 660)
     elseif weight == WEIGHT_OVERWEIGHT then
         c_StaminaCostRolling = -26
         c_StaminaCostBackStep = -18
@@ -5129,6 +5130,9 @@ function IdleCommonFunction()
         end 
 ]]
 
+    local weight = env(257)
+    if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
+
     if (iT ~= TRUE) then iT = FALSE 
     else iT = TRUE end
 
@@ -6060,6 +6064,9 @@ function MoveCommonFunction(blend_type)
 end
 
 function GuardCommonFunction(is_guard_end, blend_type)
+    local weight = env(257)
+    if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
+
     act(9100)
     if ExecPassiveAction(FALSE, FALL_TYPE_DEFAULT, FALSE) == TRUE then
         return TRUE
@@ -8301,7 +8308,22 @@ function AttackRightHeavySpecial1Start_onUpdate() -- r14
     if (sp_m == 264 or sp_m == 164 or sp_m == 614) then r1 = "W_AttackRightLight3" end
     if (sp_m == 643) then r2 = "W_AttackRightHeavy1SubStart" end
     
-    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+    if env(1116, 100283) == FALSE and AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+        return 
+    elseif env(1116, 100283) == TRUE and AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+        if env(1106, ACTION_ARM_R1) == TRUE then
+            local staminaRegen = 0
+            if (GetEquipType(HAND_RIGHT, 20, 42) == TRUE) then  staminaRegen = 12
+            elseif (GetEquipType(HAND_RIGHT, 30, 33) == TRUE) then staminaRegen = 22
+            elseif (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE) then staminaRegen = 28
+            elseif (GetEquipType(HAND_RIGHT, 35, 26) == TRUE) then staminaRegen = 36
+            elseif (GetEquipType(HAND_RIGHT, 32, 47) == TRUE) then staminaRegen = 44
+            else staminaRegen = 19 end
+            
+            AddStamina(staminaRegen)
+            act(2002, 621)
+            act(2002, 622)
+        end
         return 
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
         ExecEventAllBody("W_AttackRightHeavySpecial1End")
@@ -9302,8 +9324,24 @@ function AttackBothHeavySpecial1Start_onUpdate()  -- r14
 
     if (sp_m == 621) then l1 = "W_AttackBothHeavy2Start" end
 
+
     act("特殊補間設定", 0, FALSE)
-    if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+    if env(1116, 100283) == FALSE and AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+        return 
+    elseif env(1116, 100283) == TRUE and AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+        if env(1106, ACTION_ARM_R1) == TRUE then
+            local staminaRegen = 0
+            if (GetEquipType(HAND_RIGHT, 20, 42) == TRUE) then  staminaRegen = 12
+            elseif (GetEquipType(HAND_RIGHT, 30, 33) == TRUE) then staminaRegen = 22
+            elseif (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE) then staminaRegen = 28
+            elseif (GetEquipType(HAND_RIGHT, 35, 26) == TRUE) then staminaRegen = 36
+            elseif (GetEquipType(HAND_RIGHT, 32, 47) == TRUE) then staminaRegen = 44
+            else staminaRegen = 19 end
+            
+            AddStamina(staminaRegen)
+            act(2002, 621)
+            act(2002, 622)
+        end
         return 
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
         ExecEventAllBody("W_AttackBothHeavySpecial1End")
@@ -13703,13 +13741,18 @@ function ItemDrinkNothingMP_Upper_onUpdate()
     end
 end
 
-function ItemDrinkStartSake_Upper_onUpdate()
+function ItemDrinkStartSake_Upper_onUpdate() -- executioner's glove
     local blend_type, lower_state = GetHalfBlendInfo()
-    if ItemCommonFunction(blend_type) == TRUE then
+    if env(1001) < STAMINA_MINIMUM then -- no stamina, get stamina
         return 
-    elseif env(301, 0) == TRUE then
-        ExecEventHalfBlendNoReset(Event_ItemDrinkingSake, blend_type)
+    elseif ItemCommonFunction(blend_type) == TRUE then
         return 
+    elseif env("アニメ終了か", 1) == TRUE then -- new
+        ExecEventAllBody("W_Idle") -- new
+        return  -- new
+    --elseif env(301, 0) == TRUE then
+      --  ExecEventHalfBlendNoReset(Event_ItemDrinkingSake, blend_type)
+       -- return 
     elseif HalfBlendLowerCommonFunction(Event_ItemDrinkStartSake, lower_state, FALSE, FALSE) == TRUE then
         return 
     else
