@@ -8496,6 +8496,9 @@ function AttackRightHeavyKick_onUpdate() -- jump
     iT = FALSE
     local r1 = "W_AttackRightLightStep"
     local sp_m = env(345 , HAND_RIGHT)
+
+    if GetEquipType(HAND_RIGHT, 23, 29) == TRUE then r1 = "W_AttackRightLight2" end
+
     if (   (sp_m ~= 264 and sp_m ~= 164)   and GetEquipType(HAND_RIGHT, 38)  == TRUE)   then r1 = "W_AttackRightLight3" end
     if sp_m == 614 then r1 = "W_AttackRightLight2" end
     if sp_m == 609 or sp_m == 612 then r1 = "W_AttackRightHeavySpecial1Start" end
@@ -9682,10 +9685,15 @@ end
 
 function AttackBothHeavyKick_onUpdate() -- jump
     local b2 = "W_AttackBothHeavy1Start"
+    local b1 = "W_AttackBothLight1"
+
+    if GetEquipType(HAND_RIGHT, 23) == TRUE  and c_Style ~= HAND_LEFT_BOTH then b1 = "W_AttackBothLight2" end
+    if GetEquipType(HAND_LEFT, 23) == TRUE  and c_Style == HAND_LEFT_BOTH then b1 = "W_AttackBothLight2" end
+
     if i1BB == TRUE then b2 = "W_AttackBothHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
 
-    local b1 = "W_AttackBothLight1"
+
     local sp_m = env(345 , HAND_RIGHT)
 
     if sp_m == 643 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
