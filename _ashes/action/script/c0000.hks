@@ -8214,7 +8214,7 @@ function AttackRightHeavy1Start_onUpdate()  -- r21 charge
     if GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 29, 30, 32, 33, 35, 42, 47, 48) == TRUE or sp_m == 51 or sp_m == 80 or 
     sp_m == 158 or sp_m == 151 or sp_m == 166 or sp_m == 179 or sp_m == 137 or sp_m == 43 then r1 = "W_AttackRightLight2" end
     if (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 179) or sp_m == 59 then r1 = "W_AttackRightLight3" end
-    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 then r1 = "W_AttackRightLight1" end
+    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 or sp_m == 53 then r1 = "W_AttackRightLight1" end
 
     if (sp_m == 614) then r1 = "W_AttackRightLight3" end
     if sp_m == 609 or (sp_m == 612) then r1 = "W_AttackRightHeavySpecial1Start" end
@@ -8242,7 +8242,7 @@ function AttackRightHeavy1End_onUpdate() -- r21 release end -- doesn't work for 
     local sp_m = env(345 , HAND_RIGHT)
     if GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 29, 30, 32, 33, 35, 42) == TRUE or sp_m == 51 or sp_m == 80 or sp_m == 158 or sp_m == 151 or sp_m == 166 or sp_m == 179 or sp_m == 137 or sp_m == 43 then r1 = "W_AttackRightLight2" end
     if (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 179) or sp_m == 59 then r1 = "W_AttackRightLight3" end
-    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 then r1 = "W_AttackRightLight1" end
+    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 or sp_m == 53 then r1 = "W_AttackRightLight1" end
     
     if sp_m == 643 then r1 = "W_AttackRightLight2" end
 
@@ -9194,7 +9194,7 @@ function AttackBothHeavy1Start_onUpdate()  -- r21 charge
     if GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 30, 32, 33, 35, 38, 42, 47) == TRUE or sp_m == 51 or 
     sp_m == 80 or sp_m == 158 or sp_m == 151 or sp_m == 166 or sp_m == 179 or sp_m == 137 or sp_m == 43 then b1 = "W_AttackBothLight2" end
     if GetEquipType(HAND_RIGHT, 29) == TRUE or sp_m == 59 or sp_m == 138 or sp_m == 161 or sp_m == 261 or sp_m == 232 or sp_m == 235 or sp_m == 656 or sp_m == 146 then b1 = "W_AttackBothLight3" end
-    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 or sp_m == 50  or sp_m == 654 or sp_m == 107 then b1 = "W_AttackBothLight1" end
+    if env(1116, 100801) == TRUE or i1BB == TRUE or sp_m == 57 or sp_m == 90 or sp_m == 50  or sp_m == 654 or sp_m == 107 or sp_m == 142 then b1 = "W_AttackBothLight1" end
 
     if sp_m  == 264 then b1 = "W_AttackBothLight3" end
     if sp_m == 164 or sp_m == 614  then b1 = "W_AttackBothLight2" end
@@ -9364,8 +9364,8 @@ function AttackBothHeavy2End_onUpdate()  -- r22 release end
 
     if sp_m == 609 or (sp_m == 612) then b1 = "W_AttackBothHeavySpecial1Start" end
 
-    local r2 = "W_AttackBothHeavy1Start"
-    if i1BB == TRUE then r2 = "W_AttackBothHeavy1SubStart" end
+    local b2 = "W_AttackBothHeavy1Start"
+    if i1BB == TRUE then b2 = "W_AttackBothHeavy1SubStart" end
 
     if GetEquipType(HAND_RIGHT, 25) == TRUE then b1 =  "W_AttackBothLight2" end
 
@@ -9411,7 +9411,7 @@ function AttackBothHeavy2End_onUpdate()  -- r22 release end
             return 
         end
     else 
-        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, r2, FALSE, TRUE) == TRUE then
+        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
             return 
         else
             return 
@@ -11997,7 +11997,7 @@ function Charge_Upper_onUpdate()
         return 
         
 
-    elseif (sp_m == 656 or sp_m == 72 or (sp_o == 72 and style == HAND_LEFT_BOTH)) and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE) then -- new
+    elseif (    ((sp_m == 656 or sp_m == 72) and style ~= HAND_LEFT_BOTH) or ((sp_o == 656 or sp_o == 72) and style == HAND_LEFT_BOTH) and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE)   ) then -- new
         act("特殊補間設定", 0, TRUE)
         ExecEventAllBody("W_ChargeContinue")
         return -- new
@@ -12024,9 +12024,9 @@ function Charge_Activate()
 end
 
 function ChargeContinue_onUpdate()
-    local sp_kind = env(345 , HAND_RIGHT)
-    local sp_kindo = env(345 , HAND_LEFT)
-    if sp_kind == 101 then iT = FALSE end
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if sp_m == 101 then iT = FALSE end
     local r2 = "W_AttackRightHeavy1Start"
     local l2 = "W_AttackLeftHeavy1"
     local b2 = "W_AttackBothHeavy1Start"
@@ -12064,7 +12064,7 @@ function ChargeContinue_onUpdate()
 
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", l2, "W_AttackBothLight1", b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
         return 
-    elseif (sp_kind == 656 or sp_kind == 72 or (sp_kindo == 72 and style == HAND_LEFT_BOTH)) and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE or (env(1108, ACTION_ARM_L2) <= 0 and env(1116, 100280) == TRUE)   ) then -- new
+    elseif (    ((sp_m == 656 or sp_m == 72) and style ~= HAND_LEFT_BOTH) or ((sp_o == 656 or sp_o == 72) and style == HAND_LEFT_BOTH)  and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE or (env(1108, ACTION_ARM_L2) <= 0 and env(1116, 100280) == TRUE)   )) then -- new
         act("特殊補間設定", 0, TRUE)
         ExecEventAllBody("W_ChargeContinue2")
         return -- new
