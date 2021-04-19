@@ -1084,12 +1084,12 @@ function IsEnableSwordArts()
     local arts_id = c_SwordArtsID
     local sp_kind = env(345 , HAND_LEFT)
     if style ~= HAND_LEFT_BOTH and c_SwordArtsHand == 0 then
-        if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or sp_kind == 234 or sp_kind == 257 then
+        if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or sp_kind == 234 or sp_kind == 257 or (enableShieldStrike == TRUE and sp_kind == 225) then
             return FALSE
         elseif arts_id == SWORDARTS_PARRY or arts_id == SWORDARTS_SPIN or arts_id == SWORDARTS_STRONGBASH or arts_id == SWORDARTS_CHAINSHOT or arts_id == SWORDARTS_MAGICBUFF or arts_id == SWORDARTS_SAMAGIC or arts_id == SWORDARTS_CHARGESHOT or arts_id == SWORDARTS_ONESHOTFULL or arts_id == SWORDARTS_STRONGSHOT or arts_id == SWORDARTS_SAMAGICMEDIUM or arts_id == SWORDARTS_SAMAGICSTRONG or arts_id == SWORDARTS_WIDESHOT or arts_id == SWORDARTS_MAGICBUFFPRAY or arts_id == SWORDARTS_MAGICBUFFATTACK then
             return TRUE
         end
-    elseif arts_id ~= SWORDARTS_RIGHTARTS and arts_id ~= SWORDARTS_INVALID then
+    elseif arts_id ~= SWORDARTS_RIGHTARTS and arts_id ~= SWORDARTS_INVALID then -- invalid WA
         return TRUE
     end
     return FALSE
@@ -1650,6 +1650,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     -- ===============================[ Custom Code end ]===============================
 
     if request == ATTACK_REQUEST_RIGHT_LIGHT then
+        enableShieldStrike = TRUE
         local sp_m = env(345 , HAND_RIGHT)
         local sp_o = env(345 , HAND_LEFT)
         local is_Um = GetEquipType(HAND_RIGHT, 26, 35)     
@@ -1674,6 +1675,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
 
         end
     elseif request == ATTACK_REQUEST_LIGHT_KICK then
+        enableShieldStrike = TRUE
         local sp_m = env(345 , HAND_RIGHT)
         local sp_o = env(345 , HAND_LEFT)
         local is_Um = GetEquipType(HAND_RIGHT, 26, 35)     
@@ -1690,6 +1692,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             else ExecEventAllBody("W_AttackRightLightKick") end
         end
     elseif request == ATTACK_REQUEST_RIGHT_HEAVY then
+        enableShieldStrike = TRUE
         local sp_m = env(345 , HAND_RIGHT)
         local sp_o = env(345 , HAND_LEFT)
         local is_Um = GetEquipType(HAND_RIGHT, 26, 35)     
@@ -1729,6 +1732,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         end
         
     elseif request == ATTACK_REQUEST_HEAVY_KICK then
+        enableShieldStrike = TRUE
         local sp_m = env(345 , HAND_RIGHT)
         local sp_o = env(345 , HAND_LEFT)
         local is_Um = GetEquipType(HAND_RIGHT, 26, 35)     
@@ -6105,6 +6109,7 @@ function MoveCommonFunction(blend_type)
 end
 
 function GuardCommonFunction(is_guard_end, blend_type)
+    enableShieldStrike = FALSE 
     local weight = env(257)
     if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
 
@@ -6736,6 +6741,7 @@ function CultForceQuit()
 end
 
 function Idle_onActivate()
+    enableShieldStrike = FALSE
     SetVariable("MoveSpeedLevelReal", 0)
     ClearAttackQueue()
     act(9100) -- standby
@@ -6963,6 +6969,7 @@ function Dash180_Upper_onUpdate()
 end
 
 function Evasion_Activate()
+    enableShieldStrike = FALSE
     ActivateRightArmAdd(START_FRAME_NONE)
     return 
 end
@@ -7223,6 +7230,7 @@ function ChainRecover_Upper_onUpdate()
 end
 
 function Move_Activate()
+    enableShieldStrike = FALSE
     SetMoveWeightIndex()
     SetVariable("ChangeStartWaistTwistAngle", 0)
     SetVariable("ChangeEndWaistTwistAngle", 0)
@@ -10637,7 +10645,7 @@ function DrawStanceRightComboStartRight_onUpdate()
 end
 
 function DrawStanceRightComboStartLeft_onUpdate()
-    if SwordArtsCommonFunction("W_DrawStanceRightAttackLight3", "W_DrawStanceRightAttackHeavy", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_DrawStanceRightAttackLight.", "W_DrawStanceRightAttackHeavy", FALSE, TRUE, TRUE, FALSE) == TRUE then
+    if SwordArtsCommonFunction("W_DrawStanceRightAttackLight3", "W_DrawStanceRightAttackHeavy", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_DrawStanceRightAttackLight3", "W_DrawStanceRightAttackHeavy", FALSE, TRUE, TRUE, FALSE) == TRUE then
         return 
     else
         return 
