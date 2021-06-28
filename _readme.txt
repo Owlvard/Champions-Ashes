@@ -1,6 +1,7 @@
 ******************
 * ASHES LAUNCHER *
 ******************
+test
 
 Installing, updating, enabling, and disabling is all handled by the launcher now.
 Place the launcher in your root game directory and launch it.
