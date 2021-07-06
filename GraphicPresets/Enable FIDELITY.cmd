@@ -10,7 +10,7 @@ ECHO [EXPERIMENTAL, SOME GLITCHES MIGHT OCCUR]
 ECHO Amazing visuals or burning PC, either way you will see the light!
 ECHO.
 ECHO Initiating Preset...
-robocopy ".\Fidelity\map" "..\_ashes\map" "*.tpf*" "*.btl*" "*.msb*" /e /z /mir >nul 2>nul
+robocopy ".\Fidelity\map" "..\_ashes\map" "*.tpf*" "*.txt*" "*.btl*" "*.msb*" /e /z /mir >nul 2>nul
 robocopy ".\Fidelity\param\drawparam" "..\_ashes\param\drawparam" "*.gparam*" /e /z /mir >nul 2>nul
 ECHO READY, Enjoy Ashes!
 PAUSE

@@ -8,7 +8,7 @@ ECHO.
 ECHO Improved visuals with minimal performance loss
 ECHO.
 ECHO Initiating Preset...
-robocopy ".\Performance\map" "..\_ashes\map" "*.tpf*" "*.btl*" "*.msb*" /e /z /mir >nul 2>nul
+robocopy ".\Performance\map" "..\_ashes\map" "*.tpf*" "*.txt*" "*.btl*" "*.msb*" /e /z /mir >nul 2>nul
 robocopy ".\Performance\param\drawparam" "..\_ashes\param\drawparam" "*.gparam*" /e /z /mir >nul 2>nul
 ECHO READY, Enjoy Ashes!
 PAUSE
