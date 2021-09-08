@@ -1192,6 +1192,11 @@ function SetEvasionStaminaCost()
         c_StaminaCostBackStep = -11
         c_StaminaCostJump = -16
     end
+
+    if env(1116, 100292) == TRUE then 
+        c_StaminaCostRolling = c_StaminaCostRolling*4  
+        c_StaminaCostBackStep = c_StaminaCostBackStep*4  
+    end
     return 
 end
 
@@ -6051,6 +6056,7 @@ end
 function DamageCommonFunction(guardcondition, estep, fall_type)
     act(147)
     local style = c_Style
+    local isGuardianShield = FALSE
     if style == HAND_LEFT_BOTH then
         if GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW, WEAPON_CATEGORY_LARGE_ARROW, WEAPON_CATEGORY_CROSSBOW) == TRUE then
             act("精密射撃可能か")
@@ -6065,7 +6071,7 @@ function DamageCommonFunction(guardcondition, estep, fall_type)
     local b2 = "W_AttackBothHeavy1SubStart"
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
+    if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" isGuardianShield = TRUE end
 
     local is_usechainrecover = GetVariable("UseChainRecover")
     if ExecEvasion(TRUE, estep, is_usechainrecover) == TRUE then
@@ -6079,7 +6085,7 @@ function DamageCommonFunction(guardcondition, estep, fall_type)
     elseif ExecMagic(QUICKTYPE_NORMAL, ALLBODY) == TRUE then
         ResetDamageCount()
         return TRUE
-    elseif i1BB == TRUE and ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif (i1BB == TRUE or isGuardianShield == TRUE)  and ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
         ResetDamageCount()   
         return TRUE
     elseif ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
@@ -8618,6 +8624,7 @@ function AttackRightHeavy1Start_onUpdate()  -- r21 charge
     then 
         act(2002, 627)
     end
+    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightHeavyKickSpecial" end
     if AttackCommonFunction(r1, "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
         return 
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
@@ -8654,6 +8661,7 @@ function AttackRightHeavy1End_onUpdate() -- r21 release end -- doesn't work for 
     then 
         act(2002, 627)
     end
+    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightHeavyKickSpecial" end
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
         return 
     else
@@ -8694,6 +8702,7 @@ function AttackRightHeavy2Start_onUpdate()  -- r22 charge
     then 
         act(2002, 627)
     end
+    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightHeavyKickSpecial" end
     if is_catalysts == TRUE and is_pyro ~= TRUE then  
         if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightLight2", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
             return 
@@ -8747,6 +8756,7 @@ function AttackRightHeavy2End_onUpdate() -- r22 release end
     then 
         act(2002, 627)
     end
+    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightHeavyKickSpecial" end
     if is_catalysts == TRUE and is_pyro ~= TRUE then  
         if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightLight2", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
             return 
@@ -9386,6 +9396,10 @@ function AttackBothLight3_onUpdate()  -- r13
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
+    if (sp_m == 666 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 666 and c_Style == HAND_LEFT_BOTH)  then 
+        l1 = "W_AttackBothLeft3" 
+
+    end
 
         if (sp_m == 621) then l1 = "W_AttackBothHeavy2Start" end
 
@@ -9641,6 +9655,11 @@ function AttackBothLeftDash_onUpdate() -- bothdashleft run l1 run 33500
     if i1BB == TRUE then b2 = "W_AttackBothHeavy1SubStart" end
     
     if (sp_m == 643) then l1 = "W_AttackBothLeft3" end
+    if (sp_m == 666 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 666 and c_Style == HAND_LEFT_BOTH)  then 
+        l1 = "W_AttackBothLight3" 
+        b1 = "W_AttackBothLight3"
+    end
+
 
     if AttackCommonFunction(r1, "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -9947,7 +9966,7 @@ function AttackBothHeavy2End_onUpdate()  -- r22 release end
     else 
         if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
             return 
-        elseif sp_m == 610 and env(1108, ACTION_ARM_R2) >= 1 and env(1116, 100280) == TRUE then  ExecEventAllBody("W_AttackBothHeavy2End") return 
+        elseif sp_m == 610 and env(1108, ACTION_ARM_R2) >= 1 and ( env(1001) > STAMINA_MINIMUM ) and env(1116, 100280) == TRUE then  ExecEventAllBody("W_AttackBothHeavy2End") return 
         else
             return 
         end
