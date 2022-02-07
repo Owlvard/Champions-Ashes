@@ -4,7 +4,7 @@
 // @game    DarkSouls3
 // @string    
 // @linked    []
-// @version    3.2.1
+// @version    3.2.2
 // ==/EMEVD==
 
 Event(0, Default, function() {
@@ -151,6 +151,7 @@ Event(0, Default, function() {
     InitializeEvent(0, 90000000, 0);
     InitializeEvent(0, 234, 0);
     InitializeEvent(0, 236, 0);
+    InitializeEvent(0, 14334, 0);
 });
 
 Event(50, Default, function() {
@@ -1584,9 +1585,18 @@ Event(870, Default, function(X0_1, X4_4) {
     EndUnconditionally(EventEndType.Restart);
 });
 
+Event(14334, Restart, function() {
+    IfCharacterHasSpEffect(MAIN, 10000, 94510000, true, ComparisonType.Equal, 1);
+    IfCharacterHasSpEffect(AND_01, 10000, 94510001, true, ComparisonType.Equal, 1);
+    IfConditionGroup(MAIN, PASS, AND_01);
+    SetSpEffect(10000, 94510002);
+    EndUnconditionally(EventEndType.Restart);
+});
+
 Event(90000000, Default, function() {
     InitializeEvent(0, 90010000, 20, 9036);
     InitializeEvent(1, 90010000, 21, 9037);
+    InitializeEvent(2, 90010000, 35, 9038);
     InitializeEvent(0, 90020000, 21, 9037, 3900230, 100284);
 });
 
@@ -1613,5 +1623,3 @@ Event(234, Restart, function() {
     SetMapCeremony(50, 0, 10);
     SetEventFlag(235, ON);
 });
-
-
