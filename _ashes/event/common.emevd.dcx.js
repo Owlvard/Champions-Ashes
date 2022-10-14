@@ -4,7 +4,7 @@
 // @game    DarkSouls3
 // @string    
 // @linked    []
-// @version    3.2.2
+// @version    3.3.2
 // ==/EMEVD==
 
 Event(0, Default, function() {
@@ -43,12 +43,17 @@ Event(0, Default, function() {
     InitializeEvent(0, 970, 13000800, 2000, 0, 0);
     InitializeEvent(1, 970, 13000890, 2010, 0, 0);
     InitializeEvent(2, 970, 13000830, 2020, 0, 0);
+    InitializeEvent(28, 970, 13000830, 30607000, 0, 0); //Oceiros scale drop
     InitializeEvent(3, 970, 13010800, 2030, 0, 0);
+    InitializeEvent(29, 970, 13100800, 30607000, 0, 0); //DSA scale drop
     InitializeEvent(9, 970, 13410830, 2040, 0, 0);
     InitializeEvent(10, 970, 13410860, 2050, 0, 0);
     InitializeEvent(4, 970, 13100800, 2060, 0, 0);
     InitializeEvent(5, 970, 13200800, 2070, 0, 0);
+    InitializeEvent(30, 970, 13200800, 30607000, 0, 0); //Ancient Wyvern scale drop
+    InitializeEvent(30, 970, 13200800, 31412001, 0, 0); //Ancient Wyvern tit scale drop
     InitializeEvent(6, 970, 13200850, 2080, 0, 0);
+    InitializeEvent(27, 970, 13200850, 30607000, 0, 0); //Nameless King scale drop
     InitializeEvent(7, 970, 13300850, 2090, 0, 0);
     InitializeEvent(8, 970, 13300800, 2100, 0, 0);
     InitializeEvent(11, 970, 13500800, 2110, 0, 0);
@@ -65,6 +70,7 @@ Event(0, Default, function() {
     InitializeEvent(23, 970, 15000800, 2330, 0, 0);
     InitializeEvent(24, 970, 15100800, 2340, 0, 0);
     InitializeEvent(25, 970, 15100850, 2350, 0, 0);
+    InitializeEvent(31, 970, 15100850, 30607000, 0, 0); //Midir scale drop
     InitializeEvent(26, 970, 15110800, 2360, 0, 0);
     InitializeEvent(10, 250, 17, 6700, 0);
     InitializeEvent(11, 250, 18, 6770, 0);
@@ -150,8 +156,9 @@ Event(0, Default, function() {
     InitializeEvent(2, 9020, 14500161, 14500162, 14500162, 6952, 45);
     InitializeEvent(0, 90000000, 0);
     InitializeEvent(0, 234, 0);
+    InitializeEvent(0, 234, 0);
     InitializeEvent(0, 236, 0);
-    InitializeEvent(0, 14334, 0);
+    InitializeEvent(0, 90009, 0);
 });
 
 Event(50, Default, function() {
@@ -1622,4 +1629,8 @@ Event(234, Restart, function() {
     IfConditionGroup(MAIN, PASS, AND_01);
     SetMapCeremony(50, 0, 10);
     SetEventFlag(235, ON);
+});
+
+Event(90009, Default, function() {
+    SetSpEffect(10000, 8005);
 });
