@@ -4,7 +4,7 @@
 // @game    DarkSouls3
 // @string    
 // @linked    []
-// @version    3.3.2
+// @version    3.4
 // ==/EMEVD==
 
 $Event(20005110, Restart, function(X0_4, X4_4) {
