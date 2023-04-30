@@ -2257,7 +2257,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             local speed = GetVariable("MoveSpeedLevelReal")
             if DASH_STARTING_SPEED < speed then l2 = "W_AttackLeftHeavySp1"
             elseif r1 == "W_AttackRightLightStep" then 
-                if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then l2 = "W_AttackLeftHeavySp2"
+                if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) and sp_m ~= 679 then l2 = "W_AttackLeftHeavySp2"
                 else  l2 = "W_AttackLeftHeavy2" end
             elseif r1 == "W_AttackRightBackstep" then l2 = "W_AttackLeftHeavySp2"
             elseif l1 == "W_AttackLeftLight1" then l2 = "W_AttackLeftHeavy1"
@@ -9607,6 +9607,7 @@ function AttackLeftHeavy1_onUpdate()
     if sp_o == 691 then 
         l1 = "W_AttackLeftHeavy2" 
         if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then  r1 = "W_AttackLeftHeavySp2" end
+        if sp_m == 679 then r1 = "W_AttackRightLight1" end
     end
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -9665,6 +9666,7 @@ function AttackLeftHeavy2_onUpdate()
             if env(1116, 100341) == TRUE then r1 = "W_AttackLeftHeavySp2" 
             else r1 = "W_AttackRightLight2" end
         end
+        if sp_m == 679 then r1 = "W_AttackRightLight1" end
     end
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -9730,6 +9732,7 @@ function AttackLeftHeavy3_onUpdate()
     if sp_o == 691 then 
         l1 = "W_AttackLeftHeavy2" 
         if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then  r1 = "W_AttackLeftHeavySp2" end
+        if sp_m == 679 then r1 = "W_AttackRightLight1" end
     end
     
         if AttackCommonFunction(r1, r2, nil, l1, "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
@@ -19966,7 +19969,7 @@ function UpdateWristTwistNew()	-- credits to El Fonzo -- stance
     if (sp_o == 149 or sp_o == 239) then is_pyro_o = TRUE end
 
     if (GetEquipType(HAND_RIGHT, 30) == TRUE and sp_m ~= 102) and (GetEquipType(HAND_LEFT, 30) == TRUE and is_gun == FALSE and sp_o ~= 102 and sp_o ~= 691) and (is_both == FALSE and sp_m ~= 138)                                                                              then is_axe_ps = TRUE else is_axe_ps = FALSE end
-    if (GetEquipType(HAND_RIGHT, 23) == TRUE and sp_m ~= 685 and sp_m ~= 236 and sp_m ~= 612 and sp_m ~= 101 and sp_m ~= 649 and sp_m ~= 627) and (GetEquipType(HAND_LEFT, 23) == TRUE and is_gun == FALSE and sp_o ~= 651)        and     (is_both == FALSE and sp_m ~= 142)   then is_ss_ps = TRUE else is_ss_ps = FALSE end
+    if (GetEquipType(HAND_RIGHT, 23) == TRUE and sp_m ~= 685 and sp_m ~= 236 and sp_m ~= 612 and sp_m ~= 101 and sp_m ~= 649 and sp_m ~= 627 and sp_m ~= 679) and (GetEquipType(HAND_LEFT, 23) == TRUE and is_gun == FALSE and sp_o ~= 651)        and     (is_both == FALSE and sp_m ~= 142)   then is_ss_ps = TRUE else is_ss_ps = FALSE end
 	if (GetEquipType(HAND_RIGHT, 27) == TRUE and sp_m ~= 624) and (GetEquipType(HAND_LEFT, 27) == TRUE) and (is_both == FALSE and sp_m ~= 237)                                                                                                                                  then is_ts_ps = TRUE else is_ts_ps = FALSE end
     if (GetEquipType(HAND_RIGHT, 26) == TRUE and sp_m ~= 162 and sp_m ~= 161 and sp_m ~= 253 and sp_m ~= 666  )  and    (GetEquipType(HAND_LEFT, 25, 26)  == TRUE and is_gun == FALSE and (sp_o ~= 161 and sp_o ~= 253 and sp_o ~= 666)) and (is_both == FALSE)                 then is_ugs_ps = TRUE else is_ugs_ps = FALSE end
     if (sp_m == 689 or sp_m == 690) and (sp_o == 689 or sp_o == 690)                                                                                                                                                                                                            then is_tb_ps = TRUE else is_tb_ps = FALSE end
