@@ -4,7 +4,7 @@
 // @game    DarkSouls3
 // @string    
 // @linked    []
-// @version    3.3.2
+// @version    3.4
 // ==/EMEVD==
 
 $Event(0, Default, function() {
@@ -150,6 +150,7 @@ $Event(0, Default, function() {
     InitializeEvent(0, 9018, 0);
     InitializeEvent(0, 9019, 74000669);
     InitializeEvent(0, 9015, 0);
+    InitializeEvent(0, 9030, 0);
     InitializeEvent(0, 6900, 0);
     InitializeEvent(0, 9020, 73500300, 1621, 1634, 6951, 35);
     InitializeEvent(1, 9020, 14100511, 14100512, 14100512, 6952, 41);
@@ -1426,3 +1427,9 @@ $Event(90009, Default, function() {
     SetSpEffect(10000, 8005);
 });
 
+$Event(9030, Default, function() { //Toggle flag for gravity event when get Research Note through starting gift
+    EndIf(EventFlag(50004030));
+    WaitFor(PlayerHasItem(ItemType.Goods, 2600));
+    SetEventFlag(50004030, ON);
+    EndEvent();
+});
