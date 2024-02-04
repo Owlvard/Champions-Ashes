@@ -4247,7 +4247,7 @@ function ExecHandChange(hand, is_force, blend_type)
                 W_Event90565[0] = "W_AttackRightHeavySpecial1SubStart"      
                 W_Event90565[2] = "W_AttackRightHeavySpecial1SubStart_Upper"
                 if (env(1116, 100291) == TRUE and  env(1001) > 0) then  ExecEventAllBody("W_AttackRightHeavySpecial2Start") 
-                elseif (hand ~= HAND_RIGHT and sp_m == 159)  then 
+                elseif (hand ~= HAND_RIGHT)  then 
                     if sp_m == 159 then ExecEventHalfBlend(Event_HandChangeStart, blend_type)
                     else ExecEventAllBody("W_AttackRightHeavySpecial2Start")  -- to iT -- hold transform 
                     end
@@ -9652,10 +9652,16 @@ function AttackRightHeavyKickSpecial_onUpdate() -- run r2 030610
     end
 end
 
-function AttackRightBackstep_onUpdate() -- r15
+function AttackRightBackstep_onUpdate() -- r15 030920
     local sp_m = env(345, HAND_RIGHT)
     local r1 = "W_AttackRightLight1"
     local r2 = "W_AttackRightHeavy1Start"
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
 
     if i1BB == TRUE then r2 = "W_AttackRightHeavy1SubStart" end
     if sp_m == 689 or sp_m == 690 then r1 = "W_AttackRightLight1" end
@@ -10179,7 +10185,6 @@ function AttackBothLeft1_onUpdate() -- l11
     local r1 = "W_AttackRightLight2"
     local l1 = "W_AttackBothLeft2"
     local b2 = "W_AttackBothHeavy1Start"
-
     local r2 = "W_AttackRightHeavy1Start"
     if i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart"
@@ -10188,6 +10193,13 @@ function AttackBothLeft1_onUpdate() -- l11
     local b1 = "W_AttackBothLight2"
     local sp_m = env(345 , HAND_RIGHT)
     local sp_o = env(345 , HAND_LEFT)
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
+
     if sp_m == 613  then 
         b1 = "W_AttackBothHeavy1End" 
         l1 = "W_AttackBothHeavy1End" 
@@ -10276,6 +10288,13 @@ function AttackBothLeft2_onUpdate()  -- l12
 
     local b1 = "W_AttackBothLight3"
     local sp_m = env(345 , HAND_RIGHT)
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
+
     if sp_m == 613  then b1 = "W_AttackBothLeft3" end
 
     if sp_m == 643 then 
@@ -10345,6 +10364,14 @@ function AttackBothLeft3_onUpdate()  -- l13
 
     local b1 = "W_AttackBothLight2"
     local sp_m = env(345 , HAND_RIGHT)
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
+
+
     if sp_m == 613  then 
         l1 = "W_AttackBothHeavy2End" 
         b1 = "W_AttackBothHeavy2End" 
@@ -10418,6 +10445,13 @@ function AttackBothLeftDash_onUpdate() -- bothdashleft run l1 run 33500
     if style == HAND_LEFT_BOTH then
         hand = HAND_LEFT
     end
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
+
     if env(345 , hand) == 161 then
         r1 = "W_AttackRightLight2"
         l1 = "W_AttackBothLeft2"
@@ -10445,6 +10479,13 @@ function AttackBothLeftStep_onUpdate() -- roll l1 roll 33900
     local sp_m = env(345 , HAND_RIGHT)
     local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1Start"
+
+    if env(1116, 100870) == TRUE then
+        SetAttackHand(HAND_LEFT)
+    else
+        SetAttackHand(HAND_RIGHT)
+    end
+
     if i1BB == TRUE then b2 = "W_AttackBothHeavy1SubStart" end
 
     local l1 = "W_AttackBothLeft1"
