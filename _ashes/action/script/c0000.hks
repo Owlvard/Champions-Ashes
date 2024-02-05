@@ -9660,7 +9660,11 @@ function AttackRightBackstep_onUpdate() -- r15 030920
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
 
     if i1BB == TRUE then r2 = "W_AttackRightHeavy1SubStart" end
@@ -10197,7 +10201,11 @@ function AttackBothLeft1_onUpdate() -- l11
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
 
     if sp_m == 613  then 
@@ -10292,7 +10300,11 @@ function AttackBothLeft2_onUpdate()  -- l12
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
 
     if sp_m == 613  then b1 = "W_AttackBothLeft3" end
@@ -10368,9 +10380,12 @@ function AttackBothLeft3_onUpdate()  -- l13
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
-
 
     if sp_m == 613  then 
         l1 = "W_AttackBothHeavy2End" 
@@ -10449,7 +10464,11 @@ function AttackBothLeftDash_onUpdate() -- bothdashleft run l1 run 33500
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
 
     if env(345 , hand) == 161 then
@@ -10483,7 +10502,11 @@ function AttackBothLeftStep_onUpdate() -- roll l1 roll 33900
     if env(1116, 100870) == TRUE then
         SetAttackHand(HAND_LEFT)
     else
-        SetAttackHand(HAND_RIGHT)
+        if style == HAND_RIGHT_BOTH then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT_BOTH then SetAttackHand(HAND_LEFT)
+        elseif style == HAND_RIGHT then SetAttackHand(HAND_RIGHT)
+        elseif style == HAND_LEFT then SetAttackHand(HAND_LEFT)
+        end
     end
 
     if i1BB == TRUE then b2 = "W_AttackBothHeavy1SubStart" end
