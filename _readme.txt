@@ -37,6 +37,6 @@ Make sure it's disabled before using a character that you don't want banned.
 
 LINKS
 -----
-Changelog: 	https://docs.google.com/document/d/1j4UVY_1E6jqCX-sthQ467BGq67YmGrjx1I5huEmtciA
+Changelog: 	https://docs.google.com/document/d/1tVGCCKhpywtZeDNnTOA3KUQ3aro_iUg9pAfiH97VgQw
 Nexus Page: 	https://www.nexusmods.com/darksouls3/mods/488
 Discord: 	https://discord.gg/xEMdvaTVc3
