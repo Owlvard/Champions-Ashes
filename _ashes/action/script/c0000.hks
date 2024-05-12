@@ -609,7 +609,7 @@ function GetWeightIndex(is_move)
     elseif move_id == WEIGHT_HEAVY or move_id == WEIGHT_HEAVY + 20 or move_id == WEIGHT_HEAVY + 40 or move_id == WEIGHT_HEAVY + 60 then
         move_weight = MOVE_WEIGHT_HEAVY
         evasion_weight = EVASION_WEIGHT_INDEX_HEAVY
-        act(2002, 660) -- fatroll stamina regen buff
+        --act(2002, 660) -- fatroll stamina regen buff
     elseif move_id == WEIGHT_OVERWEIGHT or move_id == WEIGHT_OVERWEIGHT + 20 or move_id == WEIGHT_OVERWEIGHT + 40 or move_id == WEIGHT_OVERWEIGHT + 60 then
         move_weight = MOVE_WEIGHT_HEAVY
         evasion_weight = EVASION_WEIGHT_INDEX_OVERWEIGHT
@@ -618,6 +618,13 @@ function GetWeightIndex(is_move)
         evasion_weight = EVASION_WEIGHT_INDEX_SUPERLIGHT
     end
     if env(1116, 130110) == TRUE then
+        if move_weight < MOVE_WEIGHT_HEAVY then
+            move_weight = MOVE_WEIGHT_HEAVY
+        end
+        if evasion_weight < EVASION_WEIGHT_INDEX_HEAVY then
+            evasion_weight = EVASION_WEIGHT_INDEX_HEAVY
+        end
+    elseif env(1116, 130111) == TRUE then
         if move_weight < MOVE_WEIGHT_HEAVY then
             move_weight = MOVE_WEIGHT_HEAVY
         end
@@ -716,9 +723,15 @@ end
 
 function GetWeaponChangeType(hand)
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667) 
     then i1BB = TRUE 
     else i1BB = FALSE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     local left_offset = 0
     local pos = env("武器格納場所タイプ取得", hand)
@@ -740,9 +753,15 @@ end
 
 function GetHandChangeType(hand)
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or  sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667 ) 
     then i1BB = TRUE 
     else i1BB = FALSE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     local left_offset = 0
     local pos = env("武器格納場所タイプ取得", hand)
@@ -765,7 +784,7 @@ end
 function GetSwordArtsInfo()
     local style = c_Style
     local is_both = FALSE
-    local sp = env(345 , HAND_LEFT)
+    local sp_o = env(345 , HAND_LEFT)
     local is_m = GetEquipType(HAND_LEFT, 20, 23, 25, 26, 28, 29, 30, 32, 33, 35, 36, 38) 
     local is_r = GetEquipType(HAND_LEFT, 27) 
     local is_sh = GetEquipType(HAND_LEFT, 48, 47) 
@@ -780,19 +799,19 @@ function GetSwordArtsInfo()
         elseif style == HAND_LEFT_BOTH then
             arts_hand = HAND_LEFT
         end
-        arts_id = env(326, arts_hand)
+        arts_id = env(326, arts_hand) -- Get Weapon ID
     else
-        local sp_o = env(326, HAND_LEFT)
-        if (    (sp == 137 or sp == 237 or (is_r == TRUE) or sp == 186 or sp == 187 or sp == 20 or is_m == TRUE or sp_o == SWORDARTS_RIGHTARTS or sp_o == 1701 ) and not (sp == 115 or sp == 178 or  sp == 207 or sp == 217 or sp == 218 or sp == 220 or (sp == 159 and c_Style == HAND_RIGHT) or sp == 234 or sp == 257 or sp == 99 or sp == 101 or sp == 151 or sp == 71 or sp == 665 or (is_sh == TRUE and sp_o == 3202   ) or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp == 67)      )   ) then         
+        local arts_id_o = env(326, HAND_LEFT)
+        if (    (sp_o == 137 or sp_o == 237 or (is_r == TRUE) or sp_o == 186 or sp_o == 187 or sp_o == 20 or is_m == TRUE or arts_id_o == SWORDARTS_RIGHTARTS or arts_id_o == 1701 ) and not (sp_o == 115 or sp_o == 178 or  sp_o == 207 or sp_o == 217 or sp_o == 218 or sp_o == 220 or (sp_o == 159 and c_Style == HAND_RIGHT) or sp_o == 234 or sp_o == 257 or sp_o == 99 or sp_o == 101 or sp_o == 151 or sp_o == 71 or sp_o == 665 or (is_sh == TRUE and arts_id_o == 3202   ) or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67)      )   ) then         
             arts_hand = HAND_RIGHT
             arts_id = env(326, HAND_RIGHT) 
         else
             arts_hand = HAND_LEFT
-            arts_id = sp_o
+            arts_id = arts_id_o
         end
         if env(225, HAND_LEFT) == WEAPON_CATEGORY_FIST then
             if arts_hand == HAND_LEFT then
-                if arts_id == SWORDARTS_ATTACKSPIN or sp == 235 then
+                if arts_id == SWORDARTS_ATTACKSPIN or sp_o == 235 then
                     arts_hand = HAND_RIGHT
                     arts_id = env(326, HAND_RIGHT) 
                 elseif arts_id ~= SWORDARTS_ONESHOTFULL then
@@ -803,8 +822,8 @@ function GetSwordArtsInfo()
                 arts_hand = HAND_LEFT
             end
         end
-        --if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and ((sp == 218 and c_SwordArtsID == SWORDARTS_DRAWSTANCE) or (sp == 115)) ) then
-        if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and (sp == 218 or sp == 115) ) then
+        --if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and ((sp_o == 218 and c_SwordArtsID == SWORDARTS_DRAWSTANCE) or (sp_o == 115)) ) then
+        if (env(225, HAND_LEFT) == WEAPON_CATEGORY_RAPIER and (sp_o == 218 or sp_o == 115) ) then
             if arts_hand == HAND_LEFT then
                 if arts_id ~= SWORDARTS_ONESHOTFULL then
                     arts_id = SWORDARTS_PARRY
@@ -816,13 +835,19 @@ function GetSwordArtsInfo()
         end
 
         -- follower torch offhand wa 
-        if (env(225, HAND_LEFT) == 33 and sp == 240 ) then 
+        if (env(225, HAND_LEFT) == 33 and sp_o == 240 ) then 
+            arts_hand = HAND_LEFT   
+            arts_id = SWORDARTS_MAGICBUFF
+        end
+
+        -- guardian shield offhand wa 
+        if (env(225, HAND_LEFT) == 48 and sp_o == 671 ) then 
             arts_hand = HAND_LEFT   
             arts_id = SWORDARTS_MAGICBUFF
         end
 
           -- blood bullet technique
-        if (sp == 602 or sp == 617 or sp == 618 or sp == 623 or sp == 628 or sp == 629 or sp == 630 or sp == 650 or sp == 652 or sp == 653) and 
+        if (sp_o == 602 or sp_o == 617 or sp_o == 618 or sp_o == 623 or sp_o == 628 or sp_o == 629 or sp_o == 630 or sp_o == 650 or sp_o == 652 or sp_o == 653) and 
         (env(225, HAND_LEFT) == 33 or  env(225, HAND_LEFT) == 25 )  then 
             arts_hand = HAND_LEFT   
             arts_id = SWORDARTS_MAGICBUFF
@@ -882,33 +907,39 @@ function GetAttackRequest(is_guard)
     local is_staff = GetEquipType(hand, WEAPON_CATEGORY_STAFF)
 
     if ForwardAttackShortcutRequest() then
-        if is_arrow == TRUE then return ATTACK_REQUEST_INVALID end
-        if is_crossbow == TRUE then return ATTACK_REQUEST_INVALID end
+        --if is_arrow == TRUE then return ATTACK_REQUEST_INVALID end
+        --if is_crossbow == TRUE then return ATTACK_REQUEST_INVALID end
         --if is_staff == TRUE then return ATTACK_REQUEST_INVALID end
         if env(1116, 100260) == TRUE then return ATTACK_REQUEST_INVALID end
         
         local sp_m = env(345 , HAND_RIGHT) 
-        local spo = env(345 , HAND_LEFT) 
-        if (sp_m == 248 or spo == 248) and env(1116, 100140) == TRUE then return ATTACK_REQUEST_INVALID end
+        local sp_o = env(345 , HAND_LEFT) 
+        if (sp_m == 248 or sp_o == 248) and env(1116, 100140) == TRUE then return ATTACK_REQUEST_INVALID end
 
         return GetForwardShortcutAttack()
     elseif env(1106, ACTION_ARM_R1) == TRUE then -- if changed to elseif ~halvard
         if is_both == TRUE then
-            local sp = env(345 , HAND_RIGHT) 
+            local sp_m = env(345 , HAND_RIGHT) 
             local is_ga = GetEquipType(HAND_RIGHT, 32) 
             local is_gh = GetEquipType(HAND_RIGHT, 35) 
-            local spo = env(345 , HAND_LEFT) 
+            local sp_o = env(345 , HAND_LEFT) 
             local is_gao = GetEquipType(HAND_LEFT, 32) 
             local is_gho = GetEquipType(HAND_LEFT, 35) 
+            local is_h = GetEquipType(HAND_RIGHT, 38) 
+            local is_ho = GetEquipType(HAND_LEFT, 38) 
             local is_r = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_RAPIER)
             local is_ro = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_RAPIER)
             local is_rightHandCA = FALSE
             local is_leftHandCA = FALSE
 
-            if (    ((is_gh == TRUE and sp == 655) or (is_ga == TRUE and c_SwordArtsID == 12) or (is_ga == TRUE and sp == 998) or (sp == 72 and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE) or (sp == 166 and c_SwordArtsID == 12  and env(1116, 697) == TRUE) or (is_r == TRUE) or sp == 103 or sp == 167 or sp == 147 or sp == 668 or sp == 673 or sp == 176 or sp == 231 or sp == 672 or sp == 681 or sp == 199 or sp == 168 or sp == 242 or sp == 140 or sp == 68) and is_both_right == TRUE) then is_rightHandCA = TRUE else is_rightHandCA = FALSE end
-            if (    ((is_gho == TRUE and spo == 655) or (is_gao == TRUE and c_SwordArtsID == 12) or (is_gao == TRUE and spo == 998) or (spo == 72  and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE ) or (spo == 166 and c_SwordArtsID == 12  and env(1116, 697) == TRUE) or (is_ro == TRUE) or spo == 103 or spo == 167 or spo == 147 or  spo == 668 or  spo == 673 or spo == 176 or  spo == 231 or spo == 672 or spo == 681 or spo == 199 or spo == 168 or spo == 242 or spo == 140 or spo == 68) and is_both_right == FALSE) then is_leftHandCA = TRUE else is_leftHandCA = FALSE end
+            if (    ((is_gh == TRUE and sp_m == 655) or (is_ga == TRUE and c_SwordArtsID == 12) or (is_ga == TRUE and sp_m == 998) or (sp_m == 72 and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE) or (sp_m == 166 and c_SwordArtsID == 12  and env(1116, 697) == TRUE) or (is_r == TRUE) or sp_m == 103 or sp_m == 167 or sp_m == 147 or sp_m == 668 or sp_m == 673 or sp_m == 176 or sp_m == 231 or sp_m == 672 or sp_m == 681 or sp_m == 199 or sp_m == 168 or sp_m == 242 or sp_m == 140 or sp_m == 68) and is_both_right == TRUE) then is_rightHandCA = TRUE else is_rightHandCA = FALSE end
+            if (    ((is_gho == TRUE and sp_o == 655) or (is_gao == TRUE and c_SwordArtsID == 12) or (is_gao == TRUE and sp_o == 998) or (sp_o == 72  and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE ) or (sp_o == 166 and c_SwordArtsID == 12  and env(1116, 697) == TRUE) or (is_ro == TRUE) or sp_o == 103 or sp_o == 167 or sp_o == 147 or  sp_o == 668 or  sp_o == 673 or sp_o == 176 or  sp_o == 231 or sp_o == 672 or sp_o == 681 or sp_o == 199 or sp_o == 168 or sp_o == 242 or sp_o == 140 or sp_o == 68) and is_both_right == FALSE) then is_leftHandCA = TRUE else is_leftHandCA = FALSE end
 
-            if is_arrow == TRUE then
+            if is_staff == TRUE then
+                return ATTACK_REQUEST_INVALID
+            elseif env(1106, ACTION_ARM_LIGHT_KICK) == TRUE then
+                return ATTACK_REQUEST_LIGHT_KICK
+            elseif is_arrow == TRUE then
                 act("弓矢スロット選択", 0)
                 return ATTACK_REQUEST_ARROW_FIRE_RIGHT
             elseif is_crossbow == TRUE then
@@ -918,22 +949,25 @@ function GetAttackRequest(is_guard)
                 else
                     return ATTACK_REQUEST_BOTHRIGHT_CROSSBOW
                 end
-            elseif is_staff == TRUE then
-                return ATTACK_REQUEST_INVALID
-            elseif env(1106, ACTION_ARM_LIGHT_KICK) == TRUE then
-                return ATTACK_REQUEST_LIGHT_KICK
             elseif (is_guard == TRUE and is_rightHandCA == TRUE) or (is_guard == TRUE and is_leftHandCA == TRUE) then
-                if ((sp == 655 and c_Style == HAND_RIGHT_BOTH) or (spo == 655 and is_leftHandCA == TRUE) ) then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt 2H combat art
+                if ((sp_m == 655 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 655 and is_leftHandCA == TRUE) ) then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt 2H combat art
                 elseif (    ((is_ga == TRUE and c_SwordArtsID == 12) and c_Style == HAND_RIGHT_BOTH) or ((is_gao == TRUE and c_SwordArtsID == 12) and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_WARCRY -- Greataxe or Yhorm's Machete combat art
-                elseif (    (sp == 231 and c_Style == HAND_RIGHT_BOTH) or (spo == 231 and is_leftHandCA == TRUE)) then SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE) return ExecEventAllBody("W_DrawStanceRightAttackHeavy")   -- astora combat art
-                elseif ((   (sp == 72 and c_Style == HAND_RIGHT_BOTH) or (spo == 72 and is_leftHandCA == TRUE)) and c_SwordArtsID ~= 24 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky combat art
-                elseif ((   (sp == 166 and c_Style == HAND_RIGHT_BOTH) or (spo == 166 and is_leftHandCA == TRUE)) and c_SwordArtsID == 12 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_STAMPEDE -- old hero
-                elseif (    ((sp == 68 or sp == 176 or sp == 242 or sp == 668 or sp == 672 or sp == 681) and c_Style == HAND_RIGHT_BOTH) or ((spo == 68 or spo == 176 or spo == 242 or spo == 672 or spo == 668 or spo == 681)  and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- 038700 kusabimaru 2H DSS or DSSS or Earth Seeker combat art     
-                elseif (    ((sp == 103 or sp == 167 or sp == 168 or sp == 673 or sp == 199) and c_Style == HAND_RIGHT_BOTH) or ((spo == 103 or spo == 167 or spo == 168 or spo == 673 or spo == 199) and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ONESHOT -- DSGA or Demon GA or eleonora or bloodlust combat art
-                elseif (    ((is_ga == TRUE and (sp == 998 or sp == 140)) and c_Style == HAND_RIGHT_BOTH) or ((is_gao == TRUE and (spo == 998 or spo == 140)) and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ATTACKSPIN -- Great Machete or Demon Great machete or salvation axes
+                elseif (    (sp_m == 231 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 231 and is_leftHandCA == TRUE)) then SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE) return ExecEventAllBody("W_DrawStanceRightAttackHeavy")   -- astora combat art
+                elseif ((   (sp_m == 72 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 72 and is_leftHandCA == TRUE)) and c_SwordArtsID ~= 24 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky combat art
+                elseif ((   (sp_m == 166 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 166 and is_leftHandCA == TRUE)) and c_SwordArtsID == 12 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_STAMPEDE -- old hero
+                elseif (    ((sp_m == 68 or sp_m == 176 or sp_m == 668 or sp_m == 681) and c_Style == HAND_RIGHT_BOTH) or ((sp_o == 68 or sp_o == 176 or sp_o == 668 or sp_o == 681)  and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- 038700 kusabimaru 2H DSS or DSSS or Earth Seeker combat art     
+                elseif (    ((sp_m == 103 or sp_m == 167 or sp_m == 168 or sp_m == 673 or sp_m == 199) and c_Style == HAND_RIGHT_BOTH) or ((sp_o == 103 or sp_o == 167 or sp_o == 168 or sp_o == 673 or sp_o == 199) and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ONESHOT -- DSGA or Demon GA or eleonora or bloodlust combat art
+                elseif (    ((is_ga == TRUE and (sp_m == 998 or sp_m == 140)) and c_Style == HAND_RIGHT_BOTH) or ((is_gao == TRUE and (sp_o == 998 or sp_o == 140)) and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_ATTACKSPIN -- Great Machete or Demon Great machete or salvation axes
+                elseif ((   ((sp_m == 242 and is_h == TRUE) or (sp_m == 242 and is_ga == TRUE)  and c_Style == HAND_RIGHT_BOTH) or ((sp_o == 242 and is_ho == TRUE) or (sp_o == 242 and is_gao == TRUE) and is_leftHandCA == TRUE)))  then return SWORDARTS_REQUEST_RIGHT_HEADHUNT -- Crescent Axe Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 24)  then return SWORDARTS_REQUEST_RIGHT_RANDOMONESHOT -- Sekiro Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 34)  then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- Sekiro Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 25)  then return SWORDARTS_REQUEST_RIGHT_RANDOMONESHOT -- Sekiro Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 13)  then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- Sekiro Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 20)  then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- Sekiro Combat Art
+                elseif ((   (sp_m == 672 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 672 and is_leftHandCA == TRUE)) and c_SwordArtsID == 2)  then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- Sekiro Combat Art
 
-                elseif (    (sp == 147 and c_Style == HAND_RIGHT_BOTH)  ) then return SWORDARTS_REQUEST_RIGHT_PARRY -- falchion combat art
-                elseif (    (spo == 147 and is_leftHandCA == TRUE)) then return ATTACK_REQUEST_BOTH_LIGHT -- falchion combat art
+                elseif (    (sp_m == 147 and c_Style == HAND_RIGHT_BOTH)  ) then return SWORDARTS_REQUEST_RIGHT_PARRY -- falchion combat art
+                elseif (    (sp_o == 147 and is_leftHandCA == TRUE)) then return ATTACK_REQUEST_BOTH_LIGHT -- falchion combat art
                 elseif (    (is_r == TRUE and c_Style == HAND_RIGHT_BOTH) or (is_ro == TRUE and is_leftHandCA == TRUE)) then return SWORDARTS_REQUEST_RIGHT_PARRY -- thrusting sword combat art   
                 else return SWORDARTS_REQUEST_RIGHT_ONESHOT -- ???
                 end
@@ -944,12 +978,12 @@ function GetAttackRequest(is_guard)
             local is_s = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SPEAR)
             local is_r = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_RAPIER)
             local is_h = GetEquipType(HAND_RIGHT, 38) 
-            local sp = env(345 , HAND_RIGHT) 
+            local sp_m = env(345 , HAND_RIGHT) 
 
             local is_ga = GetEquipType(HAND_RIGHT, 32) 
             local is_gh = GetEquipType(HAND_RIGHT, 35) 
 
-            if is_s == TRUE or is_r == TRUE or (is_h == TRUE and (sp == 108 or sp == 67)) then 
+            if is_s == TRUE or is_r == TRUE or (is_h == TRUE and (sp_m == 108 or sp_m == 67)) then 
                 if 0 < env(1108, ACTION_ARM_L1) then
                     return ATTACK_REQUEST_ATTACK_WHILE_GUARD
                 end
@@ -960,21 +994,26 @@ function GetAttackRequest(is_guard)
             elseif is_crossbow == TRUE then
                 act("弓矢スロット選択", 0)
                 return ATTACK_REQUEST_RIGHT_CROSSBOW
-            elseif is_gh == TRUE and sp == 655 then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt combat art
-            elseif sp == 231 then 
+            elseif is_gh == TRUE and sp_m == 655 then return SWORDARTS_REQUEST_RIGHT_CHARGE -- vordt combat art
+            elseif sp_m == 231 then 
                 act(2002, 626)
                 return ExecEventAllBody("W_DrawStanceRightAttackHeavy") -- astora
-            elseif (is_ga == TRUE and (sp ~= 199 and sp ~= 168 and sp ~= 242 and sp ~= 140 and sp ~= 998)) then -- 998 is an empty spcategory
+            elseif (is_ga == TRUE and (sp_m ~= 199 and sp_m ~= 168 and sp_m ~= 242 and sp_m ~= 140 and sp_m ~= 998)) then -- 998 is an empty spcategory
                 return SWORDARTS_REQUEST_RIGHT_WARCRY -- Greataxe or Yhorm's machete combat art
-            elseif sp == 72 and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE  then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky
-            elseif sp == 103 or sp == 167 or sp == 168 or sp == 673 or sp == 199 then return SWORDARTS_REQUEST_RIGHT_ONESHOT -- DSGA or Demon GA or eleonora or bloodlust
-            elseif (sp == 166 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_STAMPEDE -- hero
-            elseif sp == 176 or sp == 242 or sp == 668 or sp == 672 or sp == 681 then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- DSSS or Earth Seeker
-            elseif (is_ga == TRUE and (sp == 998 or sp == 140)) then return SWORDARTS_REQUEST_RIGHT_ATTACKSPIN -- Great Machete or Demon Great machete or salvation axes
-            elseif sp == 147 then return SWORDARTS_REQUEST_RIGHT_PARRY -- falchion combat art
+            elseif sp_m == 72 and c_SwordArtsID ~= 24  and env(1116, 697) == TRUE  then return SWORDARTS_REQUEST_RIGHT_ENDURE -- murky
+            elseif sp_m == 103 or sp_m == 167 or sp_m == 168 or sp_m == 673 or sp_m == 199 then return SWORDARTS_REQUEST_RIGHT_ONESHOT -- DSGA or Demon GA or eleonora or bloodlust
+            elseif (sp_m == 166 and env(1116, 697) == TRUE)  then return SWORDARTS_REQUEST_RIGHT_STAMPEDE -- hero
+            elseif sp_m == 176 or sp_m == 668 or sp_m == 681 then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- DSSS or Earth Seeker
+            elseif (is_ga == TRUE and (sp_m == 998 or sp_m == 140)) then return SWORDARTS_REQUEST_RIGHT_ATTACKSPIN -- Great Machete or Demon Great machete or salvation axes
+            elseif (sp_m == 242 and is_h == TRUE) or (sp_m == 242 and is_ga == TRUE) then return SWORDARTS_REQUEST_RIGHT_HEADHUNT -- Crescent Axe Combat Art
+            elseif sp_m == 672 and env(1116, 706) == TRUE then return SWORDARTS_REQUEST_RIGHT_RANDOMONESHOT -- Sekiro Combat Art
+            elseif sp_m == 672 and env(1116, 706) ~= TRUE then return SWORDARTS_REQUEST_RIGHT_ONESHOT_NOGENTRANS -- Sekiro Combat Art
+            elseif sp_m == 147 then return SWORDARTS_REQUEST_RIGHT_PARRY -- falchion combat art
             end
         elseif is_staff == TRUE then
             return ATTACK_REQUEST_INVALID
+        elseif env(1106, ACTION_ARM_LIGHT_KICK) == TRUE then
+            return ATTACK_REQUEST_LIGHT_KICK
         elseif is_arrow == TRUE then
             return ATTACK_REQUEST_ARROW_BOTH_RIGHT
         elseif is_crossbow == TRUE then
@@ -989,20 +1028,14 @@ function GetAttackRequest(is_guard)
     elseif env(1106, ACTION_ARM_R2) == TRUE then
 
         local is_unfaltering_prayer = FALSE -- unfaltering prayer
-        local sp_c = env(345 , HAND_RIGHT) 
-        local sp_lb = env(345 , HAND_LEFT) 
+        local sp_m = env(345 , HAND_RIGHT) 
+        local sp_o = env(345 , HAND_LEFT) 
 
         if c_SwordArtsID == SWORDARTS_SAMAGIC or c_SwordArtsID == SWORDARTS_SAMAGICMEDIUM or c_SwordArtsID == SWORDARTS_SAMAGICSTRONG then 
             is_unfaltering_prayer = TRUE 
         end
 
-        if is_arrow == TRUE then
-            if is_both == TRUE then
-                act("弓矢スロット選択", 1)
-                return ATTACK_REQUEST_ARROW_FIRE_RIGHT2
-            else
-                return ATTACK_REQUEST_ARROW_BOTH_RIGHT
-            end
+        
             -- base for all catalysts = 41
             -- talisman = 127
             -- pyro flame = 149
@@ -1010,12 +1043,26 @@ function GetAttackRequest(is_guard)
             -- pyro parting = 239
             -- murky long staff = 266
             -- sacred c of fili = 267 
-        --elseif (     (is_unfaltering_prayer == TRUE and ( style == HAND_LEFT or style == HAND_LEFT_BOTH))   or   ((sp_c == 185 or sp_c == 127 or sp_c == 267) and style ~= HAND_LEFT_BOTH)   or  ((sp_lb == 185 or sp_lb == 127 or sp_lb == 267) and style == HAND_LEFT_BOTH)       ) then
+        --elseif (     (is_unfaltering_prayer == TRUE and ( style == HAND_LEFT or style == HAND_LEFT_BOTH))   or   ((sp_m == 185 or sp_m == 127 or sp_m == 267) and style ~= HAND_LEFT_BOTH)   or  ((sp_o == 185 or sp_o == 127 or sp_o == 267) and style == HAND_LEFT_BOTH)       ) then
           --  if is_both == TRUE then               
             --    return ATTACK_REQUEST_INVALID
            -- else
              --   return ATTACK_REQUEST_INVALID
            -- end
+
+        if env(1106, ACTION_ARM_HEAVY_KICK) == TRUE then
+            local check_weapon = FALSE --GetEquipType(hand, WEAPON_CATEGORY_STAFF)
+
+            if  ((check_weapon == FALSE and env(1116, 100260) == FALSE) )  then
+                return ATTACK_REQUEST_HEAVY_KICK
+            end
+        elseif is_arrow == TRUE then
+            if is_both == TRUE then
+                act("弓矢スロット選択", 1)
+                return ATTACK_REQUEST_ARROW_FIRE_RIGHT2
+            else
+                return ATTACK_REQUEST_ARROW_BOTH_RIGHT
+            end
         elseif is_crossbow == TRUE then
             if is_both == TRUE then
                 if style == HAND_LEFT_BOTH then
@@ -1029,17 +1076,16 @@ function GetAttackRequest(is_guard)
                 act("弓矢スロット選択", 1)
                 return ATTACK_REQUEST_RIGHT_CROSSBOW2
             end
-        elseif env(1106, ACTION_ARM_HEAVY_KICK) == TRUE then
-            local check_weapon = FALSE --GetEquipType(hand, WEAPON_CATEGORY_STAFF)
 
-            if  ((check_weapon == FALSE and env(1116, 100260) == FALSE) )  then
-                return ATTACK_REQUEST_HEAVY_KICK
+        elseif (is_guard == TRUE and (sp_m == 672 or sp_m == 688)) then -- Sekiro Prosthetic Art
+            if (sp_o == 691)  then return ATTACK_REQUEST_LEFT_HEAVY -- Sekiro Art
+            else return ATTACK_REQUEST_BOTH_HEAVY
             end
         end
-        local sp_kind = env(345 , hand)
-        if sp_kind == 178 or sp_kind == 207 or (sp_kind == 217 and env(1116, 100260) == FALSE) or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_RIGHT) or sp_kind == 234 or (GetEquipType(hand, 38)  == TRUE and sp_kind == 67)  then 
+        local sp_hybrid = env(345 , hand)
+        if env(1116, 100271) == FALSE and (sp_hybrid == 178 or sp_hybrid == 207 or (sp_hybrid == 217 and env(1116, 100260) == FALSE) or sp_hybrid == 220 or (sp_hybrid == 159 and c_Style == HAND_RIGHT) or sp_hybrid == 234 or (GetEquipType(hand, 38)  == TRUE and sp_hybrid == 67))  then 
             return ATTACK_REQUEST_INVALID
-        elseif sp_kind == 257 and env(1116, 100580) == FALSE then
+        elseif env(1116, 100271) == FALSE and sp_hybrid == 257 and env(1116, 100580) == FALSE then
             return ATTACK_REQUEST_INVALID
         elseif is_both == TRUE then
             return ATTACK_REQUEST_BOTH_HEAVY
@@ -1099,7 +1145,7 @@ function GetAttackRequest(is_guard)
             local isFUGS = FALSE
             if (GetEquipType(HAND_LEFT, 26) == TRUE and sp_o == 163 and IsNodeActive("Rolling_CMSG", "RollingSelftrans_CMSG", "EStepDown_CMSG", "BackStepSuperlight_CMSG") == TRUE) then isFUGS = TRUE else isFUGS = FALSE end
 
-            if (   (sp_o ~= 50 and sp_o ~= 179 and sp_o ~= 232 and sp_o ~= 264 and sp_o ~= 164 and sp_o ~= 107 and sp_o ~= 663 and sp_o ~= 674 and sp_o ~= 681 )         and GetEquipType(HAND_LEFT, 38) == TRUE)   then is_go = TRUE    else is_go = FALSE end
+            if (   (sp_o ~= 50 and sp_o ~= 232 and sp_o ~= 264 and sp_o ~= 164 and sp_o ~= 107 and sp_o ~= 663 and sp_o ~= 674 and sp_o ~= 681 )         and GetEquipType(HAND_LEFT, 38) == TRUE)   then is_go = TRUE    else is_go = FALSE end
             if (   (sp_m ~= 50 and sp_m ~= 179 and sp_m ~= 232 and sp_m ~= 264 and sp_m ~= 164 and sp_m ~= 107 and sp_m ~= 621 and sp_m ~= 640 and sp_m ~= 663 and sp_m ~= 674 and sp_m ~= 681 )   and GetEquipType(HAND_RIGHT, 38)  == TRUE)   then is_gm = TRUE    else is_gm = FALSE end
             
             -- powerstance
@@ -1110,7 +1156,7 @@ function GetAttackRequest(is_guard)
             elseif  (   (is_gm == TRUE)                                                 and    (is_go == TRUE)                                                          and                                    (is_both == FALSE))                then return ATTACK_REQUEST_BOTH_LEFT
             elseif  is_ugs_ps == TRUE    then return ATTACK_REQUEST_BOTH_LEFT
             elseif  (   (sp_m == 162)                                                    and    (sp_o == 154)                                                              and                                    (is_both == FALSE))                then return ATTACK_REQUEST_BOTH_LEFT
-            elseif  (   (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m == 50)            and    (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o == 50)                       and                                    (is_both == FALSE))                then return ATTACK_REQUEST_BOTH_LEFT
+            elseif  (   (GetEquipType(HAND_RIGHT, 38) == TRUE and (sp_m == 50 or sp_m == 179 or sp_m == 107 or sp_m == 232 or sp_m == 674 or sp_m == 663 or sp_m == 681))            and    (GetEquipType(HAND_LEFT, 38) == TRUE and (sp_o == 50 or sp_o == 179 or sp_o == 107 or sp_o == 232 or sp_o == 674 or sp_o == 663 or sp_o == 681))                       and                                    (is_both == FALSE))                then return ATTACK_REQUEST_BOTH_LEFT
             elseif ((is_m == TRUE and isFUGS == FALSE) and (sp_o ~= 99 and sp_o ~= 101 and sp_o ~= 137 and sp_o ~= 151))  then
                 return ATTACK_REQUEST_LEFT_HEAVY
             elseif sp_o == 178 or sp_o == 207 or (sp_o == 217 and not (is_sl == TRUE and IsNodeActive("Rolling_CMSG", "RollingSelftrans_CMSG", "EStepDown_CMSG", "BackStepSuperlight_CMSG") == TRUE)  ) or sp_o == 220 or sp_o == 234 or sp_o == 257 or sp_o == 186 or sp_o == 20 or (is_d == TRUE and sp_o == 150) or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67) then
@@ -1150,8 +1196,8 @@ function GetAttackRequest(is_guard)
             elseif GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW, WEAPON_CATEGORY_LARGE_ARROW) == TRUE then
                 return ATTACK_REQUEST_ARROW_BOTH_LEFT
             end
-            local sp_kind = env(345 , HAND_LEFT)
-            if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_LEFT) or sp_kind == 234 or sp_kind == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_kind == 67) then
+            local sp_o = env(345 , HAND_LEFT)
+            if sp_o == 178 or sp_o == 207 or sp_o == 217 or sp_o == 220 or (sp_o == 159 and c_Style == HAND_LEFT) or sp_o == 234 or sp_o == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67) then
                 return ATTACK_REQUEST_INVALID
             end
         end
@@ -1267,7 +1313,7 @@ function SetEvasionStaminaCost()
         c_StaminaCostJump = -16
         c_StaminaCostRollingBU = -30
         c_StaminaCostBackStepBU = -14
-        act(2002, 660)
+        --act(2002, 660)
     elseif weight == WEIGHT_OVERWEIGHT then
         c_StaminaCostRolling = -26
         c_StaminaCostBackStep = -18
@@ -1296,7 +1342,7 @@ function SetEvasionStaminaCost()
 end
 
 function SetSwordArtsCancelType()
-    local sp_kind = env(345 , HAND_LEFT)
+    local sp_o = env(345 , HAND_LEFT)
     if IsEnableSwordArts() == TRUE then
         act(2011, env("剣戟キャンセルタイプを取得", c_SwordArtsHand))
     else
@@ -1337,12 +1383,14 @@ function SetSwordArtsPointInfo(button, is_point_consume)
         sel = 1
     end
 
-    local sp = env(345 , HAND_LEFT)
-    if (sp == 602 or sp == 617 or sp == 618 or sp == 623 or sp == 628 or sp == 629 or sp == 630 or sp == 650 or sp == 652 or sp == 653) and 
+    local sp_o = env(345 , HAND_LEFT)
+    if (sp_o == 602 or sp_o == 617 or sp_o == 618 or sp_o == 623 or sp_o == 628 or sp_o == 629 or sp_o == 630 or sp_o == 650 or sp_o == 652 or sp_o == 653) and 
     (env(225, HAND_LEFT) == 33 or  env(225, HAND_LEFT) == 25 ) and c_Style ~= HAND_RIGHT_BOTH   then sel = 0 end
 
     local sp_m = env(345 , HAND_RIGHT)
     if sp_m == 649 or (sp_m == 672 and (c_Style == HAND_RIGHT or c_Style == HAND_RIGHT_BOTH)) then sel = 0 end 
+
+    if (sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH) then sel = 0 end
 
     local val = "IsEnoughArtPointsL2"
     if button == ACTION_ARM_R1 then
@@ -1363,10 +1411,10 @@ function SetSwordArtsPointInfo(button, is_point_consume)
         end
     elseif button == ACTION_ARM_L2 then
         if IsNodeActive("MagicBuffRight_Upper_Selector") == TRUE or IsNodeActive("MagicBuffLeft_Upper_Selector") == TRUE then
-            local sp_kind_L = env(345 , HAND_LEFT)
-            local sp_kind_R = env(345 , HAND_RIGHT)
+            local sp_o = env(345 , HAND_LEFT)
+            local sp_m = env(345 , HAND_RIGHT)
             local style = c_Style
-            if (sp_kind_L == 265 or sp_kind_L == 665) and (sp_kind_R == 265 or sp_kind_R == 665) then
+            if (sp_o == 265 or sp_o == 665) and (sp_m == 265 or sp_m == 665) then
                 DebugPrint(1, style)
                 if style == HAND_BOTH or style == HAND_LEFT_BOTH or style == HAND_RIGHT_BOTH then
                     val = "IsEnoughArtPointsL2_2"
@@ -1389,6 +1437,7 @@ function SetSwordArtsPointInfo(button, is_point_consume)
 end
 
 function SetAttackQueue(r1, r2, l1, l2, b1, b2)
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -1407,23 +1456,31 @@ function SetAttackQueue(r1, r2, l1, l2, b1, b2)
     return 
 end
 
-function ClearAttackQueue()
+function ClearAttackQueue()    
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
     local r2 = "W_AttackRightHeavy1Start"
     local b2 =  "W_AttackBothHeavy1Start"
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+    
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
     end
-    if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
+    if (sp_m == 624) then b2 = "W_AttackRightHeavy1SubStart" end
+    if (sp_m == 610) then b2 = "W_AttackRightHeavy1SubStart" end
+    if (sp_m == 667) then b2 = "W_AttackRightHeavy1SubStart" end
+    if (sp_m == 671 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
 
-    g_r1 = "W_AttackRightLight1"
+    g_r1 = r1
     g_r2 = r2
     g_l1 = "W_AttackLeftLight1"
     g_l2 = "W_AttackLeftHeavy1"
-    g_b1 = "W_AttackBothLight1"
+    g_b1 = b1
     g_b2 = b2
     return 
 end
@@ -1459,9 +1516,9 @@ end
 function IsEnableSwordArts()
     local style = c_Style
     local arts_id = c_SwordArtsID
-    local sp_kind = env(345 , HAND_LEFT)
+    local sp_o = env(345 , HAND_LEFT)
     if style ~= HAND_LEFT_BOTH and c_SwordArtsHand == 0 then
-        if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or sp_kind == 234 or sp_kind == 257 or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_kind == 67)  then
+        if sp_o == 178 or sp_o == 207 or sp_o == 217 or sp_o == 220 or sp_o == 234 or sp_o == 257 or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67)  then
             return FALSE
         elseif arts_id == SWORDARTS_PARRY or arts_id == SWORDARTS_SPIN or arts_id == SWORDARTS_STRONGBASH or arts_id == SWORDARTS_CHAINSHOT or arts_id == SWORDARTS_MAGICBUFF or arts_id == SWORDARTS_SAMAGIC or arts_id == SWORDARTS_CHARGESHOT or arts_id == SWORDARTS_ONESHOTFULL or arts_id == SWORDARTS_STRONGSHOT or arts_id == SWORDARTS_SAMAGICMEDIUM or arts_id == SWORDARTS_SAMAGICSTRONG or arts_id == SWORDARTS_WIDESHOT or arts_id == SWORDARTS_MAGICBUFFPRAY or arts_id == SWORDARTS_MAGICBUFFATTACK then
             return TRUE
@@ -1631,18 +1688,25 @@ function IsEnableGuard()
     if style == HAND_RIGHT_BOTH then
         hand = HAND_RIGHT
     end
-    local sp = env(345 , hand)
+    local sp_kind = env(345 , hand)
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
 
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667 ) 
     then i1BB = TRUE 
     else i1BB = FALSE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     local is_sl = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_SHIELD, WEAPON_CATEGORY_LARGE_SHIELD, WEAPON_CATEGORY_TORCH) 
     local is_m = GetEquipType(HAND_LEFT, 20, 23, 25, 26, 28, 29, 30, 32, 33, 35, 36, 38) 
     local is_r = GetEquipType(HAND_LEFT, 27) 
     
     local isFUGS = FALSE
-    if (GetEquipType(HAND_LEFT, 26) == TRUE and sp == 163) then isFUGS = TRUE else isFUGS = FALSE end
+    if (GetEquipType(HAND_LEFT, 26) == TRUE and sp_kind == 163) then isFUGS = TRUE else isFUGS = FALSE end
 
     local sp_m = env(345 , HAND_RIGHT)
     local sp_o = env(345 , HAND_LEFT)    
@@ -1652,17 +1716,17 @@ function IsEnableGuard()
             return FALSE
         elseif is_m == TRUE and isFUGS == FALSE   then 
             return FALSE
-        elseif sp == 123 then
+        elseif sp_kind == 123 then
             return TRUE
-        elseif sp == 178 or sp == 207 or (sp == 217 and not is_sl == TRUE)  or sp == 220 or (sp == 159 and c_Style == HAND_RIGHT) or sp == 234 or sp == 257 or sp == 186  or (GetEquipType(hand, 38)  == TRUE and sp == 67) then
+        elseif sp_kind == 178 or sp_kind == 207 or (sp_kind == 217 and not is_sl == TRUE)  or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_RIGHT) or sp_kind == 234 or sp_kind == 257 or sp_kind == 186  or (GetEquipType(hand, 38)  == TRUE and sp_kind == 67) then
             return FALSE
-        elseif sp == 99 or sp == 101 or sp == 137 or sp == 151 or sp == 218 or sp == 20 or  is_r == TRUE   then
+        elseif sp_kind == 99 or sp_kind == 101 or sp_kind == 137 or sp_kind == 151 or sp_kind == 218 or sp_kind == 20 or  is_r == TRUE   then
             return FALSE
         elseif is_sl == TRUE then 
             return TRUE 
         end
     end
-    if sp == 229 or sp == 231 or sp == 234 then
+    if sp_kind == 229 or sp_kind == 231 or sp_kind == 234 then
         return TRUE
     elseif IsWeaponCanGuard() == FALSE then
         return FALSE
@@ -1697,7 +1761,7 @@ function IsWarcrySpAtk()
     if style == HAND_LEFT_BOTH then
         offset = 50
     end
-    local buff = {1062301, 1062311, 1070101, 1070111, 1070401, 1070411, 1070501, 1070511, 1080001, 1080011, 1080601, 1080611, 1083201, 1092401, 1092411, 1070201}
+    local buff = {1062301, 1062311, 1070101, 1070111, 1070401, 1070411, 1070501, 1070511, 1080001, 1080011, 1080601, 1080611, 1083201, 1092401, 1092311, 1092301, 1092411, 1070201}
     for local0 = 1, #buff, 1 do
         if env(1116, buff[local0] + offset) == TRUE then
             return TRUE
@@ -1783,7 +1847,7 @@ function IsArtsSpAtk()
     if style == HAND_LEFT_BOTH then
         offset = 50
     end
-    local buff = {1083201, 1092401, 1092411}
+    local buff = {1083201, 1092401, 1092411, 1092301, 1092311}
     for local0 = 1, #buff, 1 do
         if env(1116, buff[local0] + offset) == TRUE then
             return TRUE
@@ -2044,6 +2108,9 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             r2 = "W_AttackRightHeavy1SubStart" 
             b2 = "W_AttackBothHeavy1SubStart"
         end
+
+        if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
+
         if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
         if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
         if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -2083,9 +2150,41 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         if artsr1 == TRUE then
             SetSwordArtsPointInfo(ACTION_ARM_R1, TRUE)
         end
+
         if IsArtsSpAtk() == TRUE and r1 == "W_AttackRightLightStep" then
             r1 = "W_AttackRightLightStepSpecial"
         end
+
+        if (GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 148 or sp_m == 217 or sp_m == 240 or sp_m == 998) and c_Style == HAND_RIGHT) then -- morning star alt moveset
+            if r1 == "W_AttackRightLightStep" then r1 = "W_AttackRightLightStepSpecial"
+            end
+        end
+
+        if sp_m == 665 then
+            if r1 == "W_AttackRightLight1" then 
+                ExecEventHalfBlend(Event_MagicBuffRight, ALLBODY)
+                r1 = "W_MagicBuffRight"
+            elseif r1 == "W_AttackRightLight2" then r1 = "W_MagicBuffRight2"
+            elseif r1 == "W_AttackRightLight3" then r1 = "W_MagicBuffRight3"
+            end
+        end
+
+        if (GetEquipType(HAND_RIGHT, 38) == TRUE and env(1116, 705) == TRUE and (sp_m == 677) and c_Style ~= HAND_LEFT_BOTH) then 
+            if r1 == "W_AttackRightLight1" then r1 = "W_AttackRightHeavyKickSpecial"
+            elseif r1 == "W_AttackRightLight2" then r1 = "W_AttackRightHeavyKickSpecial"
+            elseif r1 == "W_AttackRightLight3" then r1 = "W_AttackRightHeavyKickSpecial"
+            end
+        end
+
+        if (sp_m == 692 and c_Style ~= HAND_LEFT_BOTH) then 
+            if r1 == "W_AttackRightLightDash" then r1 = "W_AttackBothDash"
+            end
+        end
+    
+        if ExtraR1R2 == TRUE then 
+            if r1 == "W_AttackRightLight1" then r1 = "W_Attack2RightLight1" end -- followups for all attacks
+        end
+
         if (iT == TRUE) then 
             ExecEventAllBody(b1)
         else  
@@ -2104,6 +2203,8 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             if (    (is_Um == FALSE and sp_m == 163 and is_both_right == TRUE  and env(1116, 100282) == TRUE) or (sp_m == 171 and is_both_right == TRUE and env(1116, 100282) == TRUE)  or 
                     (is_Uo == FALSE and sp_o == 163 and is_both_right == FALSE and env(1116, 100282) == TRUE) or (sp_o == 171 and is_both_right == FALSE and env(1116, 100282) == TRUE)    ) then 
             elseif (sp_m == 672 or sp_m == 688) and c_Style ~= HAND_LEFT_BOTH then  ExecEventAllBody("W_AttackRightLightKick")
+            elseif (sp_m == 175 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 175 and c_Style == HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackRightLightKick")
+            elseif (sp_m == 696 and c_Style ~= HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackRightLightKick")
             else ExecEventAllBody("W_AttackBothLightKick") end
         else
             if (    (is_Um == FALSE and sp_m == 163 and is_both_right == TRUE  and env(1116, 100282) == TRUE) or (sp_m == 171 and is_both_right == TRUE and env(1116, 100282) == TRUE)  or 
@@ -2117,6 +2218,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         local is_Um = GetEquipType(HAND_RIGHT, 26, 35)     
         local is_Uo = GetEquipType(HAND_LEFT, 26, 35) 
         local is_both_right = FALSE
+
         if c_Style == HAND_RIGHT_BOTH then is_both_right = TRUE end
         if (  (    (is_Um == FALSE and sp_m == 163 and is_both_right == TRUE)    or      (is_Uo == FALSE and sp_o == 163 and is_both_right == FALSE)    ) and env(1116, 100289) == TRUE) then 
         else   
@@ -2135,13 +2237,18 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 r2 = "W_AttackRightHeavySpecial2Start"
 
             end
-            --xxxxxx--
 
         elseif (sp_m == 689 or sp_m == 690 or sp_m == 687 or sp_m == 688  or sp_m == 692) then -- W_AttackRightHeavy1Start extra r2 
             EXR2 = TRUE
             if r2 == "W_AttackRightHeavy1Start" then -- r21 charge extra 030345
                     r2 = "W_AttackRightHeavyWepBroken2Start" 
             end
+
+        elseif ExtraR1R2 == TRUE then 
+            if r2 == "W_AttackRightHeavy1Start" then r2 = "W_Attack2RightHeavy1Start" 
+            elseif r2 == "W_AttackRightHeavy1SubStart" then r2 = "W_Attack2RightHeavy1Start" 
+            elseif r2 == "W_AttackRightHeavy2Start" then r2 = "W_Attack2RightHeavy2Start" 
+            end -- followups for all attacks
             
         elseif IsWepBrokenHeavyAtk() == TRUE then
             if r2 == "W_AttackRightHeavy1Start" then
@@ -2180,12 +2287,21 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             elseif                      (GetEquipType(HAND_RIGHT, 38)  == TRUE and sp_m == 67 and is_both_right == TRUE and env(1116, 100289) == TRUE)  or (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o == 67 and is_both_right == FALSE  and env(1116, 100289) == TRUE)   then
                 ExecEventAllBody("W_CrossbowStepInReload") 
             elseif (sp_m == 672 or sp_m == 688) and c_Style ~= HAND_LEFT_BOTH then ExecEventAllBody("W_AttackRightHeavyKick")
+            elseif (sp_m == 696 and c_Style ~= HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackRightHeavyKick")
+            elseif (sp_m == 686 and c_Style ~= HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
             elseif ((sp_m == 687 and env(1116, 705) == TRUE) and c_Style ~= HAND_LEFT_BOTH)
                 or ((sp_o == 687 and env(1116, 705) == TRUE) and c_Style == HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackBothHeavyKickSpecial")
+            elseif ((GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 217 or sp_m == 240 or sp_m == 998) and c_Style ~= HAND_LEFT_BOTH))
+            or     ((GetEquipType(HAND_LEFT, 33) == TRUE and env(1116, 707) == TRUE and (sp_o == 217 or sp_o == 240 or sp_o == 998) and c_Style == HAND_LEFT_BOTH)) then -- morning star alt moveset
+                    ExecEventAllBody("W_AttackBothHeavyKickSpecial")
             else
                 ExecEventAllBody("W_AttackBothHeavyKick")
             end
         elseif IsArtsSpAtk() == TRUE then
+            ExecEventAllBody("W_AttackRightHeavyKickSpecial")
+        elseif (GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 148 or sp_m == 217 or sp_m == 240 or sp_m == 998) and c_Style == HAND_RIGHT) then -- morning star alt moveset
+            ExecEventAllBody("W_AttackRightHeavyKickSpecial")
+        elseif (sp_m == 686 and c_Style ~= HAND_LEFT_BOTH) then -- great mace alt fr2
             ExecEventAllBody("W_AttackRightHeavyKickSpecial")
         elseif (env(1116, 698) and IsWarcrySpAtk() == TRUE and (sp_m == 127) and c_Style ~= HAND_LEFT_BOTH)
         or (env(1116, 698) and IsWarcrySpAtk() == TRUE and (sp_o == 127) and c_Style == HAND_LEFT_BOTH) then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
@@ -2261,7 +2377,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                     l2 = "W_AttackLeftHeavySp3" -- 32092    guns out of ammo
                 end
         end
-        if (sp_g == 651) then 
+        if (sp_g == 651) then  --651
             local speed = GetVariable("MoveSpeedLevelReal")
             if DASH_STARTING_SPEED < speed then l2 = "W_AttackLeftHeavySp1"
             elseif r1 == "W_AttackRightLightStep" then l2 = "W_AttackLeftHeavySp2"
@@ -2272,7 +2388,24 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             end
         end
 
-        if (sp_g == 691) then 
+        if (sp_g == 154 and c_Style ~= HAND_LEFT_BOTH) then 
+            local speed = GetVariable("MoveSpeedLevelReal")
+            if DASH_STARTING_SPEED < speed then l2 = "W_AttackLeftHeavySp1"
+            elseif r1 == "W_AttackRightLightStep" then l2 = "W_AttackLeftHeavySp2"  
+            elseif r1 == "W_AttackRightBackstep" then l2 = "W_AttackLeftHeavySp3"         
+            end
+        end
+        
+        if (sp_g == 665) then  --665 blacksmith
+            if l2 == "W_AttackLeftHeavy1" then 
+                ExecEventHalfBlend(Event_MagicBuffLeft, ALLBODY)
+                l2 = "W_MagicBuffLeft"
+            elseif l2 == "W_AttackLeftHeavy2" then l2 = "W_MagicBuffLeft2"
+            elseif l2 == "W_AttackLeftHeavy3" then l2 = "W_MagicBuffLeft3"              
+            end
+        end
+
+        if (sp_g == 691 or sp_g == 697 or sp_g == 698) then 
             local speed = GetVariable("MoveSpeedLevelReal")
             if DASH_STARTING_SPEED < speed then l2 = "W_AttackLeftHeavySp1"
             elseif r1 == "W_AttackRightLightStep" then 
@@ -2329,6 +2462,47 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 b1 = "W_AttackBothLightStepSpecial"
             end
 
+            if (GetEquipType(HAND_RIGHT, 38) == TRUE and env(1116, 705) == TRUE and (sp_m == 677) and c_Style ~= HAND_LEFT_BOTH) 
+            or
+               (GetEquipType(HAND_LEFT, 38) == TRUE and env(1116, 705) == TRUE and (sp_o == 677) and c_Style == HAND_LEFT_BOTH) 
+            then 
+                if b1 == "W_AttackBothLight1" then b1 = "W_AttackBothHeavyKickSpecial"
+                elseif b1 == "W_AttackBothLight2" then b1 = "W_AttackBothHeavyKickSpecial"
+                elseif b1 == "W_AttackBothLight3" then b1 = "W_AttackBothHeavyKickSpecial"
+                end
+            end
+
+            if (sp_m == 175 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 175 and c_Style == HAND_LEFT_BOTH) 
+            then 
+                if b1 == "W_AttackBothLight1" then b1 = "W_AttackRightLight1"
+                elseif b1 == "W_AttackBothLight2" then b1 = "W_AttackRightLight2"
+                elseif b1 == "W_AttackBothLight3" then b1 = "W_AttackRightLight3"
+                end
+            end
+
+            if ((GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 217 or sp_m == 240 or sp_m == 998)) and c_Style ~= HAND_LEFT_BOTH)
+            or ((GetEquipType(HAND_LEFT, 33) == TRUE and env(1116, 707) == TRUE and (sp_o == 217 or sp_o == 240 or sp_o == 998)) and c_Style == HAND_LEFT_BOTH)
+            then -- morning star alt moveset
+                if b1 == "W_AttackBothLightStep" then b1 = "W_AttackBothLightStepSpecial"
+                end
+            end
+
+            if (sp_m == 696 and c_Style ~= HAND_LEFT_BOTH) 
+            then 
+                if b1 == "W_AttackBothLight1" then b1 = "W_AttackRightLight1"
+                elseif b1 == "W_AttackBothLight2" then b1 = "W_AttackRightLight2"
+                elseif b1 == "W_AttackBothLight3" then b1 = "W_AttackRightLight3"
+                elseif b1 == "W_AttackBothLightStep" then b1 = "W_AttackRightLightStep"
+                elseif b1 == "W_AttackBothDash" then b1 = "W_AttackRightLightDash"
+                end
+            end
+
+            if (sp_m == 686 and c_Style ~= HAND_LEFT_BOTH) 
+            then 
+                if b1 == "W_AttackBothLight3" then b1 = "W_AttackRightLight3"
+                end
+            end
+
             if (sp_m == 672 or sp_m == 688) and c_Style ~= HAND_LEFT_BOTH then 
                 if b1 == "W_AttackBothLight1" then b1 = "W_AttackRightLight1"
                 elseif b1 == "W_AttackBothLight2" then b1 = "W_AttackRightLight2"
@@ -2349,12 +2523,14 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 if b1 == "W_AttackBothLight1" then b1 = "W_AttackRightLight1"
                 elseif b1 == "W_AttackBothLight2" then b1 = "W_AttackRightLight2"
                 elseif b1 == "W_AttackBothLight3" then b1 = "W_AttackRightLight3"
-                elseif b1 == "W_AttackBothDash" then b1 = "W_AttackRightLightDash"
                 elseif b1 == "W_AttackBothLightStep" then b1 = "W_AttackRightLightStep"
                 end
             end
 
-            local sp_m = env(345 , HAND_RIGHT)
+            if ExtraR1R2 == TRUE then 
+                if b1 == "W_AttackBothLight1" then b1 = "W_Attack2BothLight1" end -- followups for all attacks
+            end
+
             if (   GetEquipType(HAND_RIGHT, 36) == TRUE and sp_m == 176 and env(1116, 100282) == TRUE)    then 
             else
             ExecEventAllBody(b1)
@@ -2364,18 +2540,19 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         local sp_m = env(345 , HAND_RIGHT)
         local sp_o = env(345 , HAND_LEFT)
         if r1 == "W_AttackRightLightDash" then
-            if  (GetEquipType(HAND_RIGHT, 30) == TRUE and (sp_m ~= 692 and sp_m ~= 138) and  GetEquipType(HAND_LEFT, 30) == TRUE)  or (GetEquipType(HAND_RIGHT, 27) == TRUE and GetEquipType(HAND_LEFT, 27) == TRUE) or (sp_m == 162 and sp_o == 154) or (    (GetEquipType(HAND_RIGHT, 26) == TRUE and sp_m ~= 162 and sp_m ~= 161 and sp_m ~= 253 and sp_m ~= 666 ) and (GetEquipType(HAND_LEFT, 25, 26) == TRUE and (sp_o ~= 161 and sp_o ~= 253 and sp_o ~= 666 ))  ) then l1 = "W_AttackBothLeft3" 
-            elseif (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o ~= 50) then l1 = "W_AttackBothLeft1" 
-            elseif (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m == 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o == 50) then l1 = "W_AttackBothLeft3" 
+            if  (GetEquipType(HAND_RIGHT, 30) == TRUE and (sp_m ~= 692 and sp_m ~= 138) and  GetEquipType(HAND_LEFT, 30) == TRUE)  or (GetEquipType(HAND_RIGHT, 27) == TRUE and GetEquipType(HAND_LEFT, 27) == TRUE) or (    (GetEquipType(HAND_RIGHT, 26) == TRUE and sp_m ~= 162 and sp_m ~= 161 and sp_m ~= 253 and sp_m ~= 666 ) and (GetEquipType(HAND_LEFT, 25, 26) == TRUE and (sp_o ~= 161 and sp_o ~= 253 and sp_o ~= 666 ))  ) then l1 = "W_AttackBothLeft3" 
+            elseif (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o ~= 50) then l1 = "W_AttackBothLeftDash" 
+            elseif (GetEquipType(HAND_RIGHT, 38) == TRUE and (sp_m == 50 or sp_m == 179 or sp_m == 107 or sp_m == 232 or sp_m == 674 or sp_m == 663 or sp_m == 681)) and (GetEquipType(HAND_LEFT, 38) == TRUE and (sp_o == 50 or sp_o == 179 or sp_o == 107 or sp_o == 232 or sp_o == 674 or sp_o == 663 or sp_o == 681)) then l1 = "W_AttackBothLeft3" 
+            elseif (sp_m == 162 and sp_o == 154)  then l1 = "W_AttackBothLeftDash" 
             elseif sp_m == 649 then l1 = "W_AttackBothLeft1" 
             elseif sp_m == 664 then l1 = "W_AttackBothHeavyKickSpecial" 
             else l1 = "W_AttackBothLeftDash" end
         elseif r1 == "W_AttackRightLightStep" then
             if          (GetEquipType(HAND_RIGHT, 30) == TRUE and GetEquipType(HAND_LEFT, 30) == TRUE) or  (GetEquipType(HAND_RIGHT, 27) == TRUE and GetEquipType(HAND_LEFT, 27) == TRUE)  then l1 = "W_AttackBothLeft3"
-            elseif      (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o ~= 50) then l1 = "W_AttackBothLeft1" 
-            elseif      (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m == 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o == 50) then l1 = "W_AttackBothLeft2" 
+            elseif      (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m ~= 50) and (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o ~= 50) then l1 = "W_AttackBothLeftStep" 
+            elseif      (GetEquipType(HAND_RIGHT, 38) == TRUE and (sp_m == 50 or sp_m == 179 or sp_m == 107 or sp_m == 232 or sp_m == 674 or sp_m == 663 or sp_m == 681)) and (GetEquipType(HAND_LEFT, 38) == TRUE and (sp_o == 50 or sp_o == 179 or sp_o == 107 or sp_o == 232 or sp_o == 674 or sp_o == 663 or sp_o == 681)) then l1 = "W_AttackBothLeft2" 
             elseif (    (GetEquipType(HAND_RIGHT, 26) == TRUE and sp_m ~= 162 and sp_m ~= 161 and sp_m ~= 253 and sp_m ~= 666 ) and (GetEquipType(HAND_LEFT, 25, 26) == TRUE and (sp_o ~= 161 and sp_o ~= 253 and sp_o ~= 666 ))  ) then l1 = "W_AttackBothLeft2" 
-            elseif (sp_m == 162 and sp_o == 154)  then l1 = "W_AttackBothLeft2" 
+            elseif (sp_m == 162 and sp_o == 154)  then l1 = "W_AttackBothLeftStep" 
             elseif sp_m == 649 then l1 = "W_AttackBothLeft1" 
             else l1 = "W_AttackBothLeftStep" end
         elseif env(345 , HAND_RIGHT) == 609 and r1 == "W_AttackRightLightDashSpecial" then 
@@ -2444,6 +2621,12 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 elseif b2 == "W_AttackBothHeavy2Start" then 
                     b2 = "W_AttackBothHeavyWepBroken2Start"
                 end
+            elseif ExtraR1R2 == TRUE then 
+                if b2 == "W_AttackBothHeavy1Start" then b2 = "W_Attack2BothHeavy1Start" 
+                elseif b2 == "W_AttackBothHeavy1SubStart" then b2 = "W_Attack2BothHeavy1Start"
+                elseif b2 == "W_AttackBothHeavy2Start" then b2 = "W_Attack2BothHeavy2Start" 
+                end -- followups for all attacks
+            
             elseif IsWepBrokenHeavyAtk() == TRUE then
                 if b2 == "W_AttackBothHeavy1Start" then
                     b2 = "W_AttackBothHeavyWepBroken1Start"
@@ -2510,11 +2693,11 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         atk_hand = HAND_LEFT
         SetSwordArtsPointInfo(ACTION_ARM_L2, TRUE)     
         if (faultyWA ~= TRUE) then
-            local sp_kind_left = env(345 , HAND_LEFT)
-            local sp_kind_right = env(345 , HAND_RIGHT)
+            local sp_o = env(345 , HAND_LEFT)
+            local sp_m = env(345 , HAND_RIGHT)
             local dual = FALSE
             local style = c_Style
-            if (sp_kind_left == 265 or sp_kind_left == 665) and (sp_kind_right == 265 or sp_kind_right == 665) then
+            if (sp_o == 265 or sp_o == 665) and (sp_m == 265 or sp_m == 665) then
                 dual = TRUE
             end
             if dual == TRUE and style == HAND_RIGHT then
@@ -2557,11 +2740,16 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         is_find_atk = FALSE
         local hand = HAND_RIGHT
         local style = c_Style
+        local sp_o = env(345 , HAND_LEFT)
+        local sp_m = env(345 , HAND_RIGHT)
+        
         if style == HAND_LEFT_BOTH then
             hand = HAND_LEFT
         end
         if IsWepBrokenParry(hand) == TRUE then
-            ExecEventAllBody("W_ParryRightStart_WepBreak")
+            if (sp_m == 690 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 690 and c_Style == HAND_LEFT_BOTH) 
+            then ExecEventHalfBlend(Event_MagicInvalidRight, blend_type)
+            else ExecEventAllBody("W_ParryRightStart_WepBreak") end
         else
             ExecEventAllBody("W_ParryRightStart")
         end
@@ -2626,11 +2814,11 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
     elseif request == SWORDARTS_REQUEST_RIGHT_MAGICBUFFATTACK then
         SetSwordArtsPointInfo(ACTION_ARM_L2, TRUE)     
         if (faultyWA ~= TRUE) then
-            local sp_kind_left = env(345 , HAND_LEFT)
-            local sp_kind_right = env(345 , HAND_RIGHT)
+            local sp_o = env(345 , HAND_LEFT)
+            local sp_m = env(345 , HAND_RIGHT)
             local dual = FALSE
             local style = c_Style
-            if (sp_kind_left == 265 or sp_kind_left == 665) and (sp_kind_right == 265 or sp_kind_right == 665) then
+            if (sp_o == 265 or sp_o == 665) and (sp_m == 265 or sp_m == 665) then
                 dual = TRUE
             end
             if dual == TRUE and style == HAND_RIGHT then
@@ -2717,6 +2905,60 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 event = "W_RollingOverweightLeft"
             end
             ExecEventAllBody(event)
+        elseif GetWeightIndex(FALSE) == EVASION_WEIGHT_INDEX_HEAVY then
+            local rollingangle = GetVariable("RollingAngle")
+            if 0 <= rollingangle then
+                SetVariable("RollingDirection", 1)
+            else
+                SetVariable("RollingDirection", 0)
+            end
+            local event = "W_RollingHeavy"
+            local weight = GetWeightIndex(FALSE)
+            local is_selftrans = FALSE
+                if IsNodeActive("Rolling_CMSG") == TRUE then
+                    is_selftrans = TRUE
+                end
+    
+            local turn_angle_real = 200
+            if GetVariable("IsLockon") == true then
+                act("ロックオン対象へ即座に旋回")
+                turn_angle_real = math.abs(GetVariable("TurnAngle") - rollingangle)
+                if 180 < turn_angle_real then
+                    turn_angle_real = 360 - turn_angle_real
+                end
+            elseif 0.00100000004749745 < math.abs(rollingangle) then
+                SetTurnSpeed(0)
+            else
+                local move_angle = GetVariable("MoveAngle")
+                if move_angle ~= 0 then
+                    rollingangle = move_angle
+                end
+            end
+            SetVariable("TurnAngleReal", turn_angle_real)
+            if is_selftrans == TRUE then
+                event = event .. "Selftrans"
+                SetVariable("RollingAngleRealSelftrans", rollingangle)
+            else
+                SetVariable("RollingAngleReal", rollingangle)
+            end
+
+            local front, back, left, right = false
+            if 135 < math.abs(rollingangle) then
+                back = true
+            elseif 45 < rollingangle then
+                right = true
+            elseif rollingangle < -45 then
+                left = true
+            else
+                front = true
+            end
+            SetVariable("EnableTAE_RollingFront", front)
+            SetVariable("EnableTAE_RollingBack", back)
+            SetVariable("EnableTAE_RollingLeft", left)
+            SetVariable("EnableTAE_RollingRight", right)
+            AddStamina(c_StaminaCostRolling*3)
+            ExecEventAllBody(event) 
+            
         else
             local front, back, left, right = false
             if 135 < math.abs(angle) then
@@ -2734,39 +2976,72 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             SetVariable("EnableTAE_CircleStepRight", right)
             SetSwordArtsPointInfo(ACTION_ARM_L2, TRUE)     
             if (faultyWA ~= TRUE) then
-                if IsNodeActive("CircleStepStart_Blend") == TRUE then
-                    if 0 <= angle then
-                        SetVariable("CircleStepDirectionSelftrans", 1)
-                    else
-                        SetVariable("CircleStepDirectionSelftrans", 0)
-                    end
-                        if back == true then angle = 180 -- bow WA when doing WA into WA
-                        elseif right == true then angle = 90
-                        elseif left == true then angle = -90
-                        else angle = 0 end
+            local is_bow = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SMALL_ARROW)
+            local is_bowo = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW)
+
+            local sp_m = env(345 , HAND_RIGHT)
+            local sp_o = env(345 , HAND_LEFT)
+            if IsNodeActive("CircleStepStart_Blend") == TRUE then
+                if 0 <= angle then
+                    SetVariable("CircleStepDirectionSelftrans", 1)
+                else
+                    SetVariable("CircleStepDirectionSelftrans", 0)
+                end
+                -- check if bow
+                if (is_bow == TRUE and c_Style ~= HAND_LEFT_BOTH) or (is_bowo == TRUE and c_Style == HAND_LEFT_BOTH) then
+                    if back == true then angle = 180 -- bow WA when doing WA into WA
+                    elseif right == true then angle = 90
+                    elseif left == true then angle = -90
+                    else angle = 0 end
                     if IsExistArrow() == TRUE then
                         ExecEventAllBody("W_NoArrow") 
                     else
                         SetVariable("CircleStepAngleSelftrans", angle)
                         ExecEventAllBody("W_CircleStepStartSelftrans")
                     end
+                elseif ( sp_m == 217 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 217 and c_Style == HAND_LEFT_BOTH) then
+                    if front == true then angle = 0
+                    elseif right == true then angle = 90
+                    elseif left == true then angle = -90
+                    else angle = 180 end
+                    SetVariable("CircleStepAngleSelftrans", angle)
+                    ExecEventAllBody("W_CircleStepStartSelftrans")
+                    
+                else 
+                    SetVariable("CircleStepAngleSelftrans", angle)
+                    ExecEventAllBody("W_CircleStepStartSelftrans") 
+                end
+            else
+                if 0 <= angle then
+                    SetVariable("CircleStepDirection", 1)
                 else
-                    if 0 <= angle then
-                        SetVariable("CircleStepDirection", 1)
-                    else
-                        SetVariable("CircleStepDirection", 0)
-                    end
-                        if back == true then angle = 180 -- bow WA in neutral and locked on
-                        elseif right == true then angle = 90
-                        elseif left == true then angle = -90
-                        else angle = 0 end
+                    SetVariable("CircleStepDirection", 0)
+                end
+                -- check if bow
+                if (is_bow == TRUE and c_Style ~= HAND_LEFT_BOTH) or (is_bowo == TRUE and c_Style == HAND_LEFT_BOTH) then
+                    if back == true then angle = 180 -- bow WA in neutral and locked on
+                    elseif right == true then angle = 90
+                    elseif left == true then angle = -90
+                    else angle = 0 end
                     if IsExistArrow() == TRUE then
                         ExecEventAllBody("W_NoArrow") 
                     else
                         SetVariable("CircleStepAngle", angle)
                         ExecEventAllBody("W_CircleStepStart")
                     end
+                elseif ( sp_m == 217 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 217 and c_Style == HAND_LEFT_BOTH) then
+                    if front == true then angle = 0
+                    elseif right == true then angle = 90
+                    elseif left == true then angle = -90
+                    else angle = 180 end
+                    SetVariable("CircleStepAngleSelftrans", angle)
+                    ExecEventAllBody("W_CircleStepStartSelftrans")
+                    
+                else 
+                    SetVariable("CircleStepAngle", angle)
+                    ExecEventAllBody("W_CircleStepStart")
                 end
+            end
             else 
                 if (style == HAND_RIGHT_BOTH or style == HAND_LEFT_BOTH or style == HAND_BOTH) then ExecEventHalfBlend(Event_MagicInvalidLeft, blend_type) 
                 else ExecEventHalfBlend(Event_MagicInvalidRight, blend_type) end 
@@ -2987,9 +3262,10 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             arrow_hand = HAND_LEFT
         end
         local sp_kind = env(345 , arrow_hand)
+        local is_bow =  GetEquipType(arrow_hand, WEAPON_CATEGORY_SMALL_ARROW) 
         if IsExistArrow() == TRUE then
             ExecEventAllBody("W_NoArrow")
-        elseif sp_kind == 81 or sp_kind == 249 then
+        elseif is_bow == TRUE or sp_kind == 81 or sp_kind == 249 then
             if IsEnoughWeaponReleaseStatus(arrow_hand) == TRUE then
                 if r1 == "W_AttackRightLightStep" then
                     is_find_atk = TRUE
@@ -3027,12 +3303,15 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         if blend_type == ALLBODY and MoveStart(LOWER, Event_MoveLong, FALSE) == TRUE then
             blend_type = UPPER
         end
-        if IsExistBolt(HAND_RIGHT) == TRUE then
-            ExecEventHalfBlend(Event_AttackCrossbowRightEmpty, blend_type)
-        elseif env("ボルト装填状態取得", 1) == TRUE then
-            ExecEventHalfBlend(Event_AttackCrossbowRightStart, blend_type)
+        if r1 == "W_AttackRightLightStep" then ExecEventAllBody("W_AttackRightLightStep")
         else
-            ExecEventHalfBlend(Event_AttackCrossbowRightReload, blend_type)
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowRightEmpty, blend_type)
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowRightStart, blend_type)
+            else
+                ExecEventHalfBlend(Event_AttackCrossbowRightReload, blend_type)
+            end
         end
     elseif request == ATTACK_REQUEST_LEFT_CROSSBOW or request == ATTACK_REQUEST_LEFT_CROSSBOW2 then
         is_find_atk = FALSE
@@ -3059,12 +3338,15 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         if blend_type == ALLBODY and MoveStart(LOWER, Event_MoveLong, FALSE) == TRUE then
             blend_type = UPPER
         end
-        if IsExistBolt(HAND_RIGHT) == TRUE then
-            ExecEventHalfBlend(Event_AttackCrossbowBothRightEmpty, blend_type)
-        elseif env("ボルト装填状態取得", 1) == TRUE then
-            ExecEventHalfBlend(Event_AttackCrossbowBothRightStart, blend_type)
+        if b1 == "W_AttackBothLightStep" then ExecEventAllBody("W_AttackBothLightStep")
         else
-            ExecEventHalfBlend(Event_AttackCrossbowBothRightReload, blend_type)
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowBothRightEmpty, blend_type)
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowBothRightStart, blend_type)
+            else
+                ExecEventHalfBlend(Event_AttackCrossbowBothRightReload, blend_type)
+            end
         end
     elseif request == ATTACK_REQUEST_BOTHLEFT_CROSSBOW or request == ATTACK_REQUEST_BOTHLEFT_CROSSBOW2 then
         is_find_atk = FALSE
@@ -3139,7 +3421,7 @@ function ExecSwordArtsStance(blend_type)
         if blend_type == ALLBODY and MoveStart(LOWER, Event_MoveLong, FALSE) == TRUE then
             blend_type = UPPER
         end
-        if env(1116, 100490) == TRUE then -- sp
+        if env(1116, 100490) == TRUE then -- sp_kind
             ExecEventHalfBlend(Event_DrawStanceRightLoop, blend_type)
         else
             ExecEventHalfBlend(Event_DrawStanceRightStart, blend_type)
@@ -3193,7 +3475,7 @@ function ExecSwordArtsStance(blend_type)
             if blend_type == ALLBODY and MoveStart(LOWER, Event_MoveLong, FALSE) == TRUE then
                 blend_type = UPPER
             end
-            if env(1116, 100490) == TRUE then -- get sp
+            if env(1116, 100490) == TRUE then -- get sp_kind
                 ExecEventHalfBlend(Event_DrawStanceRightLoop, blend_type)
             else
                 ExecEventHalfBlend(Event_DrawStanceRightStart, blend_type)
@@ -3267,7 +3549,8 @@ function ExecMagic(quick_type, blend_type)
     local style = c_Style
     local magic_hand = HAND_RIGHT
     local is_samagic = FALSE 
-    if env(1106, ACTION_ARM_MAGIC_R) == TRUE then
+    if ForwardAttackShortcutRequest() then return FALSE 
+    elseif env(1106, ACTION_ARM_MAGIC_R) == TRUE then
         if style == HAND_LEFT_BOTH then
             if GetEquipType(HAND_LEFT, WEAPON_CATEGORY_STAFF) == FALSE then
                 return FALSE
@@ -3289,20 +3572,22 @@ function ExecMagic(quick_type, blend_type)
         magic_hand = HAND_LEFT
     elseif env(1106, ACTION_ARM_R2) == TRUE then
         if env(1106, ACTION_ARM_HEAVY_KICK) == TRUE then
-            return FALSE
+            return FALSE 
         elseif style == HAND_LEFT_BOTH then
-            local sp_kind = env(345 , HAND_LEFT)
-            if sp_kind ~= 178 and sp_kind ~= 207 and (sp_kind ~= 217 or env(1116, 100260) == TRUE) and sp_kind ~= 220 and sp_kind ~= 234 and sp_kind ~= 257 and (  GetEquipType(HAND_LEFT, 38)  == FALSE or sp_kind ~= 67) then
+            local sp_o = env(345 , HAND_LEFT)
+            if sp_o ~= 178 and sp_o ~= 207 and (sp_o ~= 217 or env(1116, 100260) == TRUE) and sp_o ~= 220 and sp_o ~= 234 and sp_o ~= 257 and (  GetEquipType(HAND_LEFT, 38)  == FALSE or sp_o ~= 67) then
                 return FALSE
-            elseif sp_kind == 257 and env(1116, 100580) == TRUE then
+            elseif sp_o == 257 and env(1116, 100580) == TRUE then
                 return FALSE
             end
             SetAttackHand(HAND_LEFT)
         else
-            local sp_kind = env(345 , HAND_RIGHT)
-            if sp_kind ~= 178 and sp_kind ~= 207 and (sp_kind ~= 217 or env(1116, 100260) == TRUE) and sp_kind ~= 220 and (sp_kind ~= 159 or c_Style ~= HAND_RIGHT ) and sp_kind ~= 234 and sp_kind ~= 257 and (  GetEquipType(HAND_RIGHT, 38)  ~= TRUE or sp_kind ~= 67) then
+            local sp_hybrid_m = env(345 , HAND_RIGHT)
+            if env(1116, 100271) == TRUE then 
+                return 
+            elseif sp_hybrid_m ~= 178 and sp_hybrid_m ~= 207 and (sp_hybrid_m ~= 217 or env(1116, 100260) == TRUE) and sp_hybrid_m ~= 220 and (sp_hybrid_m ~= 159 or c_Style ~= HAND_RIGHT ) and sp_hybrid_m ~= 234 and sp_hybrid_m ~= 257 and (  GetEquipType(HAND_RIGHT, 38)  ~= TRUE or sp_hybrid_m ~= 67) then
                 return FALSE
-            elseif sp_kind == 257 and env(1116, 100580) == TRUE then
+            elseif sp_hybrid_m == 257 and env(1116, 100580) == TRUE then
                 return FALSE
             end
             SetAttackHand(HAND_RIGHT)
@@ -3321,8 +3606,8 @@ function ExecMagic(quick_type, blend_type)
                 magic_hand = HAND_LEFT
             end
         elseif style == HAND_RIGHT then
-            local sp_kind = env(345 , HAND_LEFT)
-            if sp_kind ~= 178 and sp_kind ~= 207 and sp_kind ~= 217 and sp_kind ~= 220 and (sp_kind ~= 159 or c_Style ~= HAND_RIGHT ) and sp_kind ~= 234 and sp_kind ~= 257  and (GetEquipType(HAND_LEFT, 38)  == FALSE or sp_kind ~= 67) then
+            local sp_o = env(345 , HAND_LEFT)
+            if sp_o ~= 178 and sp_o ~= 207 and sp_o ~= 217 and sp_o ~= 220 and (sp_o ~= 159 or c_Style ~= HAND_RIGHT ) and sp_o ~= 234 and sp_o ~= 257  and (GetEquipType(HAND_LEFT, 38)  == FALSE or sp_o ~= 67) then
                 return FALSE
             end
             SetAttackHand(HAND_LEFT)
@@ -3877,6 +4162,10 @@ function ExecItem(quick_type, blend_type)
     elseif item_type == ITEM_BACK_BOTTLE then
         ExecEventHalfBlend(Event_ItemBackBottle, blend_type)
     elseif item_type == ITEM_DRINK_SAKE then
+        if env(1001) <= 0 then
+            ResetRequest()
+            return FALSE
+        end
         if blend_type == ALLBODY and MoveStart(LOWER, Event_MoveLong, FALSE) == TRUE then
             blend_type = UPPER
         end
@@ -3909,6 +4198,11 @@ function ExecItem(quick_type, blend_type)
             ExecEventHalfBlend(Event_DragonFullEndBefore, blend_type) -- twinkling dragon body
         end
     elseif item_type == ITEM_OLDMONK then
+        if env(1001) <= 0 then
+            ResetRequest()
+            return FALSE
+        end
+
         ExecEventHalfBlend(Event_ItemOldMonk, blend_type)
     elseif item_type == ITEM_QUICK_THROW_HOMINGKNIFE then
         if env(1001) <= 0 then
@@ -4041,9 +4335,15 @@ function ExecWeaponChange(blend_type)
     if IsWeaponChangeBlocked() then return FALSE end
 
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667) 
     then i1BB = TRUE 
     else i1BB = FALSE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     if c_HasActionRequest == FALSE then
         return FALSE
@@ -4077,9 +4377,15 @@ function ExecHandChange(hand, is_force, blend_type)
     if IsHandChangeBlocked() then return FALSE end
 
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or  sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667) 
     then i1BB = TRUE 
     else i1BB = FALSE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     if is_force == FALSE then
         if c_HasActionRequest == FALSE then
@@ -4105,9 +4411,9 @@ function ExecHandChange(hand, is_force, blend_type)
             pos = GetHandChangeType(HAND_LEFT)
             if pos == WEAPON_CHANGE_REQUEST_LEFT_WAIST then
                 if IsDualBladeSpecific(HAND_RIGHT) == TRUE then
-                    local sp_kind = env(345 , HAND_RIGHT)
+                    local sp_m = env(345 , HAND_RIGHT)
                     local kind = env(225, HAND_LEFT)
-                    if sp_kind == 144 and kind == WEAPON_CATEGORY_FIST then
+                    if sp_m == 144 and kind == WEAPON_CATEGORY_FIST then
                          SetHandChangeStyle(LEFT_TO_BACK, LEFT_FROM_BACK)
                     else
                          SetHandChangeStyle(LEFT_TO_WAIST, LEFT_FROM_WAIST)
@@ -4149,9 +4455,9 @@ function ExecHandChange(hand, is_force, blend_type)
             pos = GetHandChangeType(HAND_RIGHT)
             if pos == WEAPON_CHANGE_REQUEST_RIGHT_WAIST then
                 if IsDualBladeSpecific(HAND_LEFT) == TRUE then
-                    local sp_kind = env(345 , HAND_LEFT)
+                    local sp_o = env(345 , HAND_LEFT)
                     local kind = env(225, HAND_RIGHT)
-                    if sp_kind == 144 and kind == WEAPON_CATEGORY_FIST then
+                    if sp_o == 144 and kind == WEAPON_CATEGORY_FIST then
                         SetHandChangeStyle(RIGHT_TO_BACK, RIGHT_FROM_BACK)
                     else
                         SetHandChangeStyle(RIGHT_TO_WAIST, RIGHT_FROM_WAIST)
@@ -4194,9 +4500,9 @@ function ExecHandChange(hand, is_force, blend_type)
     elseif style == HAND_RIGHT_BOTH then
         pos = GetHandChangeType(HAND_LEFT)
         if pos == WEAPON_CHANGE_REQUEST_LEFT_WAIST then
-            local sp_kind = env(345 , HAND_RIGHT)
+            local sp_m = env(345 , HAND_RIGHT)
             local kind = env(225, HAND_LEFT)
-            if sp_kind == 144 and kind == WEAPON_CATEGORY_FIST then
+            if sp_m == 144 and kind == WEAPON_CATEGORY_FIST then
                 SetHandChangeStyle(BOTH_TO_BACK, LEFT_FROM_BACK)
             else
                 SetHandChangeStyle(BOTH_TO_WAIST, LEFT_FROM_WAIST)
@@ -4212,9 +4518,9 @@ function ExecHandChange(hand, is_force, blend_type)
     elseif style == HAND_LEFT_BOTH then
         pos = GetHandChangeType(HAND_RIGHT)
         if pos == WEAPON_CHANGE_REQUEST_RIGHT_WAIST then
-            local sp_kind = env(345 , HAND_LEFT)
+            local sp_o = env(345 , HAND_LEFT)
             local kind = env(225, HAND_RIGHT)
-            if sp_kind == 144 and kind == WEAPON_CATEGORY_FIST then
+            if sp_o == 144 and kind == WEAPON_CATEGORY_FIST then
                 SetHandChangeStyle(BOTHRIGHT_TO_BACK, RIGHT_FROM_BACK)
             else
                 SetHandChangeStyle(BOTHRIGHT_TO_WAIST, RIGHT_FROM_WAIST)
@@ -5093,6 +5399,9 @@ function ExecDamage(is_parry, is_attackwhileguard) -- receive damage add damage 
         elseif env(1116, 100352) == TRUE then
             ExecEventAllBody("W_OneShotNoGenTransStart")
             return FALSE
+        elseif env(1116, 100353) == TRUE then
+            ExecEventAllBody("W_MagicBuffLeft2")
+            return FALSE
         elseif env(1116, 100700) == TRUE then
             return FALSE
         elseif env(1116, 100510) == TRUE then
@@ -5790,15 +6099,21 @@ function IdleCommonFunction()
         end 
 ]]
 
-    local weight = env(257)
-    if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
+    --local weight = env(257)
+    --if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
 
     if (iT ~= TRUE) then iT = FALSE 
     else iT = TRUE end
 
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if (sp_m == 195 or sp_m == 264 or sp_m == 164 or sp_m == 101 or sp_m == 604 or sp_m == 605 or sp_m == 606 or sp_m == 609 or sp_m == 610 or sp_m == 612 or sp_m == 622 or sp_m == 624 or sp_m == 642 or sp_m == 613 or sp_m == 614 or sp_m == 620 or sp_m == 621  or sp_m == 627 or sp_m == 640 or sp_m == 641 or sp_m == 643 or sp_m == 645 or sp_m == 646 or sp_m == 647 or sp_m == 649 or sp_m == 664 or sp_m == 667 ) 
     then i1BB = TRUE end
+
+    if ((sp_m == 698 or sp_m == 699 or sp_m == 700) and c_Style ~= HAND_LEFT_BOTH) 
+    or ((sp_o == 698 or sp_o == 699 or sp_o == 700) and c_Style == HAND_LEFT_BOTH) 
+    then ExtraR1R2 = TRUE 
+    else ExtraR1R2 = FALSE end
 
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
@@ -5806,6 +6121,12 @@ function IdleCommonFunction()
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
     end
+    
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
+
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -5835,7 +6156,7 @@ function IdleCommonFunction()
         return TRUE
     elseif ExecSwordArtsStance(ALLBODY) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(ALLBODY) == TRUE then
         return TRUE
@@ -5912,10 +6233,12 @@ end
 function BackStabCommonFunction()
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
     end
+    
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -6083,6 +6406,11 @@ end
 function SlideCommonFunction(can_endslide)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6107,7 +6435,7 @@ function SlideCommonFunction(can_endslide)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(ALLBODY) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(ALLBODY) == TRUE then
         return TRUE
@@ -6125,6 +6453,11 @@ end
 function ThrowCommonFunction(estep)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6166,7 +6499,7 @@ function ThrowCommonFunction(estep)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(ALLBODY) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(ALLBODY) == TRUE then
         return TRUE
@@ -6247,7 +6580,11 @@ function MagicCommonFunction(blend_type, quick_type)
     UpdateAtkAutoAim()
     act(118, TRUE)
 
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1SubStart"
+    local r2 = "W_AttackRightHeavy1Start"
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -6265,9 +6602,9 @@ function MagicCommonFunction(blend_type, quick_type)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(ALLBODY) == TRUE then
         return TRUE
-    elseif i1BB == TRUE and AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+    elseif i1BB == TRUE and AttackCommonFunction(r1, "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, blend_type, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(blend_type) == TRUE then
         return TRUE
@@ -6314,12 +6651,14 @@ function CrossbowCommonFunction(blend_type)
         r1 = "W_AttackRightHeavy2End" 
         b1 = "W_AttackBothHeavy2End" 
     end
-
+    local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1SubStart"
-    if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
+    if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" 
+    else b2 = "W_AttackBothHeavy1Start" end
 
     if ExecPassiveAction(FALSE, FALL_TYPE_DEFAULT, FALSE) == TRUE then
         return TRUE
@@ -6331,7 +6670,7 @@ function CrossbowCommonFunction(blend_type)
         return TRUE
     elseif i1BB == TRUE and ExecAttack(r1, "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, blend_type, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(blend_type) == TRUE then
         return TRUE
@@ -6398,10 +6737,17 @@ function DamageCommonFunction(guardcondition, estep, fall_type)
     end
 
     local b2 = "W_AttackBothHeavy1SubStart"
-    if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
-    if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" isGuardianShield = TRUE end
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
+
+    if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" 
+    elseif (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" isGuardianShield = TRUE 
+    else b2 = "W_AttackBothHeavy1start" end
 
     local is_usechainrecover = GetVariable("UseChainRecover")
     if ExecEvasion(TRUE, estep, is_usechainrecover) == TRUE then
@@ -6415,10 +6761,10 @@ function DamageCommonFunction(guardcondition, estep, fall_type)
     elseif ExecMagic(QUICKTYPE_NORMAL, ALLBODY) == TRUE then
         ResetDamageCount()
         return TRUE
-    elseif (i1BB == TRUE or isGuardianShield == TRUE)  and ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif (i1BB == TRUE or isGuardianShield == TRUE)  and ExecAttack(r1, "W_AttackRightHeavy1SubStart", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
         ResetDamageCount()   
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, guardcondition, ALLBODY, FALSE, FALSE) == TRUE then
         ResetDamageCount()
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(ALLBODY) == TRUE then
@@ -6447,6 +6793,10 @@ end
 function QuickTurnCommonFunction()
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6472,7 +6822,7 @@ function QuickTurnCommonFunction()
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(UPPER) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(UPPER) == TRUE then
         return TRUE
@@ -6521,6 +6871,11 @@ function ItemCommonFunction(blend_type)
     if env(1116, HITSTUN_RING_EFFECT) == TRUE then DBSetPhantomColor("RESET") end
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6551,7 +6906,7 @@ function ItemCommonFunction(blend_type)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(blend_type) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(blend_type) == TRUE then
         return TRUE
@@ -6613,6 +6968,12 @@ end
 function StopCommonFunction(is_dash_stop)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
+
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6650,7 +7011,7 @@ function StopCommonFunction(is_dash_stop)
         return TRUE
     elseif ExecSwordArtsStance(ALLBODY) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(ALLBODY) == TRUE then
         return TRUE
@@ -6709,6 +7070,8 @@ function MoveCommonFunction(blend_type)
     local r2 = "W_AttackRightHeavy1Start"
     local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1Start"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if i1BB == TRUE and (env(345 , HAND_RIGHT) ~= 609)  then  
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6737,6 +7100,14 @@ function MoveCommonFunction(blend_type)
                 r2 = "W_AttackRightHeavyKickSpecial"
                 b2 = "W_AttackBothHeavyKickSpecial"
             end
+        elseif (GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 148 or sp_m == 217 or sp_m == 240 or sp_m == 998) and c_Style == HAND_RIGHT) then -- morning star alt moveset
+            r1 = "W_AttackRightLightDashSpecial"
+            r2 = "W_AttackRightHeavyKick"
+        elseif ((GetEquipType(HAND_RIGHT, 33) == TRUE and env(1116, 707) == TRUE and (sp_m == 217 or sp_m == 240 or sp_m == 998)) and c_Style ~= HAND_LEFT_BOTH)
+            or ((GetEquipType(HAND_LEFT, 33) == TRUE and env(1116, 707) == TRUE and (sp_o == 217 or sp_o == 240 or sp_o == 998)) and c_Style == HAND_LEFT_BOTH)
+            then -- morning star alt moveset
+            b1 = "W_AttackBothDashSpecial"
+            b2 = "W_AttackBothHeavyKick"
         elseif IsEnableJumpAtk() == TRUE then
             r2 = "W_AttackRightHeavyKick"
             b2 = "W_AttackBothHeavyKick"
@@ -6759,6 +7130,7 @@ function MoveCommonFunction(blend_type)
             end
             if (env(345 , HAND_RIGHT) == 664) then b2 = "W_AttackBothLightStepSpecial" end
             if (env(345 , HAND_RIGHT) == 609) then r2 = "W_AttackRightHeavyKickSpecial" end
+            if (env(345 , HAND_RIGHT) == 686 and c_Style ~= HAND_LEFT_BOTH) then b2 = "W_AttackRightHeavyKickSpecial" b2 = r2 end
             if (env(345 , HAND_RIGHT) == 688 and c_Style ~= HAND_LEFT_BOTH) then r2 = "W_AttackRightHeavyKickSpecial" b2 = r2 end
             if (env(345 , HAND_RIGHT) == 609 and c_Style == HAND_RIGHT_BOTH) then  b2 = "W_AttackBothHeavyKickSpecial" end -- left hand both 2h offhand combat art tonitrus
 
@@ -6786,8 +7158,8 @@ end
 function GuardCommonFunction(is_guard_end, blend_type)
     if env(1116, HITSTUN_RING_EFFECT) == TRUE then DBSetPhantomColor("RESET") end
     enableShieldStrike = FALSE 
-    local weight = env(257)
-    if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
+    --local weight = env(257)
+    --if weight == WEIGHT_HEAVY then act(2002, 660) end -- fatroll stamina regen buff
 
     act(9100)
     if ExecPassiveAction(FALSE, FALL_TYPE_DEFAULT, FALSE) == TRUE then
@@ -6823,6 +7195,8 @@ function GuardCommonFunction(is_guard_end, blend_type)
     local r2 = "W_AttackRightHeavy1Start"
     local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1Start"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6929,6 +7303,10 @@ end
 function SwordArtsParryCommonFunction()
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -6951,7 +7329,7 @@ function SwordArtsParryCommonFunction()
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(ALLBODY) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, ALLBODY, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(ALLBODY) == TRUE then
         return TRUE
@@ -7089,6 +7467,10 @@ end
 function WeaponChangeCommonFunction(blend_type)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -7112,7 +7494,7 @@ function WeaponChangeCommonFunction(blend_type)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(blend_type) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(blend_type) == TRUE then
         return TRUE
@@ -7130,6 +7512,10 @@ end
 function HandChangeCommonFunction(blend_type)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if iTC ~= TRUE and i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart"
@@ -7153,7 +7539,7 @@ function HandChangeCommonFunction(blend_type)
         return TRUE
     elseif ExecSwordArtsStanceOnCancelTiming(blend_type) == TRUE then
         return TRUE
-    elseif ExecAttack("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
+    elseif ExecAttack(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, blend_type, FALSE, FALSE) == TRUE then
         return TRUE
     elseif ExecWeaponChange(blend_type) == TRUE then
         return TRUE
@@ -7760,8 +8146,8 @@ function BackStep_onUpdate()
     local br1 =  "W_AttackBothDash"
     local br2 =  "W_AttackBothHeavy1Start"
 
-    local sp = env(345 , HAND_RIGHT)
-    local osp = env(345 , HAND_LEFT)
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     --local is_m = GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 50, 51) 
 
     --if is_m == TRUE then 
@@ -7796,8 +8182,8 @@ function BackStep_onUpdate()
     if is_mo == TRUE and is_both_left == TRUE then br2 = "W_CrossbowStepInReload" end
 
     if IsDualBlade() == TRUE then br2 = "W_CrossbowStepInFire" end
-    if osp == 250 and is_both_left == TRUE then br2 = "W_AttackBothHeavy1Start" end
-    if sp == 250 and is_both_right == TRUE then br2 = "W_AttackBothHeavy1Start" end
+    if sp_o == 250 and is_both_left == TRUE then br2 = "W_AttackBothHeavy1Start" end
+    if sp_m == 250 and is_both_right == TRUE then br2 = "W_AttackBothHeavy1Start" end
     
     if (env(345 , hand) == 43) then rr2 = "W_AttackRightHeavy1Start" br2 = "W_AttackBothHeavy1Start" end
 
@@ -7813,11 +8199,11 @@ function BackStep_onUpdate()
         br2 = "W_AttackBothLightStepSpecial"
     end
 
-    if ((sp == 689 or sp == 690) and c_Style == HAND_RIGHT_BOTH) or ((osp == 689 or osp == 690) and c_Style == HAND_LEFT_BOTH)  then  br1 = "W_AttackBothDashSpecial" end
-    if ((sp == 689 or sp == 690)) then  rr1 = "W_AttackRightLightDashSpecial" end
+    if ((sp_m == 689 or sp_m == 690) and c_Style == HAND_RIGHT_BOTH) or ((sp_o == 689 or sp_o == 690) and c_Style == HAND_LEFT_BOTH)  then  br1 = "W_AttackBothDashSpecial" end
+    if ((sp_m == 689 or sp_m == 690)) then  rr1 = "W_AttackRightLightDashSpecial" end
 
 
-    if (sp == 681 and c_Style == HAND_RIGHT_BOTH) or (osp == 681 and c_Style == HAND_LEFT_BOTH)  then  br1 = "W_AttackBothDashSpecial" end
+    if (sp_m == 681 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 681 and c_Style == HAND_LEFT_BOTH)  then  br1 = "W_AttackBothDashSpecial" end
 
     if  (env(345 , HAND_RIGHT) == 609) then
         rr1 = "W_AttackRightLightDashSpecial" 
@@ -7846,42 +8232,48 @@ function BackStep_onUpdate()
         is_both_right = TRUE
     end
 
-    if (sp == 67 or sp == 177) and (c_Style == HAND_RIGHT or is_both_right == TRUE  ) then -- backstep attack
+    if (sp_m == 67 or sp_m == 177) and (c_Style == HAND_RIGHT or is_both_right == TRUE  ) then -- backstep attack
         rr1 = "W_AttackRightBackstep"
         br1 = "W_AttackBothBackstep"
     end
 
-    if (osp == 67 or osp == 177) and (is_both == TRUE and is_both_right == FALSE )  then -- backstep attack
+    if (sp_o == 67 or sp_o == 177) and (is_both == TRUE and is_both_right == FALSE )  then -- backstep attack
         rr1 = "W_AttackRightBackstep"
         br1 = "W_AttackBothBackstep"
     end
 
-    if (sp == 67 and GetEquipType(HAND_RIGHT, 38) ) and (c_Style == HAND_RIGHT or is_both_right == TRUE  ) then -- backstep attack
+    if (sp_m == 67 and GetEquipType(HAND_RIGHT, 38) ) and (c_Style == HAND_RIGHT or is_both_right == TRUE  ) then -- backstep attack
         rr1 = "W_AttackRightBackstep"
         br1 = "W_AttackRightBackstep"
     end
 
-    if (osp == 67 and GetEquipType(HAND_LEFT, 38)) and (is_both == TRUE and is_both_right == FALSE )  then -- backstep attack
+    if (sp_o == 67 and GetEquipType(HAND_LEFT, 38)) and (is_both == TRUE and is_both_right == FALSE )  then -- backstep attack
         rr1 = "W_AttackRightBackstep"
         br1 = "W_AttackRightBackstep"
     end
 
-    if sp == 621 or sp == 264 or sp == 605 or sp == 620 then br1 = "W_AttackBothLightKick" end
+    if sp_m == 621 or sp_m == 264 or sp_m == 605 or sp_m == 620 then br1 = "W_AttackBothLightKick" end
+    if sp_m == 686 and c_Style ~= HAND_LEFT_BOTH then br2 = rr2 end
 
     local ll1 = "W_AttackLeftLight1"
     local lh1 = "W_AttackLeftHeavy1"
 
-    if (osp == 651 and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) ) then 
+    if (sp_o == 651 and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) ) then 
         ll1 = "W_AttackLeftHeavySp3"
         lh1 = "W_AttackLeftHeavySp3"
     end
 
-    if (osp == 691 and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) ) then 
+    if (sp_o == 154 and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) ) then 
+        ll1 = "W_AttackLeftHeavySp3"
+        lh1 = "W_AttackLeftHeavySp3"
+    end
+
+    if ((sp_o == 691 or sp_o == 697 or sp_o == 698) and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) ) then 
         ll1 = "W_AttackLeftHeavySp1"
         lh1 = "W_AttackLeftHeavySp1"
     end
 
-    if (    (osp == 602 or osp == 617 or osp == 618 or osp == 628 or osp == 629 or osp == 630 or osp == 652 or osp == 653)   and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT)  ) then 
+    if (    (sp_o == 602 or sp_o == 617 or sp_o == 618 or sp_o == 628 or sp_o == 629 or sp_o == 630 or sp_o == 652 or sp_o == 653)   and  (c_Style == HAND_LEFT or c_Style == HAND_RIGHT)  ) then 
         ll1 = "W_AttackLeftHeavy1"
         lh1 = "W_AttackLeftHeavy1"
     end
@@ -8008,6 +8400,18 @@ function Move_onUpdate()
     local addratio = 0
     local endratio = 1
     local ratio = 1
+
+    if env(1116, 100751) == TRUE then ratio = 1.1  end
+    if env(1116, 100752) == TRUE then ratio = 1.2  end
+    if env(1116, 100753) == TRUE then ratio = 1.3  end
+    if env(1116, 100754) == TRUE then ratio = 1.4  end
+    if env(1116, 100755) == TRUE then ratio = 1.5  end
+    if env(1116, 100756) == TRUE then ratio = 1.6  end
+    if env(1116, 100757) == TRUE then ratio = 1.7  end
+    if env(1116, 100758) == TRUE then ratio = 1.8  end
+    if env(1116, 100759) == TRUE then ratio = 1.9  end
+    if env(1116, 100760) == TRUE then ratio = 2.0  end
+
     if GetVariable("MoveDirection") == 3 or GetVariable("MoveDirection") == 2 then
         act(2001, 0.959999978542328 * ratio)
     elseif GetVariable("MoveDirection") == 1 then
@@ -8216,6 +8620,11 @@ end
 function LandFallAttack_onUpdate()
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
+    
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
     if i1BB == TRUE then 
         r2 = "W_AttackRightHeavy1SubStart" 
         b2 = "W_AttackBothHeavy1SubStart" 
@@ -8225,7 +8634,7 @@ function LandFallAttack_onUpdate()
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
 
-    if AttackCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
         return 
@@ -8473,7 +8882,7 @@ function GuardDamageSmall_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if (GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE  and c_Style ~= HAND_LEFT_BOTH) 
     --or ((GetEquipType(HAND_LEFT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE) and c_Style == HAND_LEFT_BOTH))
@@ -8493,7 +8902,7 @@ function GuardDamageMiddle_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if (GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE  and c_Style ~= HAND_LEFT_BOTH) 
     --or ((GetEquipType(HAND_LEFT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE) and c_Style == HAND_LEFT_BOTH))
@@ -8513,7 +8922,7 @@ function GuardDamageLarge_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if (GetEquipType(HAND_RIGHT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE and c_Style ~= HAND_LEFT_BOTH) 
     --or ((GetEquipType(HAND_LEFT, 20, 23, 25, 26, 27, 28, 29, 30, 32, 33, 35, 36, 38, 42, 47, 48) == TRUE) and c_Style == HAND_LEFT_BOTH))
@@ -8541,7 +8950,7 @@ function GuardDamageSmall_GenTrans_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if ((env(345 , HAND_RIGHT) == 693 or env(345 , HAND_RIGHT) == 236) and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT))
     and AttackCommonFunction(r1, "W_AttackRightCounter", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackRightCounter", FALSE, TRUE) == TRUE then
@@ -8564,7 +8973,7 @@ function GuardDamageMiddle_GenTrans_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if ((env(345 , HAND_RIGHT) == 693 or env(345 , HAND_RIGHT) == 236) and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT))
     and AttackCommonFunction(r1, "W_AttackRightCounter", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackRightCounter", FALSE, TRUE) == TRUE then
@@ -8587,7 +8996,7 @@ function GuardDamageLarge_GenTrans_onUpdate()
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
 
-    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLightStepSpecial" b1 = r1 end
+    if sp_m == 672 and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT) then r1 = "W_AttackRightLight3" b1 = r1 end
 
     if ((env(345 , HAND_RIGHT) == 693 or env(345 , HAND_RIGHT) == 236) and (c_Style == HAND_RIGHT_BOTH or c_Style == HAND_RIGHT))
     and AttackCommonFunction(r1, "W_AttackRightCounter", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackRightCounter", FALSE, TRUE) == TRUE then
@@ -8735,6 +9144,11 @@ function AttackRightLight1_onUpdate() -- r11
 
     if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then
         if AttackCommonFunction("W_AttackRightLight2", "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackRightLight2", "W_AttackRightHeavy2Start", FALSE, TRUE) == TRUE then
+            if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+                AddStamina(15)
+                act(2002, 621) -- set speffect 621
+                act(2002, 622)
+            end
             return 
         elseif env(1108, ACTION_ARM_R1) <= 0 and env(1116, 100338) == TRUE then
             ExecEventAllBody("W_AttackRightHeavySpecial2Start")
@@ -8766,6 +9180,15 @@ function AttackRightLight1_onUpdate() -- r11
         else
             return 
         end
+    end
+end
+
+
+function Attack2RightLight1_onUpdate() -- r11
+    if AttackCommonFunction("W_AttackRightLight2", "W_Attack2RightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight2", "W_Attack2BothHeavy1Start", FALSE, TRUE) == TRUE then
+        return
+    else
+        return
     end
 end
 
@@ -8802,6 +9225,11 @@ function AttackRightLight2_onUpdate() -- r12
 
     if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then
         if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackRightLight1", "W_AttackRightHeavy2Start", FALSE, TRUE) == TRUE then
+            if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+                AddStamina(15)
+                act(2002, 621) -- set speffect 621
+                act(2002, 622)
+            end
             return 
         elseif env(1108, ACTION_ARM_R1) <= 0 and env(1116, 100338) == TRUE then
             ExecEventAllBody("W_AttackRightHeavySpecial2End")
@@ -8983,6 +9411,7 @@ function AttackRightLightKick_onUpdate() -- 030100
     local b1 = "W_AttackBothLight1"
     local hand = HAND_RIGHT
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
 
     if (sp_m == 51 or sp_m == 166) then  r1 = "W_AttackRightLight2" end
     if i1BB == TRUE then r2 = "W_AttackRightHeavy1SubStart" end
@@ -8993,6 +9422,15 @@ function AttackRightLightKick_onUpdate() -- 030100
     if sp_m == 685 then r2 = "W_AttackRightHeavyKick" end
     if sp_m == 667 then r1 = "W_AttackRightLightDashSpecial" r2 = "W_AttackRightLightStepSpecial" end
     if sp_m == 688 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightDash" r2 = "W_AttackRightLightStepSpecial" b1 = r1 b2 = r2 end
+
+    if sp_m == 162 or sp_m == 154 then 
+        if 10 > env(2016) then  act(2002, 627) end
+    end
+
+    local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and sp_m == 85 then
+        if request == ATTACK_REQUEST_RIGHT_CROSSBOW or request == ATTACK_REQUEST_RIGHT_CROSSBOW2 then ExecEventAllBody("W_AttackRightLightStep") return end
+    end
 
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
@@ -9016,6 +9454,11 @@ function AttackRightLightStep_onUpdate() -- roll r1 030900
     if sp_m == 609 or sp_m == 645 or sp_m == 649 or sp_m == 627  then r1 = "W_AttackRightHeavySpecial1Start" end
     if (sp_m == 642) then r2 = "W_AttackRightHeavy2Start" end
     if sp_m == 688 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightKick" r2 = "W_CrossbowStepInFire" b1 = r1 b2 = r2 end
+
+    local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and sp_m == 85 then
+        if request == ATTACK_REQUEST_RIGHT_CROSSBOW or request == ATTACK_REQUEST_RIGHT_CROSSBOW2 then ExecEventAllBody("W_AttackRightHeavyKick") return end
+    end
 
     if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then
         if AttackCommonFunction("W_AttackRightLight2", "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackRightLight2", "W_AttackRightHeavy2Start", FALSE, TRUE) == TRUE then
@@ -9210,6 +9653,27 @@ function AttackRightHeavy1Start_onUpdate()  -- r21 charge 030320
     end
 end
 
+function Attack2RightHeavy1Start_onUpdate()  -- r21 charge 030322
+    local sp_m = env(345 , HAND_RIGHT)
+    
+    local r1 = "W_Attack2RightLight1"
+    local r2 = "W_Attack2RightHeavy2Start"
+    local b2 = "W_Attack2BothHeavy2Start"
+    local b1 = "W_Attack2BothLight1"
+
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return 
+    elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_Attack2RightHeavy1End")
+        return 
+    elseif env(1108, ACTION_ARM_R2) >= 1 and env(1116, 100281) == TRUE then
+        ExecEventAllBody("W_AttackRightHeavySpecial1End")
+        return 
+    else
+        return 
+    end
+end
+
 function AttackRightHeavy1End_onUpdate() -- r21 release end -- doesn't work for shields 030321
     if (env(345 , HAND_RIGHT) ~= 624) then iT = FALSE end
     local sp_m = env(345 , HAND_RIGHT)
@@ -9237,6 +9701,20 @@ function AttackRightHeavy1End_onUpdate() -- r21 release end -- doesn't work for 
         act(2002, 627)
     end
     if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightHeavyKickSpecial"  b1 = r1 end
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return 
+    else
+        return 
+    end
+end
+
+function Attack2RightHeavy1End_onUpdate() -- r21 release end - 030323
+    local sp_m = env(345 , HAND_RIGHT)
+    local r1 = "W_Attack2RightLight1"
+    local b1 = "W_Attack2BothLight1"
+    local r2 = "W_Attack2RightHeavy2Start"
+    local b2 = "W_Attack2BothHeavy2Start"
+
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
@@ -9278,7 +9756,7 @@ function AttackRightHeavy2Start_onUpdate()  -- r22 charge -- roll r2 030340
     local is_pyro = FALSE
     if (sp_m == 149 or sp_m == 239) then is_pyro = TRUE end
 
-    if sp_m == 672 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    if (sp_m == 672 or sp_m == 688) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
     then 
         act(2002, 627)
     end
@@ -9304,6 +9782,28 @@ function AttackRightHeavy2Start_onUpdate()  -- r22 charge -- roll r2 030340
         end
     end
 end
+
+
+
+function Attack2RightHeavy2Start_onUpdate()  -- r22 charge -- roll r2 030342
+    local sp_m = env(345 , HAND_RIGHT)
+
+    local r2 = "W_Attack2RightHeavy1Start"
+    local r1 = "W_Attack2RightLight1"
+    local b1 = "W_Attack2BothLight1"
+    local b2 = "W_Attack2BothHeavy1Start"
+    
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return 
+    elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_Attack2RightHeavy2End")
+        return 
+    else
+        return 
+    end
+    
+end
+
 
 function AttackRightHeavy2End_onUpdate() -- r22 release end
     local is_catalysts = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_STAFF) 
@@ -9352,6 +9852,21 @@ function AttackRightHeavy2End_onUpdate() -- r22 release end
         end
     end
 end
+
+function Attack2RightHeavy2End_onUpdate() -- r22 release end 030343
+    local sp_m = env(345 , HAND_RIGHT)
+    local r2 = "W_Attack2RightHeavy1Start"
+    local r1 = "W_Attack2RightLight1"
+    local b1 = "W_Attack2BothLight1"
+    local b2 = "W_Attack2BothHeavy1Start"
+
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return 
+    else
+        return 
+    end
+end
+
 
 function AttackRightHeavySpecial1SubStart_onUpdate()
     local r1 = "W_AttackRightLight1"
@@ -9405,6 +9920,11 @@ function AttackRightHeavySpecial1Start_onUpdate() -- r14 030350
 
     if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then
         if AttackCommonFunction(r1, "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", r1, "W_AttackRightHeavy2Start", FALSE, TRUE) == TRUE then
+            if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+                AddStamina(15)
+                act(2002, 621) -- set speffect 621
+                act(2002, 622)
+            end
             return 
         elseif env(1108, ACTION_ARM_R1) <= 0 and env(1116, 100280) == TRUE then
             ExecEventAllBody("W_AttackRightHeavySpecial2End")
@@ -9466,6 +9986,11 @@ function AttackRightHeavySpecial1End_onUpdate() -- r23 r2 charged super -- 03035
     if sp_m == 647 and not IsFeintAttempt() then r1 = "W_AttackRightLight3" end
     
     if AttackCommonFunction(r1, "W_AttackRightHeavy2Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy2Start", FALSE, TRUE) == TRUE then
+        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            AddStamina(15)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
         return 
     else
         return 
@@ -9475,7 +10000,6 @@ end
 function AttackRightHeavySpecial2Start_onUpdate() -- UT TA Transform Attack -- 030370
     -- tR1
 
-    
     local r1 = "W_AttackRightLight1"
     local b1 = "W_AttackBothLight1"
     local hand = HAND_RIGHT
@@ -9502,7 +10026,7 @@ function AttackRightHeavySpecial2Start_onUpdate() -- UT TA Transform Attack -- 0
     if sp_m == 610 or sp_m == 667 or sp_m == 622  then b1 = "W_AttackBothHeavySpecial1Start" end
     if sp_m == 610 then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
-    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLight2" b1 = r1 end
+    if sp_m == 672 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLight2" b1 = r1 r2 = "W_AttackRightHeavy2Start" b2 = r2 end
     
 
     if (env(345 , HAND_RIGHT) == 624) then b2 = "W_AttackRightHeavy1SubStart" end
@@ -9529,6 +10053,11 @@ function AttackRightHeavySpecial2Start_onUpdate() -- UT TA Transform Attack -- 0
     if IsFeintAttempt() and (sp_o == 102  or sp_o == 103) and c_Style == HAND_LEFT_BOTH then r1 =  "W_AttackRightLight2" end
 
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            AddStamina(15)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
         return 
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
         ExecEventAllBody("W_AttackRightHeavySpecial2End")
@@ -9548,6 +10077,11 @@ function AttackRightHeavySpecial2End_onUpdate() -- 030371
     if IsFeintAttempt() and (sp_o == 102  or sp_o == 103) and c_Style == HAND_LEFT_BOTH then r1 =  "W_AttackRightLight2" end    
 
     if AttackCommonFunction(r1, "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
+        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            AddStamina(15)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
         return 
     else
         return 
@@ -9593,6 +10127,12 @@ end
 
 function AttackRightHeavyWepBroken2Start_onUpdate() -- r21 030345 "W_AttackRightHeavyWepBroken2Start"
     local sp_m = env(345 , HAND_RIGHT)
+
+    if sp_m == 688 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
     if (sp_m == 689 or sp_m == 690 or sp_m == 687 or sp_m == 688 or sp_m == 692) and c_Style ~= HAND_LEFT_BOTH then  AttackRightHeavy1Start_onUpdate()
     else 
         AttackRightHeavy2Start_onUpdate() 
@@ -9615,17 +10155,21 @@ end
 function AttackRightHeavyKick_onUpdate() -- jump 030600
     iT = FALSE
     local r1 = "W_AttackRightLightStep"
+    local b1 = "W_AttackBothLight1"
     local r2 = "W_AttackRightHeavy2Start"
     local b2 = "W_AttackBothHeavy1Start"
     local sp_m = env(345 , HAND_RIGHT)
 
     if GetEquipType(HAND_RIGHT, 23, 29) == TRUE then r1 = "W_AttackRightLight2" end
+    if sp_m == 672 then b1 = "W_AttackBothLight2" end
+    if sp_m == 85 then r1 = "W_AttackRightLight1" end
 
     if (   (sp_m ~= 264 and sp_m ~= 164)   and GetEquipType(HAND_RIGHT, 38)  == TRUE) or sp_m == 640  then r1 = "W_AttackRightLight3" end
-    if sp_m == 614 or sp_m == 646 or sp_m == 667 then r1 = "W_AttackRightLight2" end
+    if sp_m == 614 or sp_m == 646 or sp_m == 667 or (sp_m == 162 and c_Style ~= HAND_LEFT_BOTH) then r1 = "W_AttackRightLight2" end
     if sp_m == 609 or sp_m == 612 or sp_m == 622 or sp_m == 627 or sp_m == 645 then r1 = "W_AttackRightHeavySpecial1Start" end
     if sp_m == 688 and c_Style ~= HAND_LEFT_BOTH then r2 = "W_AttackRightLightStepSpecial" b2 = r2 end
-    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+    if (sp_m == 696 and c_Style ~= HAND_LEFT_BOTH) then b1 = "W_AttackRightLightStep" end
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
         return 
@@ -9645,7 +10189,20 @@ function AttackRightHeavyKickSpecial_onUpdate() -- run r2 030610
     if sp_m == 614  or sp_m == 612 or sp_m == 622 or sp_m == 627 or sp_m == 645 or sp_m == 621 then r1 = "W_AttackRightHeavySpecial1Start" end
     if (sp_m == 642) then r2 = "W_AttackRightHeavy1SubStart" end
     if sp_m == 688 and c_Style ~= HAND_LEFT_BOTH then b2 = r2 end
+
+    if sp_m == 688 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            local staminaRegen = 15
+            if (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE) then staminaRegen = 23 end
+            AddStamina(staminaRegen)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
         return 
     else
         return 
@@ -9741,6 +10298,7 @@ function AttackLeftHeavy1_onUpdate() -- 032000 AttackLeftHeavy1
     local sp_m = env(345 , HAND_RIGHT)
 
     local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
     if sp_m == 656 then r1 = "W_AttackRightLight1" end
     if sp_m == 609 then r1 = "W_AttackRightLight3" end
 
@@ -9765,7 +10323,7 @@ function AttackLeftHeavy1_onUpdate() -- 032000 AttackLeftHeavy1
 
     if sp_o == 651 then l1 = "W_AttackLeftHeavySp2" end
     
-    if sp_o == 691 then 
+    if sp_o == 691 or sp_o == 697 or sp_o == 698 then 
         if 10 > env(2016) then  act(2002, 627) end -- out of bullets or fp
         l1 = "W_AttackLeftHeavy2" 
         if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then  r1 = "W_AttackLeftHeavySp2" end
@@ -9775,19 +10333,25 @@ function AttackLeftHeavy1_onUpdate() -- 032000 AttackLeftHeavy1
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
-    
+    if (sp_o == 691 and (sp_m == 672 or sp_m == 688) and c_Style == HAND_RIGHT_BOTH) then -- Prosthetic Art
+        b1 = r1 
+    end
+
     if 10 > env(2016) and iG == TRUE then  ExecEventAllBody("W_AttackLeftHeavySp3") 
 
-    elseif sp_o == 691 and (c_Style == HAND_LEFT or c_Style == HAND_RIGHT) then
-        if AttackCommonFunction(r1, "W_AttackRightHeavy2Start", "W_AttackLeftHeavy2", "W_AttackLeftHeavy2", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, TRUE) == TRUE then
+    elseif ((sp_o == 691 or sp_o == 697 or sp_o == 698) and (c_Style == HAND_LEFT or c_Style == HAND_RIGHT)) or (sp_o == 691 and (sp_m == 672 or sp_m == 688) and c_Style == HAND_RIGHT_BOTH) then -- prosthetic art
+        if AttackCommonFunction(r1, "W_AttackRightHeavy2Start", "W_AttackLeftHeavy2", "W_AttackLeftHeavy2", b1, b2, FALSE, TRUE) == TRUE then
             return 
-        elseif env(1108, ACTION_ARM_L1) <= 0 and env(1116, 100343) == TRUE then
+        elseif env(1108, ACTION_ARM_L1) <= 0 and env(1116, 100343) == TRUE and c_Style ~= HAND_RIGHT_BOTH then
+            ExecEventAllBody("W_AttackLeftHeavy3")
+            return 
+        elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100343) == TRUE and c_Style == HAND_RIGHT_BOTH then
             ExecEventAllBody("W_AttackLeftHeavy3")
             return 
         else
             return 
         end   
-    elseif AttackCommonFunction(r1, r2, nil, l1, "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+    elseif AttackCommonFunction(r1, r2, nil, l1, b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
         return 
@@ -9799,6 +10363,7 @@ function AttackLeftHeavy2_onUpdate() -- 032030 AttackLeftHeavy2
     local sp_m = env(345 , HAND_RIGHT)
 
     local r1 = "W_AttackRightLight2"
+    local b1 = "W_AttackBothLight1"
     if sp_m == 656 then r1 = "W_AttackRightLight3" end
 
     local r2 = "W_AttackRightHeavy1Start"
@@ -9821,7 +10386,7 @@ function AttackLeftHeavy2_onUpdate() -- 032030 AttackLeftHeavy2
     if GetEquipType(HAND_LEFT, 48) == TRUE and GetEquipType(HAND_RIGHT, 48) == TRUE  then r1 = "W_AttackRightLight2" end
 
     if sp_o == 651 or (sp_o == 687 and env(1116, 705) == TRUE) then l1 = "W_AttackLeftHeavySp3" end
-    if sp_o == 691 then 
+    if sp_o == 691 or sp_o == 697 or sp_o == 698 then 
         if 10 > env(2016) then  act(2002, 627) end -- out of bullets or fp
         l1 = "W_AttackLeftHeavy2" 
         if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then 
@@ -9834,6 +10399,10 @@ function AttackLeftHeavy2_onUpdate() -- 032030 AttackLeftHeavy2
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
+
+    if (sp_o == 691 and (sp_m == 672 or sp_m == 688) and c_Style == HAND_RIGHT_BOTH) then -- Prosthetic Art
+        b1 = r1 
+    end
 
     -- local sp_g = env(345 , HAND_LEFT)
     -- if (sp_g == 650) then
@@ -9850,7 +10419,7 @@ function AttackLeftHeavy2_onUpdate() -- 032030 AttackLeftHeavy2
 
         if 10 > env(2016) and iG == TRUE then  ExecEventAllBody("W_AttackLeftHeavySp3")
         
-        elseif AttackCommonFunction(r1, r2, nil, l1, "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+        elseif AttackCommonFunction(r1, r2, nil, l1, b1, b2, FALSE, TRUE) == TRUE then
             return 
         else
             return 
@@ -9864,6 +10433,7 @@ function AttackLeftHeavy3_onUpdate() -- 032060 AttackLeftHeavy3
     local is_sls = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_SHIELD) 
 
     local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
     if sp_m == 656 then r1 = "W_AttackRightLight3" end
     if sp_m == 609 then r1 = "W_AttackRightLight3" end
 
@@ -9891,14 +10461,18 @@ function AttackLeftHeavy3_onUpdate() -- 032060 AttackLeftHeavy3
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
     if sp_o == 651 then l1 = "W_AttackLeftHeavySp2" end
-    if sp_o == 691 then 
+    if sp_o == 691 or sp_o == 697 or sp_o == 698 then 
         if 10 > env(2016) then  act(2002, 627) end -- out of bullets or fp
         l1 = "W_AttackLeftHeavy2" 
         if (GetEquipType(HAND_RIGHT, 20, 23, 27, 28, 29, 30, 33, 42) == TRUE) then  r1 = "W_AttackLeftHeavySp2" end
         if sp_m == 679 then r1 = "W_AttackRightLight1" end
     end
     
-        if AttackCommonFunction(r1, r2, nil, l1, "W_AttackBothLight1", b2, FALSE, TRUE) == TRUE then
+    if (sp_o == 691 and (sp_m == 672 or sp_m == 688) and c_Style == HAND_RIGHT_BOTH) then -- prosthetic art
+        b1 = r1 
+    end
+
+        if AttackCommonFunction(r1, r2, nil, l1, b1, b2, FALSE, TRUE) == TRUE then
             return 
         else
             return 
@@ -9953,7 +10527,7 @@ function AttackBothLight1_onUpdate()  -- r11
     -- added exceptions for:
     -- dark sword, hollowslayer, lothric knight ss, old wolf, ledo, GL, whip, BB weapons
 
-    if GetEquipType(HAND_RIGHT, 48) == TRUE or GetEquipType(HAND_LEFT, 48) == TRUE then b2 = "W_AttackBothHeavy2Start" end
+    if (GetEquipType(HAND_RIGHT, 48) == TRUE and c_Style == HAND_RIGHT_BOTH) or (GetEquipType(HAND_LEFT, 48) == TRUE and c_Style == HAND_LEFT_BOTH) then b2 = "W_AttackBothHeavy2Start" end
 
     if env(345 , hand) == 232 then
         b2 = "W_AttackBothHeavy2Start"
@@ -10023,6 +10597,8 @@ function AttackBothLight1_onUpdate()  -- r11
             elseif (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 25, 38, 51) == TRUE and c_Style == HAND_LEFT_BOTH)  then staminaRegen = 28
             elseif (GetEquipType(HAND_RIGHT, 35, 26) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 35, 26) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 36
             elseif (GetEquipType(HAND_RIGHT, 32, 47) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 32, 47) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 44
+            elseif (sp_m == 671 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 671 and c_Style == HAND_LEFT_BOTH) then staminaRegen = 32
+            
             else staminaRegen = 19 end
             
             AddStamina(staminaRegen)
@@ -10032,6 +10608,14 @@ function AttackBothLight1_onUpdate()  -- r11
         return
     else
         return 
+    end
+end
+
+function Attack2BothLight1_onUpdate() -- r11
+    if AttackCommonFunction("W_AttackRightLight2", "W_Attack2RightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight2", "W_Attack2BothHeavy1Start", FALSE, TRUE) == TRUE then
+        return
+    else
+        return
     end
 end
 
@@ -10049,7 +10633,8 @@ function AttackBothLight2_onUpdate()  -- r12
     end
 
     if sp_m == 610 or sp_m == 667 then l1 = "W_AttackBothLeft2" end
-    if GetEquipType(HAND_RIGHT, 48) == TRUE or GetEquipType(HAND_LEFT, 48) == TRUE then b2 = "W_AttackBothHeavy2Start" end
+    if (GetEquipType(HAND_RIGHT, 29, 48) == TRUE and c_Style == HAND_RIGHT_BOTH) or (GetEquipType(HAND_LEFT, 29, 48) == TRUE and c_Style == HAND_LEFT_BOTH) then b2 = "W_AttackBothHeavy2Start" end
+    --if (GetEquipType(HAND_RIGHT, 48) == TRUE or GetEquipType(HAND_LEFT, 48) == TRUE then b2 = "W_AttackBothHeavy2Start" end
 
     --local JF = "W_RandomOneShotNext2"
     --if IsDualBlade() == TRUE then JF = "W_RandomOneShotNext1" end
@@ -10088,6 +10673,7 @@ function AttackBothLight2_onUpdate()  -- r12
             elseif (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 25, 38, 51) == TRUE and c_Style == HAND_LEFT_BOTH)  then staminaRegen = 28
             elseif (GetEquipType(HAND_RIGHT, 35, 26) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 35, 26) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 36
             elseif (GetEquipType(HAND_RIGHT, 32, 47) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 32, 47) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 44
+            elseif (sp_m == 671 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 671 and c_Style == HAND_LEFT_BOTH) then staminaRegen = 32
             else staminaRegen = 19 end
             
             AddStamina(staminaRegen)
@@ -10120,7 +10706,7 @@ function AttackBothLight3_onUpdate()  -- r13 034020
     -- added exceptions for:
     -- dark sword, hollowslayer, lothric knight ss, old wolf, ledo, GL, whip, BB weapons
 
-    if GetEquipType(HAND_RIGHT, 48) == TRUE or GetEquipType(HAND_LEFT, 48) == TRUE then b2 = "W_AttackBothHeavy2Start" end
+    if (GetEquipType(HAND_RIGHT, 48) == TRUE and c_Style == HAND_RIGHT_BOTH) or (GetEquipType(HAND_LEFT, 48) == TRUE and c_Style == HAND_LEFT_BOTH) then b2 = "W_AttackBothHeavy2Start" end
 
     local l1 = "W_AttackBothLeft2"
     if sp_m == 613  then l1 = "W_AttackBothLeft2" end
@@ -10173,6 +10759,7 @@ function AttackBothLight3_onUpdate()  -- r13 034020
             elseif (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 25, 38, 51) == TRUE and c_Style == HAND_LEFT_BOTH)  then staminaRegen = 28
             elseif (GetEquipType(HAND_RIGHT, 35, 26) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 35, 26) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 36
             elseif (GetEquipType(HAND_RIGHT, 32, 47) == TRUE and c_Style ~= HAND_LEFT_BOTH)     or (GetEquipType(HAND_LEFT, 32, 47) == TRUE and c_Style == HAND_LEFT_BOTH)      then staminaRegen = 44
+            elseif (sp_m == 671 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 671 and c_Style == HAND_LEFT_BOTH) then staminaRegen = 32
             else staminaRegen = 19 end
             
             AddStamina(staminaRegen)
@@ -10457,6 +11044,7 @@ function AttackBothLeftDash_onUpdate() -- bothdashleft run l1 run 33500
     local hand = HAND_RIGHT
     local style = c_Style
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     if style == HAND_LEFT_BOTH then
         hand = HAND_LEFT
     end
@@ -10496,6 +11084,7 @@ end
 
 function AttackBothLeftStep_onUpdate() -- roll l1 roll 33900
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1Start"
 
@@ -10517,6 +11106,11 @@ function AttackBothLeftStep_onUpdate() -- roll l1 roll 33900
 
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
 
+    if sp_m == 162 and sp_o == 154 then 
+        l1 = "W_AttackBothLeftStep"
+        if 10 > env(2016) then  act(2002, 627) end
+    end
+    
     if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
@@ -10602,6 +11196,11 @@ function AttackBothHeavy1Start_onUpdate()  -- r21 charge 034320
 
     if (sp_m == 70 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 70 and c_Style == HAND_LEFT_BOTH)  then  b2 = "W_AttackBothHeavy1Start" end
 
+    if ((sp_m == 141 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 141 and c_Style == HAND_LEFT_BOTH)) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
     if (    (env(345 , HAND_LEFT) == 654) and HAND_LEFT_BOTH == c_Style  )      or   (  (env(345 , HAND_RIGHT) == 654) and HAND_RIGHT_BOTH == c_Style )    then b2 = "W_AttackBothHeavyKick" end
 
     if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
@@ -10610,6 +11209,27 @@ function AttackBothHeavy1Start_onUpdate()  -- r21 charge 034320
     elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
         if sp_m == 664 or ((sp_m == 609 or sp_m == 685) and c_Style == HAND_RIGHT_BOTH) then ExecEventAllBody("W_AttackRightHeavy1End")
         else  ExecEventAllBody("W_AttackBothHeavy1End") end
+        return 
+    elseif env(1108, ACTION_ARM_R2) >= 1 and env(1116, 100281) == TRUE then
+        ExecEventAllBody("W_AttackBothHeavySpecial1End") 
+        return 
+    else
+        return 
+    end
+end
+
+function Attack2BothHeavy1Start_onUpdate()  -- r21 charge 034322
+    local r1 = "W_AttackRightLight1" 
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy2Start"
+    local l1 = "W_AttackBothLeft1"
+    local sp_m = env(345 , HAND_RIGHT)
+
+    if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return 
+    elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_Attack2BothHeavy1End")
         return 
     elseif env(1108, ACTION_ARM_R2) >= 1 and env(1116, 100281) == TRUE then
         ExecEventAllBody("W_AttackBothHeavySpecial1End") 
@@ -10654,6 +11274,11 @@ function AttackBothHeavy1End_onUpdate()  -- r21 release end 034321
         act(2002, 625)
     end
 
+    if ((sp_m == 141 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 141 and c_Style == HAND_LEFT_BOTH)) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
     local r1 = "W_AttackRightLight1" 
     local b2 = "W_AttackBothHeavy2Start"
 
@@ -10690,7 +11315,24 @@ function AttackBothHeavy1End_onUpdate()  -- r21 release end 034321
     end
 end
 
-function AttackBothHeavy2Start_onUpdate()  -- r22 charge roll r2
+
+function Attack2BothHeavy1End_onUpdate()  -- r21 release end 034323
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    local r2 = "W_Attack2RightHeavy1Start"
+    local b1 = "W_Attack2BothLight1"
+    local l1 = "W_AttackBothLeft1"
+    local r1 = "W_Attack2RightLight1" 
+    local b2 = "W_Attack2BothHeavy2Start"
+
+    if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        return
+    else
+        return 
+    end
+end
+
+function AttackBothHeavy2Start_onUpdate()  -- r22 charge roll r2 034340
     local is_catalysts = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_STAFF) -- 2h staff W_AttackRightHeavyWepBroken1Start
     local is_catalysto = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_STAFF) -- 2h staff W_AttackRightHeavyWepBroken1Start
 
@@ -10759,6 +11401,11 @@ function AttackBothHeavy2Start_onUpdate()  -- r22 charge roll r2
             act(2002, 625)
         end
 
+        if ((sp_m == 141 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 141 and c_Style == HAND_LEFT_BOTH)) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+        then 
+            act(2002, 627)
+        end
+
         if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
             return 
         elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
@@ -10768,6 +11415,31 @@ function AttackBothHeavy2Start_onUpdate()  -- r22 charge roll r2
             return 
         end
     end
+end
+
+
+function Attack2BothHeavy2Start_onUpdate()  -- r22 charge roll r2 034342
+    local is_catalysts = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_STAFF) -- 2h staff W_AttackRightHeavyWepBroken1Start
+    local is_catalysto = GetEquipType(HAND_LEFT, WEAPON_CATEGORY_STAFF) -- 2h staff W_AttackRightHeavyWepBroken1Start
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    local staffR2 = "W_Attack2RightLight1"
+        
+    local b2 = "W_Attack2BothHeavy1Start"
+    local b1 = "W_Attack2BothLight1"
+    local l1 = "W_AttackBothLeft1"
+    local r1 = "W_Attack2RightLight1" 
+    local r2 = "W_Attack2RightHeavy1Start"
+
+        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+            return 
+        elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE then
+            ExecEventAllBody("W_Attack2BothHeavy2End")
+            return 
+        else
+            return 
+        end
 end
 
 function AttackBothHeavy2End_onUpdate()  -- r22 release end 034341
@@ -10819,6 +11491,11 @@ function AttackBothHeavy2End_onUpdate()  -- r22 release end 034341
         act(2002, 625)
     end
 
+    if ((sp_m == 141 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 141 and c_Style == HAND_LEFT_BOTH)) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
     local r1 = "W_AttackRightLight1" 
     local r2 = "W_AttackRightHeavy1Start"
     if (sp_m == 645) then  
@@ -10831,6 +11508,32 @@ function AttackBothHeavy2End_onUpdate()  -- r22 release end 034341
 
     if sp_m == 667 then b1 = "W_AttackBothDashSpecial" b2 = "W_AttackRightHeavy1SubStart" end 
 
+    if ((is_catalysts == TRUE and HAND_LEFT_BOTH ~= c_Style) or (is_catalysto == TRUE and HAND_LEFT_BOTH == c_Style))  then  
+        if AttackCommonFunction(r1, r2, "W_AttackBothLeft1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackRightLight1", FALSE, TRUE) == TRUE then
+            return 
+        else
+            return 
+        end
+    else 
+        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+            return 
+        elseif sp_m == 610 and env(1108, ACTION_ARM_R2) >= 1 and ( env(1001) > STAMINA_MINIMUM ) and env(1116, 100280) == TRUE then  ExecEventAllBody("W_AttackBothHeavy2End") return 
+        else
+            return 
+        end
+    end
+end
+
+
+function Attack2BothHeavy2End_onUpdate()  -- r22 release end 034343
+    local is_catalysts = GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_STAFF) 
+    local sp_m = env(345 , HAND_RIGHT)
+    local b1 = "W_Attack2BothLight1"
+    local l1 = "W_AttackBothLeft1"
+    local b2 = "W_Attack2BothHeavy1Start"
+    local r1 = "W_Attack2RightLight1" 
+    local r2 = "W_Attack2RightHeavy1Start"
+    
     if ((is_catalysts == TRUE and HAND_LEFT_BOTH ~= c_Style) or (is_catalysto == TRUE and HAND_LEFT_BOTH == c_Style))  then  
         if AttackCommonFunction(r1, r2, "W_AttackBothLeft1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackRightLight1", FALSE, TRUE) == TRUE then
             return 
@@ -11374,6 +12077,11 @@ function AttackBothLightStep_onUpdate() -- roll r1 034900
         act(2002, 625)
     end
 
+    local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and sp_m == 85 then
+        if request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW or request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW2 then ExecEventAllBody("W_AttackBothHeavyKick") return end
+    end
+
     if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
@@ -11432,7 +12140,13 @@ function AttackBothLightStepSpecial_onUpdate() -- bs r2 backstep r2 034910
          if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
          if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
          if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
-        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            local staminaRegen = 15
+            if (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE) then staminaRegen = 28 end
+            AddStamina(staminaRegen)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
             return 
         elseif env(1108, ACTION_ARM_R2) <= 0 and env(1116, 100280) == TRUE and sp_m == 101 then
             ExecEventAllBody("W_AttackBothHeavy1End")
@@ -11479,6 +12193,11 @@ function AttackBothLightKick_onUpdate() -- 034100
     end
     if (sp_m == 681 and c_Style == HAND_RIGHT_BOTH) or (sp_o == 681 and c_Style == HAND_LEFT_BOTH)  then   b1 = "W_AttackBothLight3" end
     
+    local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and sp_m == 85 then
+        if request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW or request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW2 then ExecEventAllBody("W_AttackBothLightStep") return end
+    end
+
     if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackBothLeft1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
         return 
     else
@@ -11567,6 +12286,14 @@ function AttackBothHeavyKickSpecial_onUpdate() -- run r2 034610
     if sp_m == 643 then l1 = "W_AttackBothLeft2" end
 
     if AttackCommonFunction(r1, r2, l1, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE) == TRUE then
+        if env(1116, 100283) == TRUE  and env(1116, 100273) == FALSE and env(1106, ACTION_ARM_R1) == TRUE then 
+            local staminaRegen = 15
+            if (GetEquipType(HAND_RIGHT, 25, 38, 51) == TRUE) then staminaRegen = 28 end
+            AddStamina(staminaRegen)
+            act(2002, 621) -- set speffect 621
+            act(2002, 622)
+        end
+        
         return 
     else
         return 
@@ -11919,6 +12646,14 @@ function AttackCrossbowRightEmpty_Upper_onUpdate() -- neutral transform (UT > T)
     if sp_m == 643 then 
         r1 = "W_AttackRightLight3" 
         b1 = "W_AttackBothLight3" 
+    end
+
+    if ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style == HAND_LEFT_BOTH)) then 
+        act("精密射撃可能か")
+        if IsExistArrow() == TRUE then
+            ExecEventAllBody("W_NoArrow")
+            return 
+        end 
     end
 
     if sp_m == 609 or sp_m == 612 or sp_m == 622 or sp_m == 627 then b1 = "W_AttackBothLight3" end
@@ -12331,7 +13066,22 @@ function StepInRightStart_Upper_onUpdate() -- 036000
         b2 = "W_AttackBothHeavy1Start" 
     end
 
+    if (GetEquipType(HAND_RIGHT, 29) == TRUE and is_both_left == FALSE ) or (GetEquipType(HAND_LEFT, 29) == TRUE and is_both_left == TRUE ) then
+        r1 = "W_StepInRightSlash" 
+        b1 = "W_StepInRightSlash"
+        r2 = "W_StepInRightSlash" 
+        b2 = "W_StepInRightSlash" 
+
+        if env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+        then 
+            act(2002, 627)
+        end
+    end
+    
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, TRUE, GEN_TRANS_LEFT) == TRUE then
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_StepInRightUppercut")
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -12343,7 +13093,31 @@ function StepInRightStart_Upper_onUpdate() -- 036000
 end
 
 function StepInRightUppercut_onUpdate() -- R1
-    if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, TRUE, TRUE, GEN_TRANS_LEFT) == TRUE then
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    local is_both_left = FALSE
+    if c_Style == HAND_LEFT_BOTH then is_both_left = TRUE end
+
+    if (GetEquipType(HAND_RIGHT, 29) == TRUE and is_both_left == FALSE ) or (GetEquipType(HAND_LEFT, 29) == TRUE and is_both_left == TRUE ) then
+        r1 = "W_StepInRightSlash" 
+        b1 = "W_StepInRightSlash"
+        r2 = "W_StepInRightSlash" 
+        b2 = "W_StepInRightSlash" 
+
+        if env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+        then 
+            act(2002, 627)
+        end
+    end
+
+
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE, TRUE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -12355,7 +13129,19 @@ function StepInRightUppercut_onUpdate() -- R1
 end
 
 function StepInRightSlash_onUpdate() -- R2
+    local is_both_left = FALSE
+    if c_Style == HAND_LEFT_BOTH then is_both_left = TRUE end
+    if (GetEquipType(HAND_RIGHT, 29) == TRUE and is_both_left == FALSE ) or (GetEquipType(HAND_LEFT, 29) == TRUE and is_both_left == TRUE ) then
+        if env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+        then 
+            act(2002, 627)
+        end
+    end
+
     if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_StepInRightDashStart")
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -12367,6 +13153,15 @@ function StepInRightSlash_onUpdate() -- R2
 end
 
 function StepInRightDashStart_onUpdate()
+    local is_both_left = FALSE
+    if c_Style == HAND_LEFT_BOTH then is_both_left = TRUE end
+    if (GetEquipType(HAND_RIGHT, 29) == TRUE and is_both_left == FALSE ) or (GetEquipType(HAND_LEFT, 29) == TRUE and is_both_left == TRUE ) then
+        if env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+        then 
+            act(2002, 627)
+        end
+    end
+
     if SwordArtsCommonFunction("W_AttackRightLight3", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight3", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -12960,10 +13755,18 @@ function DrawStanceRightAttackHeavy_onUpdate() -- 036240
     local hand = HAND_RIGHT
     local style = c_Style
     local sp_kind = env(345 , hand)
+    local sp_o = env(345 , HAND_LEFT)
     if env(1116, 100250) == TRUE then
+        if (sp_kind == 67 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 67 and c_Style == HAND_LEFT_BOTH ) then
+            r2 = "W_DrawStanceRightAttackHeavy2"
+            b2 = "W_DrawStanceRightAttackHeavy2"
+            r1 = "W_DrawStanceRightAttackLight"
+            b1 = r1
+        else
         r2 = "W_DrawStanceRightAttackHeavy2"
         b2 = "W_DrawStanceRightAttackHeavy2"
         is_artsr2 = TRUE
+        end
     elseif env(1116, 100680) == TRUE then
         r2 = "W_DrawStanceRightAttackHeavy"
         b2 = "W_DrawStanceRightAttackHeavy"
@@ -13667,7 +14470,7 @@ function AttackSpinStart_Upper_onUpdate() -- 036400
     local sp_g = env(345 , HAND_LEFT)
     local offhandboth = "W_AttackLeftLight2"
     if (sp_g == 602 or sp_g == 617 or sp_g == 628 or sp_g == 629 or sp_g == 630 or sp_g == 653 ) and style == HAND_RIGHT then offhandboth = "W_ParryLeftStart" end
-    if (sp_o == 691 and c_Style ~= HAND_RIGHT_BOTH) then offhandboth = "W_AttackLeftLight1" end
+    if ((sp_o == 691 or sp_o == 697 or sp_o == 698) and c_Style ~= HAND_RIGHT_BOTH) then offhandboth = "W_AttackLeftLight1" end
 
     if SwordArtsCommonFunction(r1, r2, offhandboth, "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE, TRUE, GEN_TRANS_LEFT) == TRUE then
         act(2001, 1)
@@ -13873,13 +14676,22 @@ function AttackSpinLoopEnd_onUpdate()
     end
 end
 
-function Charge_Upper_onUpdate() -- 6700
+function Charge_Upper_onUpdate() -- 036700
     local b1 = "W_AttackBothLight1"
+    local r1 = "W_AttackRightLight1"
     local r2 = "W_AttackRightHeavy1Start"
     local l2 = "W_AttackLeftHeavy1"
     local b2 = "W_AttackBothHeavy1Start"
     local is_artsr1 = FALSE
     local is_artsr2 = FALSE
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    if ((GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m == 67 and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67 and c_Style == HAND_LEFT_BOTH)) then 
+        r2 = "W_AttackRightHeavyKickSpecial"
+        b2 = "W_AttackBothHeavyKickSpecial"
+    end
+
     if env(1116, 100260) == TRUE then
         r2 = "W_ChargeContinue"
         l2 = "W_ChargeContinue"
@@ -13887,8 +14699,13 @@ function Charge_Upper_onUpdate() -- 6700
         is_artsr2 = TRUE
     end
 
-    local sp_m = env(345 , HAND_RIGHT)
-    local sp_o = env(345 , HAND_LEFT)
+    if (sp_m == 672 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 672 and c_Style == HAND_LEFT_BOTH) then 
+        r1 = "W_ChargeContinue"
+        b1 = "W_ChargeContinue"
+        r2 = "W_ChargeContinue2"
+        b2 = "W_ChargeContinue2"
+    end
+
     if sp_m == 101 and env("アニメ終了か", 1) == TRUE and env(1001) > 0 then ExecEventAllBody("W_ChargeContinue") end
     if sp_m == 101 and env("アニメ終了か", 1) == TRUE and env(1001) <= 0 then ExecEventAllBody("W_Idle") end 
     if sp_m == 641 then b1 = "W_AttackBothHeavySpecial1SubStart" end
@@ -13901,7 +14718,6 @@ function Charge_Upper_onUpdate() -- 6700
 
     local is_h = GetEquipType(hand, 33) 
 
-    local r1 = "W_AttackRightLight1"
     if is_h == TRUE then r1 = "W_AttackRightLight3" end
 
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", l2, b1, b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
@@ -13934,7 +14750,7 @@ function Charge_Activate()
     return 
 end
 
-function ChargeContinue_onUpdate()
+function ChargeContinue_onUpdate() -- 036710
     local sp_m = env(345 , HAND_RIGHT)
     local sp_o = env(345 , HAND_LEFT)
     if sp_m == 101 then iT = FALSE end
@@ -13973,7 +14789,14 @@ function ChargeContinue_onUpdate()
         is_artsr2 = TRUE
     end
 
-    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", l2, "W_AttackBothLight1", b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
+    if (sp_m == 672 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 672 and c_Style == HAND_LEFT_BOTH) then 
+        r1 = "W_Charge"
+        b1 = "W_Charge"
+        r2 = "W_ChargeContinue2"
+        b2 = "W_ChargeContinue2"
+    end
+
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", l2, b1, b2, is_artsr1, is_artsr2, TRUE, GEN_TRANS_LFET) == TRUE then
         return 
     elseif (    (sp_m == 656 or sp_m == 72) and style ~= HAND_LEFT_BOTH     or (    (sp_o == 72 or sp_o == 656) and style == HAND_LEFT_BOTH)) and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE or (env(1108, ACTION_ARM_L2) <= 0 and env(1116, 100280) == TRUE)   ) then -- new
         act("特殊補間設定", 0, TRUE)
@@ -13988,10 +14811,24 @@ function ChargeContinue_onUpdate()
     end
 end
 
-function ChargeContinue2_onUpdate()
+function ChargeContinue2_onUpdate() -- 036720
     local sp_m = env(345 , HAND_RIGHT)
     local sp_o = env(345 , HAND_LEFT)
-    if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
+
+    local b1 = "W_AttackBothLight1"
+    local r1 = "W_AttackRightLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local l2 = "W_AttackLeftHeavy1"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    if (sp_m == 672 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 672 and c_Style == HAND_LEFT_BOTH) then         
+        r1 = "W_ChargeContinue"
+        b1 = "W_ChargeContinue"
+        r2 = "W_ChargeContinue2"
+        b2 = "W_ChargeContinue2"
+    end
+    
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif (sp_m == 656 or sp_m == 72 or (sp_o == 72 and c_Style == HAND_LEFT_BOTH)) and (env(301, 0) == TRUE or env("アニメ終了か", 1) == TRUE) then -- new
         act("特殊補間設定", 0, TRUE)
@@ -14119,8 +14956,9 @@ function WarcryCancel_onUpdate() -- 037680
     local is_CSo = GetEquipType(HAND_LEFT, 28) 
 
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_kind = env(345 , hand)
 
-    if env(345 , hand) == 217 and is_CSm == TRUE and c_Style ~= HAND_LEFT_BOTH then
+    if sp_kind == 217 and is_CSm == TRUE and c_Style ~= HAND_LEFT_BOTH then
         g_r1 = "W_AttackRightLight2"
         g_b1 = "W_AttackBothLight2"
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -14131,7 +14969,7 @@ function WarcryCancel_onUpdate() -- 037680
         end
     end   
 
-    if env(345 , hand) == 217 and is_CSo == TRUE  and c_Style == HAND_LEFT_BOTH then
+    if sp_kind == 217 and is_CSo == TRUE  and c_Style == HAND_LEFT_BOTH then
         g_r1 = "W_AttackRightLight2"
         g_b1 = "W_AttackBothLight2"
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -14169,7 +15007,12 @@ function WarcryCancel_onUpdate() -- 037680
     end
 end
 
-function Endure_Upper_onUpdate() -- 37700
+function Endure_Upper_onUpdate() -- 037700
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
     local r2 = "W_AttackRightHeavy1Start"
     local l2 = "W_AttackLeftHeavy1"
     local b2 = "W_AttackBothHeavy1Start"
@@ -14179,12 +15022,23 @@ function Endure_Upper_onUpdate() -- 37700
         b2 = "W_EndureRightHeavy"
         SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE)
     end
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", l2, "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
+
+    if env(1116, 100260) == TRUE and ((sp_m == 67 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 67 and c_Style == HAND_LEFT_BOTH)) then
+        r2 = "W_EndureRightHeavy"
+        l2 = "W_EndureRightHeavy"
+        b2 = "W_EndureRightHeavy"
+        SetSwordArtsPointInfo(ACTION_ARM_R2, TRUE)
+    end
+
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", l2, b1, b2, FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env(1116, 100460) == TRUE and env(1108, ACTION_ARM_L2) <= 0 then
         ExecEventAllBody("W_WarcryCancel")
         return 
     elseif env(1116, 100285) == TRUE and env(1108, ACTION_ARM_L2) <= 0 then
+        ExecEventAllBody("W_EndureRightHeavy")
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
         ExecEventAllBody("W_EndureRightHeavy")
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -14209,10 +15063,12 @@ function EndureRightHeavy_onUpdate() -- 37710
         hand = HAND_LEFT
     end
 
+    local sp_kind = env(345 , hand)
+
     local is_CSm = GetEquipType(HAND_RIGHT, 28) 
     local is_CSo = GetEquipType(HAND_LEFT, 28) 
 
-    if env(345 , hand) == 217 and is_CSm == TRUE and c_Style ~= HAND_LEFT_BOTH then
+    if sp_kind == 217 and is_CSm == TRUE and c_Style ~= HAND_LEFT_BOTH then
         r1 = "W_AttackRightLight2"
         b1 = "W_AttackBothLight2"
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -14223,7 +15079,7 @@ function EndureRightHeavy_onUpdate() -- 37710
         end
     end   
 
-    if env(345 , hand) == 217 and is_CSo == TRUE  and c_Style == HAND_LEFT_BOTH then
+    if sp_kind == 217 and is_CSo == TRUE  and c_Style == HAND_LEFT_BOTH then
         r1 = "W_AttackRightLight2"
         b1 = "W_AttackBothLight2"
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -14326,6 +15182,15 @@ function OneShotNoGenTransStart_onUpdate() -- 038700 Transformed WA
         r2 = "W_AttackRightHeavy1SubStart"
         b2 = "W_AttackBothHeavy2Start"
      end
+
+    if ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style == HAND_LEFT_BOTH)) then 
+        act("精密射撃可能か")
+        if IsExistArrow() == TRUE then
+            ExecEventAllBody("W_NoArrow")
+            return 
+        end 
+    end
+
     if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     elseif sp_m == 610 and env(1108, ACTION_ARM_R2) >= 1 and env(1116, 100282) == TRUE then  ExecEventAllBody("W_AttackBothHeavy1Start") return
@@ -14355,11 +15220,15 @@ end
 function MagicBuffRight_Upper_onUpdate()
     local blend_type, lower_state = GetHalfBlendInfo()
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
     if sp_m == 649 then r2 = "W_AttackRightHeavy1SubStart" b2 = "W_AttackBothHeavy1SubStart" end
 
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
+
+    if 5 > env(2016) and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) then act(2002, 121950)  end
+
+    if SwordArtsCommonFunction("W_AttackRightLight2", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy2", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     elseif HalfBlendLowerCommonFunction(Event_MagicBuffRightMirror, lower_state, FALSE, FALSE) == TRUE then
         return 
@@ -14369,7 +15238,11 @@ function MagicBuffRight_Upper_onUpdate()
 end
 
 function MagicBuffRight2_onUpdate()
-    if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, FALSE) == TRUE then
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if 5 > env(2016) and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) then act(2002, 121950)  end
+
+    if SwordArtsCommonFunction("W_AttackRightLight3", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy3", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     else
         return 
@@ -14377,7 +15250,11 @@ function MagicBuffRight2_onUpdate()
 end
 
 function MagicBuffRight3_onUpdate()
-    if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, FALSE) == TRUE then
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if 5 > env(2016) and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) then act(2002, 121950)  end
+
+    if SwordArtsCommonFunction("W_AttackRightLight2", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy2", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     else
         return 
@@ -14400,8 +15277,29 @@ function CircleStepStartSelftrans_onUpdate()
     local rolling_angle = GetVariable("CircleStepAngleSelftrans")
     local addratio = 0.300000011920929
     local endratio = 1
+
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    local is_CSm = GetEquipType(HAND_RIGHT, 28) 
+    local is_CSo = GetEquipType(HAND_LEFT, 28) 
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    if (sp_m == 217 and is_CSm == TRUE and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 217 and is_CSo == TRUE and c_Style == HAND_LEFT_BOTH) then
+        r1 = "W_CrossbowStepInFire"
+        b1 = "W_CrossbowStepInFire"
+        if  env(1116, 100260) == TRUE then
+        r2 = "W_WarcryCancel"
+        b2 = "W_WarcryCancel"
+        end
+    end    
+
     act(2001, math.abs(1 + addratio * math.abs(math.sin(math.rad(2 * rolling_angle)))))
-    if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE) == TRUE then
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE) == TRUE then
         return 
     else
         return 
@@ -14593,6 +15491,14 @@ function ChargeShotRightFire_onUpdate()
 end
 
 function CrossbowStepInRightStart_Upper_onUpdate() -- 038200
+    local hand = HAND_RIGHT
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    local r1 = "W_AttackRightLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+
     act("精密射撃可能か")
     if SwordArtsCrossbowStepInFunction() == TRUE then
         return 
@@ -14626,7 +15532,17 @@ function CrossbowStepInRightStart_Upper_onUpdate() -- 038200
             end
         end
     end
-    if env("アニメ終了か", 1) == TRUE then
+
+
+    if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE) == TRUE then
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_RandomOneShotNext1")
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100295) == TRUE then
+        ExecEventAllBody("W_CrossbowStepInReload")
+        return 
+    elseif env("アニメ終了か", 1) == TRUE then
         ExecEventAllBody("W_Idle")
         return 
     else
@@ -14637,6 +15553,7 @@ end
 function CrossbowStepInFire_onUpdate() -- 038210 bs r2 for vanilla weapons
     local hand = HAND_RIGHT
     local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
     local r1 = "W_AttackRightLight1"
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
@@ -14644,8 +15561,52 @@ function CrossbowStepInFire_onUpdate() -- 038210 bs r2 for vanilla weapons
     if sp_m == 688 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightDash" r2 = "W_AttackRightLightStepSpecial" b2 = r2 end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
 
+    if ((sp_m == 672 or sp_m == 688) or ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style == HAND_LEFT_BOTH))) and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
+    if (( sp_m == 672 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 672 and c_Style == HAND_LEFT_BOTH)) then 
+        r2 = "W_AttackRightHeavy1Start" 
+        b2 = "W_AttackBothHeavy1Start" 
+    end
+
     act("精密射撃可能か")
+
+local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style == HAND_LEFT_BOTH)) then
+        if request == ATTACK_REQUEST_RIGHT_CROSSBOW or request == ATTACK_REQUEST_RIGHT_CROSSBOW2 then
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowRightEmpty, ALLBODY)
+                return 
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventAllBody("W_CrossbowStepInFire")
+                return 
+            else
+                ExecEventAllBody("W_CrossbowStepInReload")
+                return 
+            end
+        elseif request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW or request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW2 then
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowBothRightEmpty, ALLBODY)
+                return 
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventAllBody("W_CrossbowStepInFire")
+                return 
+            else
+                ExecEventAllBody("W_CrossbowStepInReload")
+                return 
+            end
+        end
+    end
+
     if AttackCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE) == TRUE then
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_RandomOneShotNext1")
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100295) == TRUE then
+        ExecEventAllBody("W_CrossbowStepInReload")
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         ExecEventAllBody("W_Idle")
@@ -14667,6 +15628,34 @@ function CrossbowStepInReload_onUpdate() -- 038220 bs r2 for vanilla weps
     if (sp_m == 177  and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 177  and c_Style == HAND_LEFT_BOTH) then b1 = "W_AttackBothLight2" end
 
     act("精密射撃可能か")
+
+    local request = GetAttackRequest(FALSE)
+    if 0 < env(1001) and ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_CROSSBOW == TRUE) and c_Style == HAND_LEFT_BOTH)) then
+        if request == ATTACK_REQUEST_RIGHT_CROSSBOW or request == ATTACK_REQUEST_RIGHT_CROSSBOW2 then
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowRightEmpty, ALLBODY)
+                return 
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventAllBody("W_CrossbowStepInFire")
+                return 
+            else
+                ExecEventAllBody("W_CrossbowStepInReload")
+                return 
+            end
+        elseif request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW or request == ATTACK_REQUEST_BOTHRIGHT_CROSSBOW2 then
+            if IsExistBolt(HAND_RIGHT) == TRUE then
+                ExecEventHalfBlend(Event_AttackCrossbowBothRightEmpty, ALLBODY)
+                return 
+            elseif env("ボルト装填状態取得", 1) == TRUE then
+                ExecEventAllBody("W_CrossbowStepInFire")
+                return 
+            else
+                ExecEventAllBody("W_CrossbowStepInReload")
+                return 
+            end
+        end
+    end
+
     if AttackCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, "W_AttackBothHeavy1Start", FALSE, FALSE) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -14683,6 +15672,16 @@ function HeadHunt_Activate()
 end
 
 function HeadHunt_Upper_onUpdate()
+
+    if ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style == HAND_LEFT_BOTH)) then 
+        act("精密射撃可能か")
+        if IsExistArrow() == TRUE then
+            ExecEventAllBody("W_NoArrow")
+            return 
+        end 
+    end
+
+
     if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, TRUE, TRUE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
@@ -14805,6 +15804,11 @@ function OneShotFullBothStart_onUpdate() -- oneshot WA 038510
 end
 
 function RandomOneShot1_onUpdate() -- 039100
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
     local r2 = "W_RandomOneShotNext1"
     local b2 = "W_RandomOneShotNext1"
     local rand = math.random(0, 100)
@@ -14851,7 +15855,36 @@ function RandomOneShot1_onUpdate() -- 039100
         r2 = "W_RandomOneShotNext1"
         b2 = "W_RandomOneShotNext1"
     end
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, TRUE, TRUE, FALSE) == TRUE then
+
+    if ((GetEquipType(HAND_RIGHT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, WEAPON_CATEGORY_SMALL_ARROW) == TRUE and c_Style == HAND_LEFT_BOTH)) then 
+        act("精密射撃可能か")
+        if IsExistArrow() == TRUE then
+            ExecEventAllBody("W_NoArrow")
+            return 
+        end 
+    end
+
+    --if (( sp_m == 672 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 672 and c_Style == HAND_LEFT_BOTH)) then 
+      --  r2 = "W_AttackRightHeavy1Start" 
+      --  b2 = "W_AttackBothHeavy1Start" 
+    --end
+
+    if (( (sp_m == 90 or sp_m == 672) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 90 or sp_o == 672) and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_RandomOneShotNext2" 
+        b1 = r1 
+        r2 = r1 
+        b2 = r1 
+    end
+
+    if sp_m == 672 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE, TRUE, FALSE) == TRUE then
+        return 
+    elseif (env(1108, ACTION_ARM_L2) <= 0 and env(1108, ACTION_ARM_R1) <= 0 and env(1108, ACTION_ARM_R2) <= 0) and env(1116, 100280) == TRUE then
+        ExecEventAllBody("W_RandomOneShotNext1")
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -14866,6 +15899,8 @@ function RandomOneShotNext1_onUpdate() -- 039110
     local hand = HAND_RIGHT
     local sp_m = env(345 , HAND_RIGHT)
     local sp_o = env(345 , HAND_LEFT)
+    local r1 = "W_AttackRightLight2"
+    local b1 = "W_AttackBothLight2"
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
     if (( (sp_m == 689 or sp_m == 690)  and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 689 or sp_o == 690) and c_Style == HAND_LEFT_BOTH)) then 
@@ -14873,7 +15908,19 @@ function RandomOneShotNext1_onUpdate() -- 039110
         b2 = "W_RandomOneShotNext1" 
     end
 
-    if env(1116, 100283) == FALSE and SwordArtsCommonFunction("W_AttackRightLight2", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight2", b2, FALSE, TRUE, TRUE, FALSE) == TRUE then
+    if (( (sp_m == 90 or sp_m == 672) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 90 or sp_o == 672) and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_RandomOneShotNext2" 
+        b1 = r1 
+        r2 = r1 
+        b2 = r1 
+    end
+
+    if sp_m == 672 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
+    then 
+        act(2002, 627)
+    end
+    
+    if env(1116, 100283) == FALSE and SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, TRUE, TRUE, FALSE) == TRUE then
         return 
     elseif env(1116, 100283) == TRUE and SwordArtsCommonFunction("W_RandomOneShotNext3", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_RandomOneShotNext3", b2, FALSE, TRUE, TRUE, FALSE) == TRUE then
         return
@@ -14887,8 +15934,22 @@ function RandomOneShotNext1_onUpdate() -- 039110
 end
 
 function RandomOneShotNext2_onUpdate()
-    
-    if env(1116, 100283) == FALSE and SwordArtsCommonFunction("W_AttackRightLight2", "W_AttackRightHeavy1Start", "W_AttackLeftLight2", "W_AttackLeftHeavy2", "W_AttackBothLight2", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, GEN_TRANS_LEFT) == TRUE then
+    local hand = HAND_RIGHT
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    local r1 = "W_AttackRightLight2"
+    local b1 = "W_AttackBothLight2"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    if (( (sp_m == 90 or sp_m == 672) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 90 or sp_o == 672) and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_RandomOneShotNext3" 
+        b1 = r1 
+        r2 = r1 
+        b2 = r1 
+    end
+
+    if env(1116, 100283) == FALSE and SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight2", "W_AttackLeftHeavy2", b1, b2, FALSE, FALSE, TRUE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env(1116, 100283) == TRUE and SwordArtsCommonFunction("W_RandomOneShotNext4", "W_AttackRightHeavy1Start", "W_AttackLeftLight2", "W_AttackLeftHeavy2", "W_RandomOneShotNext4", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, GEN_TRANS_LEFT) == TRUE then
             return 
@@ -14902,7 +15963,21 @@ function RandomOneShotNext2_onUpdate()
 end
 
 function RandomOneShotNext3_onUpdate()
-    if env(1116, 100283) == FALSE and SwordArtsCommonFunction("W_AttackRightLight3", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, FALSE) == TRUE then
+    local hand = HAND_RIGHT
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    local r1 = "W_AttackRightLight3"
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    if (( (sp_m == 90 or sp_m == 672) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 90 or sp_o == 672) and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_RandomOneShotNext4" 
+        b1 = r1 
+        r2 = r1 
+        b2 = r1 
+    end
+    if env(1116, 100283) == FALSE and SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, TRUE, FALSE) == TRUE then
         return 
     elseif env(1116, 100283) == TRUE and SwordArtsCommonFunction("W_RandomOneShotNext1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_RandomOneShotNext1", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, FALSE) == TRUE then
         return 
@@ -14916,7 +15991,22 @@ function RandomOneShotNext3_onUpdate()
 end
 
 function RandomOneShotNext4_onUpdate()
-        if env(1116, 100283) == FALSE and SwordArtsCommonFunction("W_AttackRightLight3", "W_AttackRightHeavy1Start", "W_AttackLeftLight3", "W_AttackLeftHeavy3", "W_AttackBothLight3", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, FALSE) == TRUE then
+    local hand = HAND_RIGHT
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    local r1 = "W_AttackRightLight3"
+    local b1 = "W_AttackBothLight3"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+
+    if (( (sp_m == 90 or sp_m == 672) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 90 or sp_o == 672) and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_RandomOneShotNext4" 
+        b1 = r1 
+        r2 = r1 
+        b2 = r1 
+    end
+
+        if env(1116, 100283) == FALSE and SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight3", "W_AttackLeftHeavy3", b1, b2, FALSE, FALSE, TRUE, FALSE) == TRUE then
             return 
         elseif env(1116, 100283) == TRUE and SwordArtsCommonFunction("W_RandomOneShotNext2", "W_AttackRightHeavy1Start", "W_AttackLeftLight3", "W_AttackLeftHeavy3", "W_RandomOneShotNext2", "W_AttackBothHeavy1Start", FALSE, FALSE, TRUE, FALSE) == TRUE then
             return 
@@ -14971,8 +16061,12 @@ function MagicBuffLeft_Upper_Activate()
     return 
 end
 
-function MagicBuffLeft_Upper_onUpdate()
+function MagicBuffLeft_Upper_onUpdate() -- 037910 
     local blend_type, lower_state = GetHalfBlendInfo()
+
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if 5 > env(2016) and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) then act(2002, 121950)  end
 
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
@@ -14985,7 +16079,7 @@ function MagicBuffLeft_Upper_onUpdate()
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
+    if SwordArtsCommonFunction("W_AttackRightLight2", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy2", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     elseif HalfBlendLowerCommonFunction(Event_MagicBuffLeftMirror, lower_state, FALSE, FALSE) == TRUE then
         return 
@@ -14994,7 +16088,11 @@ function MagicBuffLeft_Upper_onUpdate()
     end
 end
 
-function MagicBuffLeft2_onUpdate()
+function MagicBuffLeft2_onUpdate() -- -- 037930 ?
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if 5 > env(2016) and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) then act(2002, 121950)  end
+    
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
     if i1BB == TRUE then
@@ -15006,7 +16104,7 @@ function MagicBuffLeft2_onUpdate()
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
+    if SwordArtsCommonFunction("W_AttackRightLight3", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy3", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     else
         return 
@@ -15014,6 +16112,12 @@ function MagicBuffLeft2_onUpdate()
 end
 
 function MagicBuffLeft3_onUpdate()
+    local sp_m = env(345 , HAND_RIGHT)
+    local sp_o = env(345 , HAND_LEFT)
+    if 5 > env(2016) 
+    --and ((sp_m == 665 and c_Style ~= HAND_LEFT_BOTH) or (sp_o == 665 and c_Style ~= HAND_RIGHT_BOTH)) 
+    then act(2002, 121950)  end
+
     local r2 = "W_AttackRightHeavy1Start"
     local b2 = "W_AttackBothHeavy1Start"
     if i1BB == TRUE then
@@ -15024,7 +16128,7 @@ function MagicBuffLeft3_onUpdate()
     if (env(345 , HAND_RIGHT) == 610) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 667) then b2 = "W_AttackRightHeavy1SubStart" end
     if (env(345 , HAND_RIGHT) == 671 and c_Style == HAND_RIGHT_BOTH) or (env(345 , HAND_LEFT) == 671 and c_Style == HAND_LEFT_BOTH)  then b2 = "W_AttackBothHeavy2Start" end
-    if SwordArtsCommonFunction("W_AttackRightLight1", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
+    if SwordArtsCommonFunction("W_AttackRightLight2", r2, "W_AttackLeftLight1", "W_AttackLeftHeavy2", "W_AttackBothLight1", b2, FALSE, FALSE, FALSE, FALSE) == TRUE then
         return 
     else
         return 
@@ -15089,9 +16193,13 @@ function StormStanceStart_Upper_onUpdate() -- 038800
         if SwordArtsStanceCommonFunction("W_StormStanceLight", "W_StormStanceHeavy", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_StormStanceLight", "W_StormStanceHeavy", blend_type, TRUE, TRUE, FALSE) == TRUE then
             return 
         elseif style == HAND_LEFT_BOTH then
-            act(2002, 100901)
+            if (GetEquipType(HAND_LEFT_BOTH, 25) == TRUE) then 
+                act(2002, 100901) 
+            end
         else
-            act(2002, 100900)
+            if (GetEquipType(HAND_RIGHT, 25) == TRUE) then 
+                act(2002, 100900)
+            end
         end
         if env(1116, 100330) == TRUE and (env(1108, ACTION_ARM_L2) < 200 or env(1107, ACTION_ARM_L2) == TRUE) then
             ExecEventHalfBlend(Event_StormStanceEnd, blend_type)
@@ -15116,9 +16224,13 @@ function StormStanceLoop_Upper_onUpdate()
     if SwordArtsStanceCommonFunction("W_StormStanceLight", "W_StormStanceHeavy", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_StormStanceLight", "W_StormStanceHeavy", blend_type, TRUE, TRUE, FALSE) == TRUE then
         return 
     elseif style == HAND_LEFT_BOTH then
+        if (GetEquipType(HAND_LEFT_BOTH, 25) == TRUE) then 
         act(2002, 100901)
+        end
     else
+        if (GetEquipType(HAND_RIGHT, 25) == TRUE) then 
         act(2002, 100900)
+        end
     end
     if env(1108, ACTION_ARM_L2) <= 0 or env(1107, ACTION_ARM_L2) == TRUE then
         ExecEventHalfBlend(Event_StormStanceEnd, blend_type)
@@ -15127,11 +16239,15 @@ function StormStanceLoop_Upper_onUpdate()
         ExecEventHalfBlend(Event_StormStanceFullLoop, blend_type)
         local style = c_Style
         if style == HAND_LEFT_BOTH then
+            if (GetEquipType(HAND_LEFT_BOTH, 25) == TRUE) then 
             act(2002, 100911)
             act(2002, 100921)
+            end
         else
+            if (GetEquipType(HAND_RIGHT, 25) == TRUE) then 
             act(2002, 100910)
             act(2002, 100920)
+            end
         end
     end
     if HalfBlendLowerCommonFunction(Event_StormStanceLoop, lower_state, FALSE, TRUE) == TRUE then
@@ -15172,8 +16288,23 @@ function StormStanceEnd_Upper_onUpdate()
     end
 end
 
-function StormStanceLight_onUpdate()
-    if SwordArtsCommonFunction("W_AttackRightLight1", "W_AttackRightHeavy1Start", "W_AttackLeftLight1", "W_AttackLeftHeavy1", "W_AttackBothLight1", "W_AttackBothHeavy1Start", FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
+function StormStanceLight_onUpdate() -- 038840
+    local r1 = "W_AttackRightLight1"
+    local b1 = "W_AttackBothLight1"
+    local r2 = "W_AttackRightHeavy1Start"
+    local b2 = "W_AttackBothHeavy1Start"
+    if (( GetEquipType(HAND_RIGHT, 29) == TRUE  and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 29) == TRUE and c_Style == HAND_LEFT_BOTH)) then 
+        r1 = "W_AttackRightLight2"
+        b1 = "W_AttackBothLight2"
+        r2 = "W_StormStanceHeavy"
+        b2 = r2
+        if env(1116, 1070202) == TRUE or env(1116, 1070252) == TRUE then 
+            r2 = "W_StormStanceFullHeavy"
+            b2 = "W_StormStanceFullHeavy"
+        end
+    end
+
+    if SwordArtsCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, FALSE, FALSE, FALSE, GEN_TRANS_LEFT) == TRUE then
         return 
     elseif env("アニメ終了か", 1) == TRUE then
         SetArtsGeneratorTransitionIndex(GEN_TRANS_LEFT, TRUE)
@@ -15223,7 +16354,7 @@ function StormStanceFullStart_Upper_onUpdate()
     end
 end
 
-function StormStanceFullLoop_Upper_onUpdate()
+function StormStanceFullLoop_Upper_onUpdate() -- 038815
     local blend_type, lower_state = GetHalfBlendInfo()
     local r1 = "W_StormStanceFullLight_NonBoss"
     local r2 = "W_StormStanceFullHeavy_NonBoss"
@@ -15235,6 +16366,7 @@ function StormStanceFullLoop_Upper_onUpdate()
         b1 = "W_StormStanceFullLight"
         b2 = "W_StormStanceFullHeavy"
     end
+    if (( GetEquipType(HAND_RIGHT, 29) == TRUE  and c_Style ~= HAND_LEFT_BOTH) or (GetEquipType(HAND_LEFT, 29) == TRUE and c_Style == HAND_LEFT_BOTH)) then r1 = "W_StormStanceLight" b1 = r1 end
     if SwordArtsStanceCommonFunction(r1, r2, "W_AttackLeftLight1", "W_AttackLeftHeavy1", b1, b2, blend_type, TRUE, TRUE, FALSE) == TRUE then
         return 
     elseif env(1108, ACTION_ARM_L2) <= 0 or env(1107, ACTION_ARM_L2) == TRUE then
@@ -15649,6 +16781,8 @@ function QuickItemEnchantDash_Upper_onUpdate()
     local r2 = "W_AttackRightHeavy1Start"
     local b1 = "W_AttackBothLight1"
     local b2 = "W_AttackBothHeavy1Start"
+
+    if ExtraR1R2 == TRUE then r1 = "W_Attack2RightLight1" r2 = "W_Attack2RightHeavy1Start" b1 = "W_Attack2BothLight1" b2 = "W_Attack2BothHeavy1Start"  end
 
     if 1 <= GetVariable("MoveSpeedIndex") then
         r1 = "W_AttackRightLightDash"
@@ -16977,9 +18111,9 @@ function MagicLaunchLeft_Upper_onUpdate()
     elseif blend_type ~= UPPER and ExecQuickTurn(LOWER) == TRUE then
         return TRUE
     elseif env(313) == TRUE or env("アニメ終了か", 1) == TRUE then
-        local sp_kind = env(345 , HAND_LEFT)
+        local sp_o = env(345 , HAND_LEFT)
         local button = ACTION_ARM_L1
-        if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_RIGHT) or sp_kind == 234 or sp_kind == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_kind == 67) then
+        if sp_o == 178 or sp_o == 207 or sp_o == 217 or sp_o == 220 or (sp_o == 159 and c_Style == HAND_RIGHT) or sp_o == 234 or sp_o == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67) then
             button = ACTION_ARM_L2
         end
         if IsHoldMagic() == TRUE then
@@ -17049,9 +18183,9 @@ function MagicLoopLeft_Upper_onUpdate()
         ExecEventHalfBlend(Event_MagicFireRight, blend_type)
         return 
     end
-    local sp_kind = env(345 , HAND_LEFT)
+    local sp_o = env(345 , HAND_LEFT)
     local button = ACTION_ARM_L1
-    if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_RIGHT) or sp_kind == 234 or sp_kind == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_kind == 67) then
+    if sp_o == 178 or sp_o == 207 or sp_o == 217 or sp_o == 220 or (sp_o == 159 and c_Style == HAND_RIGHT) or sp_o == 234 or sp_o == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67) then
         button = ACTION_ARM_L2
     end
     if env(1108, button) <= 0 then
@@ -17096,9 +18230,9 @@ function MagicLoopLeftLvl2_Upper_onUpdate()
         ExecEventHalfBlend(Event_MagicFireLeftLvl2, blend_type)
         return 
     end
-    local sp_kind = env(345 , HAND_LEFT)
+    local sp_o = env(345 , HAND_LEFT)
     local button = ACTION_ARM_L1
-    if sp_kind == 178 or sp_kind == 207 or sp_kind == 217 or sp_kind == 220 or (sp_kind == 159 and c_Style == HAND_RIGHT) or sp_kind == 234 or sp_kind == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_kind == 67)  then
+    if sp_o == 178 or sp_o == 207 or sp_o == 217 or sp_o == 220 or (sp_o == 159 and c_Style == HAND_RIGHT) or sp_o == 234 or sp_o == 257  or (GetEquipType(HAND_LEFT, 38)  == TRUE and sp_o == 67)  then
         button = ACTION_ARM_L2
     end
     if env(1108, button) <= 0 then
@@ -20264,10 +21398,12 @@ function UpdateWristTwistNew()	-- credits to El Fonzo -- stance
     if isStance == FALSE then
 
         -- powerstance
-        if is_axe_ps == TRUE  then   
+        if is_axe_ps == TRUE then   
+            if (sp_m ~= 658 and sp_m ~= 103) then
             max_wrist_front_m = 50
-            max_wrist_front_o = 50
             max_arm_front_m = -5
+            end
+            max_wrist_front_o = 50
             max_arm_front_o = -10
         elseif is_tb_ps == TRUE then
             max_wrist_front_m = -10
@@ -20307,11 +21443,11 @@ function UpdateWristTwistNew()	-- credits to El Fonzo -- stance
             max_wrist_side_o = -80 ]]
 
             max_wrist_front_m = 10
-            max_wrist_front_o = 20
+            --max_wrist_front_o = 20
             max_arm_front_m = 20
-            max_arm_front_o = -30
-            max_wrist_side_o = -80
-        elseif     (GetEquipType(HAND_RIGHT, 38) == TRUE and sp_m == 50)            and    (GetEquipType(HAND_LEFT, 38) == TRUE and sp_o == 50) then
+            --max_arm_front_o = -30
+            --max_wrist_side_o = -80
+        elseif     (GetEquipType(HAND_RIGHT, 38) == TRUE and (sp_m == 50 or sp_m == 179 or sp_m == 107 or sp_m == 232 or sp_m == 674 or sp_m == 663 or sp_m == 681))            and    (GetEquipType(HAND_LEFT, 38) == TRUE and (sp_o == 50 or sp_o == 179 or sp_o == 107 or sp_o == 232 or sp_o == 674 or sp_o == 663 or sp_o == 681)) then
             max_wrist_front_m = 20
             max_wrist_front_o = 20
             max_arm_front_m = -20
