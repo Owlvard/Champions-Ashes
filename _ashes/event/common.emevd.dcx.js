@@ -2,9 +2,9 @@
 // @docs    ds3-common.emedf.json
 // @compress    DCX_DFLT_10000_44_9
 // @game    DarkSouls3
-// @string    
+// @string    ""
 // @linked    []
-// @version    3.4
+// @version    3.4.2
 // ==/EMEVD==
 
 $Event(0, Default, function() {
@@ -351,9 +351,6 @@ $Event(700, Default, function() {
     SetEventFlag(70000125, ON);
     SetEventFlag(70000128, ON);
     SetEventFlag(70000129, ON);
-    if (PlayersClass(ClassType.Sorcerer)) {
-        SetEventFlag(74000587, ON);
-    }
     if (PlayersClass(ClassType.Pyromancer)) {
         SetEventFlag(74000465, ON);
     }
@@ -1399,7 +1396,7 @@ $Event(90000000, Default, function() {
     InitializeEvent(0, 90010000, 20, 9036);
     InitializeEvent(1, 90010000, 21, 9037);
     InitializeEvent(2, 90010000, 35, 9038);
-    InitializeEvent(0, 90020000, 21, 9037, 3900230, 100284);
+    InitializeEvent(0, 90020000, 21, 9037, 3900232, 100284);
 });
 
 $Event(90010000, Restart, function(X0_2, X4_4) {

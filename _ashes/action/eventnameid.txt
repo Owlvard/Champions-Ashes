@@ -1,6 +1,6 @@
 #BOM付きUTF8で保存された場合に一行目が解析不能になるDLPropertiesの不具合に備えてコメントアウト
 
-Num  = 4281
+Num  = 4285
 1    = "_Chang_Pose_L_leg"
 2    = "_Change_Pose_000"
 3    = "_Change_Pose_450"
@@ -4283,4 +4283,8 @@ Num  = 4281
 4279 = "W_Attack2BothHeavy2"
 4280 = "W_Attack2BothHeavy2End"
 4281 = "W_Attack2BothHeavy2Start"
+4282 = "W_Attack2RightLight2"
+4283 = "W_Attack2RightLight3"
+4284 = "W_Attack2BothLight2"
+4285 = "W_Attack2BothLight3"
 

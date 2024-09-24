@@ -1,6 +1,6 @@
 #BOM付きUTF8で保存された場合に一行目が解析不能になるDLPropertiesの不具合に備えてコメントアウト
 
-Num  = 3042
+Num  = 3046
 1    = "_QuickTurn"
 2    = "_Turn"
 3    = "a00 0000.hkt"
@@ -3044,3 +3044,7 @@ Num  = 3042
 3040 = "Attack2BothHeavy2"
 3041 = "Attack2BothHeavy2End"
 3042 = "Attack2BothHeavy2Start"
+3043 = "Attack2RightLight2"
+3044 = "Attack2RightLight3"
+3045 = "Attack2BothLight2"
+3046 = "Attack2BothLight3"
