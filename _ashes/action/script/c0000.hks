@@ -15,6 +15,7 @@ DUEL_MODE_TOGGLE_EFFECT = 100851
 DUEL_MODE_RESTORATION_TRIGGER_EFFECT = 100852
 DUEL_MODE_TEARS_EFFECT = 635
 HITSTUN_RING_EFFECT = 100853
+JUSTFRAME_RING_EFFECT = 100854
 -- =================================[ Globals end ]=================================
 
 
@@ -37,7 +38,7 @@ function DBSetPhantomColor(colorString)
         DBLUE = 5050082,
         YELLOW = 5050085,
         PURPLE = 5050088,
-        BLACK = 505021
+        BLACK = 5050043
     }
     act(2002, collorToSpEffect[colorString])
 end
@@ -6292,6 +6293,14 @@ end
 function AttackCommonFunction(r1, r2, l1, l2, b1, b2, guardcondition, use_atk_queue)
     --if env(329) == FALSE then act(2002, 637) end -- GetHasBrokenSA Hyper Armor Super Armor is broken
     if env(1116, HITSTUN_RING_EFFECT) == TRUE then DBSetPhantomColor("RESET") end
+
+    if env(1116, JUSTFRAME_RING_EFFECT) == TRUE then
+        if env(1116, 100283) == FALSE then DBSetPhantomColor("RESET")  
+        --elseif env(1116, 100283) == TRUE and env(1116, 100273) == TRUE then DBSetPhantomColor("BLACK") 
+        elseif env(1116, 100283) == TRUE and env(1116, 100273) == FALSE then DBSetPhantomColor("YELLOW") 
+        else DBSetPhantomColor("RESET") end 
+    end
+
     if env(1116, 100380) == FALSE then
         SetThrowAtkInvalid()
     end

@@ -3029,7 +3029,6 @@ Num  = 3046
 3026 = "Event91210"
 3027 = "Event91220"
 3028 = "Event91230"
-
 3029 = "Attack2RightLight1"
 3030 = "Attack2RightHeavy1"
 3031 = "Attack2RightHeavy1End"
