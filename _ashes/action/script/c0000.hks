@@ -2246,7 +2246,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             end
         end
 
-        if ((sp_m == 193 or (sp_m == 163 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 51 and GetEquipType(HAND_RIGHT, 26) == TRUE)) and c_Style ~= HAND_LEFT_BOTH) then 
+        if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 163 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 51 and GetEquipType(HAND_RIGHT, 26) == TRUE)) and c_Style ~= HAND_LEFT_BOTH) then 
             if r1 == "W_AttackRightLightDash" then r1 = "W_AttackRightLightDashSpecial"
             end
         end
@@ -2394,8 +2394,8 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
             elseif  (sp_m == 72 and env(1116, 708) == TRUE) and style ~= HAND_LEFT_BOTH  -- harpe alt fr2 jump
             or      (sp_o == 72 and env(1116, 708) == TRUE) and style == HAND_LEFT_BOTH then -- harpe alt fr2 jump
                     ExecEventAllBody("W_AttackBothHeavyKickSpecial")
-            elseif  (sp_m == 193 or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH  -- large ugs alt jump
-            or      (sp_o == 193 or (sp_o == 163 and (GetEquipType(HAND_LEFT, 26) == TRUE)) or (sp_o == 51 and (GetEquipType(HAND_LEFT, 26) == TRUE))) and style == HAND_LEFT_BOTH then -- large ugs alt jump
+            elseif  ((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH  -- large ugs alt jump
+            or      ((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or (sp_o == 163 and (GetEquipType(HAND_LEFT, 26) == TRUE)) or (sp_o == 51 and (GetEquipType(HAND_LEFT, 26) == TRUE))) and style == HAND_LEFT_BOTH then -- large ugs alt jump
                     ExecEventAllBody("W_AttackBothHeavyKickSpecial")
             else
                 ExecEventAllBody("W_AttackBothHeavyKick")
@@ -2418,7 +2418,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
         elseif GetEquipType(HAND_RIGHT, 38)  == TRUE and sp_m == 67 and env(1116, 100289) == TRUE then  ExecEventAllBody("W_CrossbowStepInFire")
         elseif (sp_m == 687 and env(1116, 705) == TRUE) and c_Style ~= HAND_LEFT_BOTH then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
         elseif (env(1116, 702) == TRUE) and (GetEquipType(HAND_RIGHT, 28) == TRUE  and sp_m == 0) and c_Style ~= HAND_LEFT_BOTH then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
-        elseif (sp_m == 193 or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
+        elseif ((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH then ExecEventAllBody("W_AttackRightHeavyKickSpecial")
         else
             ExecEventAllBody("W_AttackRightHeavyKick")
         end
@@ -2627,7 +2627,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                 end
             end
 
-            if ((sp_m == 193 or (sp_m == 163 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) ) and c_Style ~= HAND_LEFT_BOTH) then 
+            if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 163 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 51 and (GetEquipType(HAND_RIGHT, 26) == TRUE)) ) and c_Style ~= HAND_LEFT_BOTH) then 
                 if b1 == "W_AttackBothDash" then b1 = "W_AttackBothDashSpecial"
                 end
             end
@@ -3153,7 +3153,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                     SetVariable("CircleStepAngleSelftrans", angle)
                     ExecEventAllBody("W_CircleStepStartSelftrans")
 
-                elseif ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+                elseif (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
                     if front == true then angle = 0
                     elseif right == true then angle = 90
                     elseif left == true then angle = -90
@@ -3192,7 +3192,7 @@ function ExecAttack(r1, r2, l1, l2, b1, b2, is_guard, blend_type, artsr1, artsr2
                     SetVariable("CircleStepAngleSelftrans", angle)
                     ExecEventAllBody("W_CircleStepStartSelftrans")
 
-                elseif ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+                elseif (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
                     if front == true then angle = 0
                     elseif right == true then angle = 90
                     elseif left == true then angle = -90
@@ -10630,7 +10630,7 @@ function AttackRightHeavyKickSpecial_onUpdate() -- run r2 030610
     if sp_m == 128 and c_Style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightStepSpecial" end
     if sp_m == 215 and c_Style ~= HAND_LEFT_BOTH then r2 = "W_AttackRightHeavy1End" end
     if IsFeintAttempt() and sp_m == 215 and c_Style ~= HAND_LEFT_BOTH then r2 = "W_AttackRightHeavy2End" end
-    if (sp_m == 193 or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightStep" end -- large ugs alt jump
+    if ((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or (sp_m == 163 and (GetEquipType(HAND_RIGHT, 26) == TRUE))) and style ~= HAND_LEFT_BOTH then r1 = "W_AttackRightLightStep" end -- large ugs alt jump
 
 
     if sp_m == 688 and env("アーツポイント足りるか", ACTION_ARM_R2, c_SwordArtsHand) == FALSE -- 344 or HasEnoughArtsPoints no fp no mp
@@ -12538,8 +12538,8 @@ function AttackBothDash_onUpdate() -- run r1 034500
     local is_Uo = GetEquipType(HAND_LEFT, 26, 35) 
     local specialWeaponsM
     local specialWeaponsO
-    if (sp_m == 95 or sp_m == 128 or sp_m == 163 or sp_m == 193) then specialWeaponsM = TRUE else specialWeaponsM = FALSE end
-    if (sp_ugso == 95 or sp_ugso == 128 or sp_ugso == 163 or sp_ugso == 193) then specialWeaponsO = TRUE else specialWeaponsO = FALSE end
+    if (sp_m == 95 or sp_m == 128 or sp_m == 163 or (sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE)) then specialWeaponsM = TRUE else specialWeaponsM = FALSE end
+    if (sp_ugso == 95 or sp_ugso == 128 or sp_ugso == 163 or (sp_ugso == 193 and GetEquipType(HAND_LEFT, 26) == TRUE)) then specialWeaponsO = TRUE else specialWeaponsO = FALSE end
 
     local is_rightHandCA = FALSE
     local is_leftHandCA = FALSE
@@ -15026,7 +15026,7 @@ function StampedeRightStart_onUpdate() -- 037400
         end
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         r1 = "W_StampedeRightAttackLight"
         b1 = "W_StampedeRightAttackLight"
         r2 = "W_StepInRightUppercut"
@@ -15068,20 +15068,20 @@ function StampedeRightAttackLight_onUpdate() -- 50037410
 
      if sp_m == 128 then r1 = "W_Attack2RightLight2" end -- black knight greatsword combat art
 
-     if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+     if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         r1 = "W_StampedeRightAttackHeavy"
         b1 = "W_StampedeRightAttackHeavy"
         r2 = "W_StepInRightUppercut"
         b2 = "W_StepInRightUppercut"
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         if (env(1108, ACTION_ARM_R1) >= 1) and env(1116, 100770) == TRUE then
             act(2002, 100784)  -- slow down attackspeed 
         end 
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         if (env(1108, ACTION_ARM_R1) >= 800) then act(2002, 121960)  end -- charged dmg boost
     end
 
@@ -15116,20 +15116,20 @@ function StampedeRightAttackHeavy_onUpdate() -- 037420
         b1 = "W_AttackRightLight2" r1 = "W_AttackRightLight2" 
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         r1 = "W_StampedeRightAttackLight"
         b1 = "W_StampedeRightAttackLight"
         r2 = "W_StepInRightUppercut"
         b2 = "W_StepInRightUppercut"
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         if (env(1108, ACTION_ARM_R1) >= 1) and env(1116, 100770) == TRUE then
             act(2002, 100784)  -- slow down attackspeed 
         end 
     end
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         if (env(1108, ACTION_ARM_R1) >= 800) then act(2002, 121960)  end -- charged dmg boost
     end
 
@@ -16084,7 +16084,7 @@ function CircleStepStartSelftrans_onUpdate()
         end
     end    
 
-    if ((sp_m == 193 or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or ((sp_o == 193 or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
+    if (((sp_m == 193 and GetEquipType(HAND_RIGHT, 26) == TRUE) or sp_m == 202) and c_Style ~= HAND_LEFT_BOTH) or (((sp_o == 193 and GetEquipType(HAND_LEFT, 26) == TRUE) or sp_o == 202) and c_Style == HAND_LEFT_BOTH) then
         if env(1116, 100250) == TRUE then
             r1 = "W_StampedeRightAttackLight"
             b1 = "W_StampedeRightAttackLight"
